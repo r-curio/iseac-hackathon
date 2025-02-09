@@ -5,14 +5,15 @@ import { TfiLayoutPlaceholder } from "react-icons/tfi";
 import NavItem from "./nav-item";
 import { RxCaretRight } from "react-icons/rx";
 import Image from "next/image";
+import Link from "next/link";
 
 const Sidebar = () => {
   return (
     <div className="flex h-full w-72 min-w-72 flex-col gap-6 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50">
-      <div className="flex items-center gap-3 p-6">
+      <Link href="/" className="flex items-center gap-3 p-6">
         <TfiLayoutPlaceholder className="h-8 w-8" />
         <h1 className="text-xl font-semibold">Zen</h1>
-      </div>
+      </Link>
       {menuList.map((group, idx) => (
         <div key={group.key} className="flex flex-col gap-3">
           <div className="flex flex-col gap-1 px-6">
