@@ -2,25 +2,23 @@
 import React from "react";
 import { menuList } from "../libs/menu-list";
 import { TfiLayoutPlaceholder } from "react-icons/tfi";
-import { usePathname } from "next/navigation";
 import NavItem from "./nav-item";
 import { RxCaretRight } from "react-icons/rx";
+import Image from "next/image";
 
 const Sidebar = () => {
-  const pathname = usePathname();
-
   return (
-    <div className="flex flex-col gap-6 h-full w-72 rounded-tr-2xl rounded-br-2xl bg-primary bg-opacity-50">
-      <div className="flex gap-3 items-center p-6">
-        <TfiLayoutPlaceholder className="w-8 h-8" />
+    <div className="flex h-full w-72 min-w-72 flex-col gap-6 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50">
+      <div className="flex items-center gap-3 p-6">
+        <TfiLayoutPlaceholder className="h-8 w-8" />
         <h1 className="text-xl font-semibold">Zen</h1>
       </div>
       {menuList.map((group, idx) => (
-        <div key={group.key} className="flex gap-3 flex-col">
-          <div className="flex flex-col px-6 gap-1">
+        <div key={group.key} className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1 px-6">
             {group.title && (
               <div key={group.title} className="flex gap-3 px-4 py-3">
-                <h3 className="text-sm bg-gradient-1 font-medium bg-clip-text text-transparent">
+                <h3 className="bg-gradient-1 bg-clip-text text-sm font-medium text-transparent">
                   {group.title}
                 </h3>
               </div>
@@ -34,15 +32,21 @@ const Sidebar = () => {
           )}
         </div>
       ))}
-      <div className="mt-auto p-6 flex gap-3 items-center">
-        <div className="bg-accent-200 rounded-full w-10 h-10 flex items-center justify-center overflow-hidden">
-          <img src="./avatar.png" alt="Avatar" className="w-10 h-10" />
+      <div className="mt-auto flex items-center gap-3 p-6">
+        <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-accent-200">
+          <Image
+            src="/avatar.png"
+            alt="Avatar"
+            className="h-10 w-10"
+            width={40}
+            height={40}
+          />
         </div>
         <div className="flex flex-col gap-0.5">
           <p className="text-xs font-medium">Welcome back 👋</p>
           <p className="text-sm font-medium">Sam</p>
         </div>
-        <RxCaretRight className="ml-auto w-5 h-5 stroke-1" />
+        <RxCaretRight className="ml-auto h-5 w-5 stroke-1" />
       </div>
     </div>
   );
