@@ -31,9 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${poppins.className} flex h-screen w-screen bg-background-dark antialiased`}
-      >
+      <body className={`${poppins.className} bg-background-dark antialiased`}>
         <Sidebar />
         {children}
       </body>

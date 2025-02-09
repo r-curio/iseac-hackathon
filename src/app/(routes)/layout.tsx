@@ -2,7 +2,7 @@ import React from "react";
 
 const RouteLayout = ({ children }: { children: React.ReactNode }) => {
   return (
-    <div className="flex h-full w-full items-center justify-center px-10 py-8">
+    <div className="flex items-center justify-center overflow-auto py-4">
       {children}
     </div>
   );
