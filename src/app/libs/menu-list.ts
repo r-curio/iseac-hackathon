@@ -1,16 +1,16 @@
 import { IconType } from "react-icons";
-import {
-  RiDashboardLine,
-  RiFileTextLine,
-  RiSwordLine,
-  RiVideoLine,
-  RiBookOpenLine,
-  RiFileList3Line,
-  RiSettings4Line,
-  RiNotification3Line,
-  RiCustomerService2Line,
-} from "react-icons/ri";
-import { GoGoal } from "react-icons/go";
+import { 
+  LayoutDashboard, 
+  Trophy, 
+  Swords,
+  Video,
+  Target,
+  BookOpen,
+  ClipboardList,
+  Settings,
+  Bell,
+  HelpCircle,
+} from 'lucide-react';
 
 interface MenuItem {
   title: string;
@@ -27,9 +27,9 @@ export const menuList: MenuItem[] = [
     key: 1,
     title: "",
     groupLabels: [
-      { label: "Dashboard", icon: RiDashboardLine, path: "/dashboard" },
-      { label: "AI Weekly Wrap", icon: RiFileTextLine, path: "/weekly-wrap" },
-      { label: "Battle", icon: RiSwordLine, path: "/battle" },
+      { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
+      { label: "AI Weekly Wrap", icon: Trophy, path: "/weekly-wrap" },
+      { label: "Battle", icon: Swords, path: "/battle" },
     ],
   },
   {
@@ -37,12 +37,12 @@ export const menuList: MenuItem[] = [
 
     title: "Study Tools",
     groupLabels: [
-      { label: "AI Video Notes", icon: RiVideoLine, path: "/video-notes" },
-      { label: "Goal Helper AI", icon: GoGoal, path: "/goal-helper" },
-      { label: "Study Deck", icon: RiBookOpenLine, path: "/study-deck" },
+      { label: "AI Video Notes", icon: Video, path: "/video-notes" },
+      { label: "Goal Helper AI", icon: Target, path: "/goal-helper" },
+      { label: "Study Deck", icon: BookOpen, path: "/study-deck" },
       {
         label: "Practice Tests",
-        icon: RiFileList3Line,
+        icon: ClipboardList,
         path: "/practice-tests",
       },
     ],
@@ -51,13 +51,13 @@ export const menuList: MenuItem[] = [
     key: 3,
     title: "",
     groupLabels: [
-      { label: "Settings", icon: RiSettings4Line, path: "/settings" },
+      { label: "Settings", icon: Settings, path: "/settings" },
       {
         label: "Notifications",
-        icon: RiNotification3Line,
+        icon: Bell,
         path: "/notifications",
       },
-      { label: "Support", icon: RiCustomerService2Line, path: "/support" },
+      { label: "Support", icon: HelpCircle, path: "/support" },
     ],
   },
 ];
