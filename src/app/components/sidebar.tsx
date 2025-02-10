@@ -18,15 +18,19 @@ const Sidebar = () => {
     setIsCollapsed(!isCollapsed);
   };
 
-  return (
-    isMobile ? <MobileNav /> :
-    <div 
-      className={`flex flex-col min-h-fit h-full gap-6 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50 transition-all duration-300 ${
+  return isMobile ? (
+    <MobileNav />
+  ) : (
+    <div
+      className={`fixed left-0 z-50 flex h-screen min-h-fit flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-100 transition-all duration-300 2xl:gap-6 ${
         isCollapsed ? "w-20 min-w-fit" : "w-72 min-w-72"
       }`}
     >
-      <Link href="/" className={`flex items-center gap-3 p-6 ${isCollapsed ? "justify-center" : ""}`}>
-        <Image src={Logo} alt="Zen" width={30} height={30}/>
+      <Link
+        href="/"
+        className={`flex items-center gap-3 p-6 ${isCollapsed ? "justify-center" : ""}`}
+      >
+        <Image src={Logo} alt="Zen" width={30} height={30} />
         {!isCollapsed && <h1 className="text-xl font-semibold">Zen</h1>}
       </Link>
       {menuList.map((group, idx) => (
@@ -40,11 +44,11 @@ const Sidebar = () => {
               </div>
             )}
             {group.groupLabels.map(({ label, icon: Icon, path }) => (
-              <NavItem 
-                key={label} 
-                label={label} 
-                icon={Icon} 
-                path={path} 
+              <NavItem
+                key={label}
+                label={label}
+                icon={Icon}
+                path={path}
                 isCollapsed={isCollapsed}
               />
             ))}
@@ -54,7 +58,9 @@ const Sidebar = () => {
           )}
         </div>
       ))}
-      <div className={`mt-auto flex items-center gap-3 p-6 ${isCollapsed ? "justify-center" : ""}`}>
+      <div
+        className={`mt-auto flex items-center gap-3 p-6 ${isCollapsed ? "justify-center" : ""}`}
+      >
         {!isCollapsed && (
           <>
             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-accent-200">
@@ -72,8 +78,8 @@ const Sidebar = () => {
             </div>
           </>
         )}
-        <button 
-          onClick={toggleSidebar} 
+        <button
+          onClick={toggleSidebar}
           className={`ml-auto flex h-8 w-8 items-center justify-center rounded-full hover:bg-accent-200 ${
             isCollapsed ? "ml-0" : ""
           }`}
