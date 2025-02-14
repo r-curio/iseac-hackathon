@@ -9,7 +9,7 @@ const Glare = ({ className, ...props }: GlareProps) => {
   return (
     <div
       className={cn(
-        "relative h-8 w-8 bg-black opacity-20 mix-blend-color-dodge",
+        "animate-twinkle relative h-8 w-8 bg-black opacity-20 mix-blend-color-dodge",
         className,
       )}
       {...props}

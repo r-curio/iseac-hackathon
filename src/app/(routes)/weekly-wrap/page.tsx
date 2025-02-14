@@ -6,7 +6,20 @@ const WeeklyWrap = () => {
     return Array.from({ length: count }, (_, i) => {
       const left = `${Math.random() * 95}%`;
       const top = `${Math.random() * 95}%`;
-      return <Glare key={i} className={`absolute`} style={{ left, top }} />;
+      const delay = `${Math.random() * 1}s`;
+      const duration = `${Math.random() * 20}s`;
+      return (
+        <Glare
+          key={i}
+          className={`absolute`}
+          style={{
+            left,
+            top,
+            animationDelay: `${delay}`,
+            animationDuration: `${duration}`,
+          }}
+        />
+      );
     });
   };
 

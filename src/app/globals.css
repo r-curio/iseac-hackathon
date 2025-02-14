@@ -78,11 +78,30 @@
   .animate-glow {
     animation: glow-pulse 10s ease-in-out infinite alternate;
   }
+
+  @keyframes twinkle {
+    0% {
+      opacity: 0.2;
+      transform: scale(0.8);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+    100% {
+      opacity: 0.2;
+      transform: scale(0.8);
+    }
+  }
+
+  .animate-twinkle {
+    animation: twinkle 3s ease-in-out infinite alternate;
+  }
 }
 
 @layer components {
   .glow-down {
-    animation: down 10s linear infinite 2s;
+    animation: down 10s linear infinite alternate 2s;
   }
 
   .glow-up {
