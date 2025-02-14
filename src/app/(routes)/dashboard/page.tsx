@@ -1,6 +1,7 @@
 "use client";
 
 import CircleProgress from "@/app/components/circle-progress";
+import RecentFilesContainer from "@/app/components/recent-files-container";
 import { ChartNoAxesCombined, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useRef } from "react";
@@ -19,7 +20,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex w-full flex-col gap-8 lg:max-w-[1200px]">
+    <div className="flex w-[90%] flex-col items-center gap-8 xl:w-[80%] 2xl:w-[75%] 2xl:max-w-[1850px]">
       <div className="relative flex h-fit w-full overflow-hidden rounded-[32px]">
         <Image
           src="/dashboard-img/1920.png"
@@ -38,7 +39,7 @@ const Dashboard = () => {
         </div>
       </div>
       <div className="grid h-full w-full grid-cols-[1fr_1fr_1.5fr] grid-rows-3 gap-4">
-        <div className="col-span-2 row-span-1 space-y-4 rounded-xl bg-[#060810] px-6 py-4">
+        <div className="col-span-2 row-span-1 space-y-4 rounded-xl bg-[#060810] px-8 py-6">
           <div className="flex items-center gap-2">
             <p className="text-3xl font-semibold">Weekly Progress</p>
             <ChartNoAxesCombined className="h-8 w-8 rounded-lg bg-gradient-1 p-1 text-secondary-900" />
@@ -54,7 +55,7 @@ const Dashboard = () => {
 
             <div
               ref={scrollRef}
-              className="scrollbar-none grid snap-x snap-mandatory auto-cols-[20.5%] grid-flow-col gap-2 overflow-auto"
+              className="scrollbar-none grid snap-x snap-mandatory grid-flow-col gap-2 overflow-auto xl:auto-cols-[24.5%] 2xl:auto-cols-[18.5%]"
             >
               {days.map((day, index) => (
                 <div key={day} className="flex flex-col items-center gap-1">
@@ -75,9 +76,15 @@ const Dashboard = () => {
             </button>
           </div>
         </div>
-        <div className="col-span-1 row-span-3 rounded-xl bg-[#060810] px-6 py-4">
-          <div className="flex items-center">
+        <div className="col-span-1 row-span-3 rounded-xl bg-[#060810] px-8 py-6">
+          <div className="flex flex-col gap-8">
             <p className="text-3xl font-semibold">Recent Files</p>
+            <div className="flex flex-col gap-3">
+              <RecentFilesContainer title="My Files" progress={75} />
+              <RecentFilesContainer title="Design Files" progress={100} />
+              <RecentFilesContainer title="Coding Files" progress={50} />
+              <RecentFilesContainer title="My Files" progress={75} />
+            </div>
           </div>
         </div>
         <div className="col-span-2 row-span-2 rounded-xl bg-[#060810]"></div>
