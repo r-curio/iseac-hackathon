@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { menuList } from "../libs/menu-list";
-import { useState } from "react";
 import NavItem from "./nav-item";
 import { RxCaretRight, RxCaretLeft } from "react-icons/rx";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -16,9 +15,8 @@ const Sidebar = () => {
 
   const isMobile = useIsMobile();
 
-  const toggleSidebar = () => {
-    sidebar.isOpen ? sidebar.onClose() : sidebar.onOpen();
-  };
+  const toggleSidebar = () =>
+    sidebar.isOpen ? () => sidebar.onClose() : () => sidebar.onOpen();
 
   return isMobile ? (
     <MobileNav />
