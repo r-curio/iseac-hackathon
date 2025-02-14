@@ -1,12 +1,6 @@
 import React from "react";
 
-const Progress = ({
-  value,
-  className,
-}: {
-  value: number;
-  className?: string;
-}) => {
+const Progress = ({ value }: { value: number }) => {
   return (
     <div className="h-2.5 w-full rounded-full bg-[#2f415e]">
       <div
