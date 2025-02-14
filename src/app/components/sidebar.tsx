@@ -1,7 +1,6 @@
 "use client";
 import React from "react";
 import { menuList } from "../libs/menu-list";
-import { useState } from "react";
 import NavItem from "./nav-item";
 import { RxCaretRight, RxCaretLeft } from "react-icons/rx";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -9,34 +8,37 @@ import MobileNav from "./mobile-nav";
 import Logo from "../../../public/Logo.svg";
 import Image from "next/image";
 import Link from "next/link";
+import { useSidebar } from "../hooks/use-sidebar";
 
 const Sidebar = () => {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const sidebar = useSidebar();
+
   const isMobile = useIsMobile();
 
-  const toggleSidebar = () => {
-    setIsCollapsed(!isCollapsed);
-  };
+  const toggleSidebar = () =>
+    sidebar.isOpen ? () => sidebar.onClose() : () => sidebar.onOpen();
 
   return isMobile ? (
     <MobileNav />
   ) : (
     <div
+      className={`flex h-full min-h-fit flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50 transition-all duration-300 2xl:gap-6 ${
+        !sidebar.isOpen ? "w-20 min-w-fit" : "w-72 min-w-72"
       className={`fixed left-0 z-50 flex h-screen min-h-fit flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-100 transition-all duration-300 2xl:gap-6 ${
         isCollapsed ? "w-20 min-w-fit" : "w-72 min-w-72"
       }`}
     >
       <Link
         href="/"
-        className={`flex items-center gap-3 p-6 ${isCollapsed ? "justify-center" : ""}`}
+        className={`flex items-center gap-3 p-3 px-6 pt-4 2xl:p-6 ${!sidebar.isOpen ? "justify-center" : ""}`}
       >
         <Image src={Logo} alt="Zen" width={30} height={30} />
-        {!isCollapsed && <h1 className="text-xl font-semibold">Zen</h1>}
+        {sidebar.isOpen && <h1 className="text-xl font-semibold">Zen</h1>}
       </Link>
       {menuList.map((group, idx) => (
         <div key={group.key} className="flex flex-col gap-3">
-          <div className="flex flex-col gap-1 px-6">
-            {group.title && !isCollapsed && (
+          <div className="flex flex-col gap-1 xl:px-4 2xl:px-6">
+            {group.title && !!sidebar.isOpen && (
               <div key={group.title} className="flex gap-3 px-4 py-3">
                 <h3 className="bg-gradient-1 bg-clip-text text-sm font-medium text-transparent">
                   {group.title}
@@ -49,7 +51,7 @@ const Sidebar = () => {
                 label={label}
                 icon={Icon}
                 path={path}
-                isCollapsed={isCollapsed}
+                isCollapsed={!sidebar.isOpen}
               />
             ))}
           </div>
@@ -59,9 +61,9 @@ const Sidebar = () => {
         </div>
       ))}
       <div
-        className={`mt-auto flex items-center gap-3 p-6 ${isCollapsed ? "justify-center" : ""}`}
+        className={`mt-auto flex items-center gap-3 px-6 xl:p-3 2xl:p-6 ${!sidebar.isOpen ? "justify-center" : ""}`}
       >
-        {!isCollapsed && (
+        {sidebar.isOpen && (
           <>
             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-accent-200">
               <Image
@@ -81,10 +83,10 @@ const Sidebar = () => {
         <button
           onClick={toggleSidebar}
           className={`ml-auto flex h-8 w-8 items-center justify-center rounded-full hover:bg-accent-200 ${
-            isCollapsed ? "ml-0" : ""
+            !sidebar.isOpen ? "ml-0" : ""
           }`}
         >
-          {isCollapsed ? (
+          {!sidebar.isOpen ? (
             <RxCaretRight className="h-5 w-5 stroke-1" />
           ) : (
             <RxCaretLeft className="h-5 w-5 stroke-1" />
