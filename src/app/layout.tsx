@@ -31,7 +31,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${poppins.className} bg-background-dark antialiased`}>
+      <body className={`${poppins.className} bg-secondary-900 antialiased`}>
         <Sidebar />
         {children}
       </body>
