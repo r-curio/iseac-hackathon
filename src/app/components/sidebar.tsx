@@ -24,6 +24,8 @@ const Sidebar = () => {
     <div
       className={`flex h-full min-h-fit flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50 transition-all duration-300 2xl:gap-6 ${
         !sidebar.isOpen ? "w-20 min-w-fit" : "w-72 min-w-72"
+      className={`fixed left-0 z-50 flex h-screen min-h-fit flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-100 transition-all duration-300 2xl:gap-6 ${
+        isCollapsed ? "w-20 min-w-fit" : "w-72 min-w-72"
       }`}
     >
       <Link
