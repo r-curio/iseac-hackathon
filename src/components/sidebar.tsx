@@ -1,31 +1,25 @@
 "use client";
 import React from "react";
-import { menuList } from "../libs/menu-list";
+import { menuList } from "../app/libs/menu-list";
 import NavItem from "./nav-item";
 import { RxCaretRight, RxCaretLeft } from "react-icons/rx";
 import { useIsMobile } from "@/hooks/use-mobile";
 import MobileNav from "./mobile-nav";
-import Logo from "../../../public/Logo.svg";
+import Logo from "../../public/Logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { useSidebar } from "../hooks/use-sidebar";
 
 const Sidebar = () => {
   const sidebar = useSidebar();
-
   const isMobile = useIsMobile();
-
-  const toggleSidebar = () =>
-    sidebar.isOpen ? () => sidebar.onClose() : () => sidebar.onOpen();
 
   return isMobile ? (
     <MobileNav />
   ) : (
     <div
-      className={`flex h-full min-h-fit flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50 transition-all duration-300 2xl:gap-6 ${
+      className={`flex h-screen flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50 transition-all duration-300 2xl:gap-6 ${
         !sidebar.isOpen ? "w-20 min-w-fit" : "w-72 min-w-72"
-      className={`fixed left-0 z-50 flex h-screen min-h-fit flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-100 transition-all duration-300 2xl:gap-6 ${
-        isCollapsed ? "w-20 min-w-fit" : "w-72 min-w-72"
       }`}
     >
       <Link
@@ -81,7 +75,9 @@ const Sidebar = () => {
           </>
         )}
         <button
-          onClick={toggleSidebar}
+          onClick={
+            sidebar.isOpen ? () => sidebar.onClose() : () => sidebar.onOpen()
+          }
           className={`ml-auto flex h-8 w-8 items-center justify-center rounded-full hover:bg-accent-200 ${
             !sidebar.isOpen ? "ml-0" : ""
           }`}

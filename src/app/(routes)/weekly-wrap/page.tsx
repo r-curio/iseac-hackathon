@@ -1,4 +1,4 @@
-import Glare from "@/app/components/glare";
+import Glare from "@/components/glare";
 import React from "react";
 
 const WeeklyWrap = () => {
@@ -24,7 +24,7 @@ const WeeklyWrap = () => {
   };
 
   return (
-    <div className="relative m-8 my-0 flex h-[calc(100%_-_3rem)] w-[70%] overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 to-[#051960]/0">
+    <div className="relative m-8 my-0 flex h-[calc(100%_-_3rem)] w-full overflow-hidden rounded-2xl bg-gradient-to-br from-primary/20 to-[#051960]/0">
       <div className="glow-down absolute -top-1/2 left-1/2 -z-0 aspect-square w-80 -translate-x-1/2 rounded-full bg-accent-100 blur-[150px]" />
       {generateRandomGlares(6)}
       <div className="glow-up absolute -bottom-[65%] left-1/2 -z-10 aspect-square w-1/2 -translate-x-1/2 rounded-full bg-primary blur-[150px]" />

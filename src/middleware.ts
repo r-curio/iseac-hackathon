@@ -1,20 +1,20 @@
-import { type NextRequest, NextResponse } from 'next/server'
-import { updateSession } from './utils/supabase/middleware'
+import { type NextRequest, NextResponse } from "next/server";
+import { updateSession } from "./utils/supabase/middleware";
 
 export async function middleware(request: NextRequest) {
   try {
-    return await updateSession(request)
+    return await updateSession(request);
   } catch (error) {
     // Clone the URL and change pathname to /error
-    const errorUrl = request.nextUrl.clone()
-    errorUrl.pathname = '/error'
-    
+    const errorUrl = request.nextUrl.clone();
+    errorUrl.pathname = "/error";
+
     // Add error message as searchParams if it exists
     if (error instanceof Error) {
-      errorUrl.searchParams.set('message', error.message)
+      errorUrl.searchParams.set("message", error.message);
     }
-    
-    return NextResponse.redirect(errorUrl)
+
+    return NextResponse.redirect(errorUrl);
   }
 }
 
@@ -27,7 +27,7 @@ export const config = {
      * - favicon.ico (favicon file)
      * Feel free to modify this pattern to include more paths.
      */
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-    '/auth/callback'
+    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    "/auth/callback",
   ],
-}
+};

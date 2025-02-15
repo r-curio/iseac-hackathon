@@ -1,7 +1,7 @@
 "use client";
 
-import CircleProgress from "@/app/components/circle-progress";
-import RecentFilesContainer from "@/app/components/recent-files-container";
+import CircleProgress from "@/components/circle-progress";
+import RecentFilesContainer from "@/components/recent-files-container";
 import { ChartNoAxesCombined, ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
 import React, { useRef } from "react";
@@ -20,7 +20,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="flex w-[90%] flex-col items-center gap-8 xl:w-[80%] 2xl:w-[75%] 2xl:max-w-[1850px]">
+    <div className="flex flex-col items-center gap-8">
       <div className="relative flex h-fit w-full overflow-hidden rounded-[32px]">
         <Image
           src="/dashboard-img/1920.png"
