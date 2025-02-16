@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { useSidebar } from "../../hooks/use-sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";

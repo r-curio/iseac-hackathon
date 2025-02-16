@@ -1,5 +1,7 @@
 "use client"; // Error boundaries must be Client Components
 
+import { useSearchParams } from 'next/navigation';
+
 const ErrorPage = ({
   error,
   reset,
@@ -7,6 +9,9 @@ const ErrorPage = ({
   error: Error & { digest?: string };
   reset: () => void;
 }) => {
+  const searchParams = useSearchParams();
+  const errorMessage = searchParams.get('message') || error.message || 'An unknown error occurred';
+
   return (
     // global-error must include html and body tags
     <div className="flex h-full w-full flex-col items-center justify-center gap-4">
@@ -16,12 +21,15 @@ const ErrorPage = ({
       </p>
       <button
         className="rounded-lg bg-primary px-6 py-3 text-white"
-        onClick={reset}
+        onClick={() => {
+          reset();
+          window.location.href = '/';  // Redirect to home page after reset
+        }}
       >
-        Refresh Page
+        Back to Home
       </button>
       <p className="mt-24 font-mono text-lg text-gray">
-        Error: <span className="font-bold text-red-400">{error.message}</span>
+        Error: <span className="font-bold text-red-400">{errorMessage}</span>
       </p>
     </div>
   );

@@ -1,5 +1,5 @@
 import React from "react";
-import { cn } from "../libs/utils";
+import { cn } from "../app/libs/utils";
 
 interface GlareProps extends React.HTMLAttributes<HTMLDivElement> {
   className?: string;
