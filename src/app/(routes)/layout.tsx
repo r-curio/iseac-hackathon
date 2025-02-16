@@ -1,15 +1,21 @@
 "use client";
 import React from "react";
 import { useSidebar } from "../../hooks/use-sidebar";
+import { useIsMobile } from "@/hooks/use-mobile";
 
 const RouteLayout = ({ children }: { children: React.ReactNode }) => {
   const sidebar = useSidebar();
+  const isMobile = useIsMobile();
 
   return (
     <div
-      className="ml-auto flex items-center justify-center px-10 py-8"
+      className="m-0 mt-16 flex items-center justify-center p-0 lg:m-0 lg:ml-auto lg:px-10 lg:py-8"
       style={{
-        width: sidebar.isOpen ? "calc(100% - 240px)" : "calc(100% - 80px)",
+        width: isMobile
+          ? "100%"
+          : sidebar.isOpen
+            ? "calc(100% - 240px)"
+            : "calc(100% - 80px)",
       }}
     >
       {children}
