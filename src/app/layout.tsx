@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
 import Sidebar from "../components/sidebar";
-import { ScrollArea } from "@/components/ui/scroll-area";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -36,7 +35,7 @@ export default function RootLayout({
         className={`${poppins.className} flex bg-secondary-900 antialiased`}
       >
         <Sidebar />
-        <ScrollArea className="max-h-screen">{children}</ScrollArea>
+        {children}
       </body>
     </html>
   );
