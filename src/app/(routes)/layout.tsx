@@ -9,7 +9,7 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className="m-0 mt-16 flex items-center justify-center p-0 lg:m-0 lg:ml-auto lg:px-10 lg:py-8"
+      className="m-0 mt-16 flex items-center justify-center p-0 transition-all lg:m-0 lg:ml-auto lg:px-10 lg:py-8"
       style={{
         width: isMobile
           ? "100%"
