@@ -37,17 +37,6 @@ export default function VideoNotes() {
     const handleGenerateNotes = () => {
         setLoading(true);
         
-        try {
-
-            if (mode === "paste") {
-                
-            }
-
-            const response = await fetch("api/video-notes", {
-                method: "POST",
-                body: selectedFile,
-            });
-        }
     }
     
     if (loading) {
