@@ -7,7 +7,7 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <div
-      className="ml-auto flex items-center justify-center px-10 py-8"
+      className="ml-auto flex justify-center px-10 py-8"
       style={{
         width: sidebar.isOpen ? "calc(100% - 240px)" : "calc(100% - 80px)",
       }}
