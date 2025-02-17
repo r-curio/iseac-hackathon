@@ -1,24 +1,13 @@
 "use client";
 
-import CircleProgress from "@/components/circle-progress";
 import RecentFilesContainer from "@/components/recent-files-container";
-import { ChartNoAxesCombined, ChevronLeft, ChevronRight } from "lucide-react";
+import Streak from "@/components/streak";
+import WeeklyProgress from "@/components/weekly-progress";
+import { ChartNoAxesCombined } from "lucide-react";
+
 import Image from "next/image";
-import React, { useRef } from "react";
 
 const Dashboard = () => {
-  const weeklyProgress = [75, 80, 100, 25, 18, 76, 45];
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
-  const scrollRef = useRef<HTMLDivElement>(null);
-
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const scrollAmount = direction === "left" ? -200 : 200;
-      scrollRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-    }
-  };
-
   return (
     <div className="flex flex-col items-center gap-8">
       <div className="relative flex h-fit w-full overflow-hidden rounded-[32px]">
@@ -38,48 +27,18 @@ const Dashboard = () => {
           </p>
         </div>
       </div>
-      <div className="grid h-full w-full grid-cols-[1fr_1fr_1.5fr] grid-rows-3 gap-4">
-        <div className="col-span-2 row-span-1 space-y-4 rounded-xl bg-[#060810] px-8 py-6">
+      <div className="grid h-full w-full grid-cols-[1fr_1fr_1.5fr] grid-rows-3 gap-6">
+        <div className="col-span-2 row-span-1 flex flex-col gap-2 rounded-xl bg-[#060810] px-8 py-6">
           <div className="flex items-center gap-2">
-            <p className="text-3xl font-semibold">Weekly Progress</p>
+            <p className="text-2xl font-semibold">Weekly Progress</p>
             <ChartNoAxesCombined className="h-8 w-8 rounded-lg bg-gradient-1 p-1 text-secondary-900" />
           </div>
-          <div className="relative">
-            {/* Left scroll button */}
-            <button
-              onClick={() => scroll("left")}
-              className="absolute -left-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-accent-200/50 p-1 hover:bg-accent-200"
-            >
-              <ChevronLeft className="h-6 w-6" />
-            </button>
-
-            <div
-              ref={scrollRef}
-              className="scrollbar-none grid snap-x snap-mandatory grid-flow-col gap-2 overflow-auto xl:auto-cols-[24.5%] 2xl:auto-cols-[18.5%]"
-            >
-              {days.map((day, index) => (
-                <div key={day} className="flex flex-col items-center gap-1">
-                  <p className="select-none text-xl font-medium">{day}</p>
-                  <div className="flex items-center justify-center rounded-xl bg-[#070a14] p-3">
-                    <CircleProgress progress={weeklyProgress[index]} />
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            {/* Right scroll button */}
-            <button
-              onClick={() => scroll("right")}
-              className="absolute -right-3 top-1/2 z-20 -translate-y-1/2 rounded-full bg-accent-200/50 p-1 hover:bg-accent-200"
-            >
-              <ChevronRight className="h-6 w-6" />
-            </button>
-          </div>
+          <WeeklyProgress />
         </div>
-        <div className="col-span-1 row-span-3 rounded-xl bg-[#060810] px-8 py-6">
+        <div className="col-span-1 row-span-3 h-fit rounded-xl bg-[#060810] px-8 py-6 pb-8">
           <div className="flex flex-col gap-8">
             <p className="text-3xl font-semibold">Recent Files</p>
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-4">
               <RecentFilesContainer title="My Files" progress={75} />
               <RecentFilesContainer title="Design Files" progress={100} />
               <RecentFilesContainer title="Coding Files" progress={50} />
@@ -87,7 +46,7 @@ const Dashboard = () => {
             </div>
           </div>
         </div>
-        <div className="col-span-2 row-span-2 rounded-xl bg-[#060810]"></div>
+        <Streak className="col-span-2 row-span-2 h-fit p-8 pt-12" />
       </div>
       {/* <p>Leaderboards</p> */}
       {/* <div className="h-72 border border-red-500"></div> */}
