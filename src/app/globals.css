@@ -151,3 +151,9 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.custom-dashed {
+  border-radius: 26px;
+  border: 4px dashed var(--P6, #2D0F55);
+  background: var(--P8, #090311);
+}
