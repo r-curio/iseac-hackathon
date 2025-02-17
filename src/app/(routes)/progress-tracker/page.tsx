@@ -1,7 +1,6 @@
 import CircleProgress from "@/components/circle-progress";
 import ContributionHeatmap from "@/components/contribution-graph";
 import Streak from "@/components/streak";
-import WeeklyProgress from "@/components/weekly-progress";
 import React from "react";
 
 const ProgressTracker = () => {
