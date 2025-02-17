@@ -57,7 +57,7 @@ export default function VideoNotes() {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
 
-      const data = await response.json();
+      await response.json();
       setLoading(false);
       // Handle successful upload
     } catch (error) {

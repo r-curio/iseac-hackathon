@@ -72,7 +72,7 @@ const Streak = ({ className }: { className?: string }) => {
           </p>
         </div>
         <p className="text-base leading-none 2xl:text-lg">
-          You're on fire! Keep the momentum going!
+          You&apos;re on fire! Keep the momentum going!
         </p>
       </div>
     </div>

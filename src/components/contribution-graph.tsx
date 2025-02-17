@@ -5,11 +5,16 @@ interface ContributionHeatmapProps {
   className?: string;
 }
 
+interface ContributionData {
+  date: Date;
+  count: number;
+}
+
 const ContributionHeatmap = ({ className }: ContributionHeatmapProps) => {
   // Generate dates for 2025
   const generateYearData = () => {
     const year = 2025;
-    const data = [];
+    const data: ContributionData[] = [];
     const startDate = new Date(year, 0, 1);
     const endDate = new Date(year, 11, 31);
 
@@ -30,7 +35,7 @@ const ContributionHeatmap = ({ className }: ContributionHeatmapProps) => {
   };
 
   const yearData = generateYearData();
-  const weeks: any[] = [];
+  const weeks: ContributionData[][] = [];
 
   for (let i = 0; i < yearData.length; i += 7) {
     weeks.push(yearData.slice(i, i + 7));
@@ -121,7 +126,7 @@ const ContributionHeatmap = ({ className }: ContributionHeatmapProps) => {
           <div className="flex gap-1">
             {weeks.map((week, weekIndex) => (
               <div key={weekIndex} className="flex flex-col gap-1">
-                {week.map((day: any, dayIndex: number) => (
+                {week.map((day, dayIndex) => (
                   <div
                     key={`${weekIndex}-${dayIndex}`}
                     className={cn(
