@@ -10,7 +10,8 @@ interface UploadModeContentProps {
     handleDrop: (event: React.DragEvent<HTMLDivElement>) => void;
     handleDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
     handleRemoveFile: () => void;
-    handleGenerateNotes: () => void;    
+    handleGenerateNotes: () => void;
+    setText: (text: string) => void;    
 }
 
 
@@ -21,7 +22,8 @@ export function UploadModeContent({
     handleDrop, 
     handleDragOver, 
     handleRemoveFile,
-    handleGenerateNotes
+    handleGenerateNotes,
+    setText
 }: UploadModeContentProps) {
     
     
@@ -39,6 +41,7 @@ export function UploadModeContent({
                     handleDrop={handleDrop} 
                     handleDragOver={handleDragOver} 
                     handleRemoveFile={handleRemoveFile}
+                    setText={setText}
                 />
                 <div className="flex justify-center">
                     <AIButton className="mt-12 text-xl px-[64px]" onClick={handleGenerateNotes}>Generate Notes</AIButton>

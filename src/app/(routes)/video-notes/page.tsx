@@ -8,6 +8,7 @@ export default function VideoNotes() {
 
     const [mode, setMode] = useState("upload")
     const [loading, setLoading] = useState(false);
+    const [text, setText] = useState("");
     const [selectedFile, setSelectedFile] = useState<File>();
     
     // Handle file selection via input
@@ -34,9 +35,38 @@ export default function VideoNotes() {
         setSelectedFile(undefined);
     };
 
-    const handleGenerateNotes = () => {
+    const handleGenerateNotes = async () => {
         setLoading(true);
         
+        if (mode === 'paste') {
+            console.log(text);
+            return;
+        }
+
+        try {
+            const formData = new FormData();
+            if (selectedFile) {
+                formData.append('file', selectedFile);
+            }
+
+            const response = await fetch('/api/video-notes', {
+                method: 'POST',
+                body: formData
+            });
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const data = await response.json();
+            setLoading(false);
+            // Handle successful upload
+            
+        } catch(error) {
+            setLoading(false);
+            console.error('Upload error:', error);
+            // Handle error state
+        }
     }
     
     if (loading) {
@@ -55,6 +85,7 @@ export default function VideoNotes() {
                 handleDragOver={handleDragOver}
                 handleRemoveFile={handleRemoveFile}
                 handleGenerateNotes={handleGenerateNotes}
+                setText={setText}  
             />
         </div>
     )

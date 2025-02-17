@@ -2,7 +2,7 @@ import { Upload, X, FileText } from "lucide-react";
 import Image from "next/image";
 import gdrive from "../../../../../public/icons/gdrive.svg";
 import { Textarea } from "@/components/ui/textarea";
-
+import useDrivePicker from 'react-google-drive-picker'
 
 
 const formatFileSize = (bytes: number) => {
@@ -21,6 +21,7 @@ interface UploadBoxProps {
     handleDrop: (event: React.DragEvent<HTMLDivElement>) => void;
     handleDragOver: (event: React.DragEvent<HTMLDivElement>) => void;
     handleRemoveFile: () => void;
+    setText: (text: string) => void;
 }
 
 export default function UploadBox({ 
@@ -29,14 +30,40 @@ export default function UploadBox({
     handleFileChange, 
     handleDrop, 
     handleDragOver, 
-    handleRemoveFile 
+    handleRemoveFile,
+    setText 
 }: UploadBoxProps) {
-    
+    const [openPicker, ] = useDrivePicker(); 
+
+
+    const handleOpenPicker = () => {
+        openPicker({
+          clientId: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "",
+          developerKey: process.env.NEXT_PUBLIC_GOOGLE_API_KEY || "",
+          viewId: "DOCS",
+          // token: token, // pass oauth token in case you already have one
+          showUploadView: true,
+          showUploadFolders: true,
+          supportDrives: true,
+          multiselect: false,
+          // customViews: customViewsArray, // custom view
+          callbackFunction: async (data) => {
+            if (data.action === 'cancel') {
+              console.log('User clicked cancel/close button')
+              return
+            }
+                console.log(data);
+        },
+    });
+    }
 
     switch(mode){
         case 'paste':
             return (
-                <Textarea placeholder="Paste your notes here. AI will do the rest" className="h-[400px] bg-[#F8F7FC]/30 rounded-3xl"/>
+                <Textarea placeholder="Paste your notes here. AI will do the rest" 
+                    className="h-[400px] bg-[#F8F7FC]/30 rounded-3xl"
+                    onChange={(e) => setText(e.target.value)}
+                />
             )
 
         case 'upload':
@@ -111,17 +138,25 @@ export default function UploadBox({
             )
 
         case 'gdrive':
-            return (
-                <div className="h-[400px] border-white rounded-lg flex items-center justify-center custom-dashed">       
-                    <div className="flex flex-col items-center gap-4">
-                        <Image src={gdrive} alt="gdrive" width={45} height={45} />
-                        <div className="mt-10">
-                            <h1 className="font-semibold text-3xl text-center">Select a doc or presentation from your drive</h1 >
-                            <h2 className="text-[#C0B4D0] font-semibold text-2xl">Allow pop-ups for Google Drive before connecting</h2>
-                        </div>
-                        <button className="border-2 rounded-2xl border-[#C0B4D0] py-4 px-8 mt-5 hover:opacity-55">Select File</button>
+        return (
+            <div className="h-[400px] border-white rounded-lg flex items-center justify-center custom-dashed">       
+                <div className="flex flex-col items-center gap-4">
+                    <Image src={gdrive} alt="gdrive" width={45} height={45} />
+                    <div className="mt-10">
+                        <h1 className="font-semibold text-3xl text-center">
+                            Select a doc or presentation from your drive
+                        </h1>
+                        <h2 className="text-[#C0B4D0] font-semibold text-2xl">
+                        </h2>
                     </div>
+                    <button 
+                        className="border-2 rounded-2xl border-[#C0B4D0] py-4 px-8 mt-5 hover:opacity-55" 
+                        onClick={handleOpenPicker}
+                    >
+                        Select File
+                    </button>
                 </div>
-            )
+            </div>
+        )
     }
 }
