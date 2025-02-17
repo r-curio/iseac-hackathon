@@ -14,7 +14,7 @@ const WeeklyWrap = () => {
   const isMobile = useIsMobile();
 
   return (
-    <>
+    <div className="flex h-full w-full items-center justify-center">
       {/* Left scroll button */}
       <button
         onClick={() => setCurrentPage((prev) => prev - 1)}
@@ -174,16 +174,16 @@ const WeeklyWrap = () => {
               </p>
               <div className="flex flex-col items-start justify-center gap-8 text-start">
                 <p className="text-xl text-gray">
-                  <span className="font-bold">Math:</span> "The quadratic
-                  formula is used to find x in ax² + bx + c = 0."
+                  <span className="font-bold">Math:</span> The quadratic formula
+                  is used to find x in ax² + bx + c = 0.
                 </p>
                 <p className="text-xl text-gray">
-                  <span className="font-bold">Science:</span> "Newton’s 3rd Law
-                  states that every action has an equal and opposite reaction"
+                  <span className="font-bold">Science:</span> Newton’s 3rd Law
+                  states that every action has an equal and opposite reaction
                 </p>
                 <p className="text-xl text-gray">
-                  <span className="font-bold">History:</span> "The Industrial
-                  Revolution transformed economies worldwide."
+                  <span className="font-bold">History:</span> The Industrial
+                  Revolution transformed economies worldwide.
                 </p>
               </div>
             </div>
@@ -275,7 +275,7 @@ const WeeklyWrap = () => {
                   Top Focus Area: Physics (40% of study time)
                 </p>
                 <p className="text-xl">
-                  AI Suggests: "Revise Newton’s Laws for better retention!"{" "}
+                  AI Suggests: Revise Newton’s Laws for better retention!{" "}
                 </p>
               </div>
               <p className="text-2xl">
@@ -297,7 +297,7 @@ const WeeklyWrap = () => {
       >
         <ChevronRight className="h-6 w-6" />
       </button>
-    </>
+    </div>
   );
 };
 
