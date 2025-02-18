@@ -4,7 +4,7 @@ import React, { useRef, useState } from "react";
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import { ArrowUp, Target } from "lucide-react";
 
-const page = () => {
+const GoalHelper = () => {
   const [prompt, setPrompt] = useState("");
   const [result, setResult] = useState("");
   const [isLoading, setIsLoading] = useState(false);
@@ -76,6 +76,7 @@ const page = () => {
     );
 
     for await (const chunk of result.stream) {
+      setIsLoading(false);
       const chunkText = chunk.text().trim();
 
       const lines = chunkText.split("\n");
@@ -148,6 +149,11 @@ const page = () => {
             {/* <p className="font-bold text-accent-200">Submit</p> */}
           </button>
         </div>
+        {isLoading && (
+          <div className="flex items-center justify-center gap-2 p-2 pt-0">
+            <p className="text-lg font-bold text-accent-200">Loading...</p>
+          </div>
+        )}
         {result && (
           <div className="rounded-xl bg-primary/5 p-4">
             <div className="prose prose-invert max-w-none transition-all">
@@ -162,4 +168,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default GoalHelper;
