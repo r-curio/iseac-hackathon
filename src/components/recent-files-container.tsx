@@ -1,12 +1,14 @@
 import Image from "next/image";
 import React from "react";
 import { ChevronRight } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 const RecentFilesContainer = ({
   title,
+  className,
 }: {
   title: string;
-  progress: number;
+  className?: string;
 }) => {
   return (
     <div
@@ -20,10 +22,6 @@ const RecentFilesContainer = ({
       </div>
       <div className="flex flex-1 flex-col justify-center gap-2 px-4 py-4">
         <p className="font-semibold leading-none 2xl:text-lg">{title}</p>
-        {/* <div className="flex flex-col gap-1">
-          <p className="text-xs text-gray">{progress}% completed</p>
-          <Progress value={progress} />
-        </div> */}
       </div>
       <div className="flex min-w-12 items-center justify-start">
         <ChevronRight className="h-8 w-8" />
