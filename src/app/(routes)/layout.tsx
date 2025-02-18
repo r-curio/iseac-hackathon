@@ -18,7 +18,7 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
             : "calc(100% - 80px)",
       }}
     >
-      <div className="h-full w-full xl:max-w-[1100px] 2xl:max-w-[1300px]">
+      <div className="h-full w-full xl:max-w-[1300px] 2xl:max-w-[1500px]">
         {children}
       </div>
     </div>
