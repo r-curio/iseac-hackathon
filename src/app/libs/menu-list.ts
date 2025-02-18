@@ -1,7 +1,7 @@
 import { IconType } from "react-icons";
-import { 
-  LayoutDashboard, 
-  Trophy, 
+import {
+  LayoutDashboard,
+  Trophy,
   Swords,
   Video,
   Target,
@@ -10,7 +10,7 @@ import {
   Settings,
   Bell,
   HelpCircle,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MenuItem {
   title: string;
@@ -35,7 +35,7 @@ export const menuList: MenuItem[] = [
   {
     key: 2,
 
-    title: "Study Tools",
+    title: "",
     groupLabels: [
       { label: "AI Video Notes", icon: Video, path: "/video-notes" },
       { label: "Goal Helper AI", icon: Target, path: "/goal-helper" },

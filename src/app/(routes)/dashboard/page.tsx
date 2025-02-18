@@ -37,12 +37,12 @@ const Dashboard = () => {
         </div>
         <div className="col-span-1 row-span-3 h-fit rounded-xl bg-[#060810] px-8 py-6 pb-8">
           <div className="flex flex-col gap-8">
-            <p className="text-3xl font-semibold">Recent Files</p>
+            <p className="text-3xl font-semibold">Recent Courses</p>
             <div className="flex flex-col gap-4">
-              <RecentFilesContainer title="My Files" progress={75} />
-              <RecentFilesContainer title="Design Files" progress={100} />
-              <RecentFilesContainer title="Coding Files" progress={50} />
-              <RecentFilesContainer title="My Files" progress={75} />
+              <RecentFilesContainer title="My Courses" progress={75} />
+              <RecentFilesContainer title="Design Courses" progress={100} />
+              <RecentFilesContainer title="Coding Courses" progress={50} />
+              <RecentFilesContainer title="My Courses" progress={75} />
             </div>
           </div>
         </div>

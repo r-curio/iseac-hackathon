@@ -103,7 +103,7 @@ const GoalHelper = () => {
 
   return (
     <div className="flex h-full w-full items-center justify-center">
-      <div className="flex h-fit w-1/2 flex-col gap-4 rounded-xl bg-primary/10 p-8">
+      <div className="flex h-fit w-full flex-col gap-4 rounded-xl bg-primary/10 p-8">
         <div className="mb-4 flex items-center justify-center gap-2 p-2 pt-0">
           <p className="text-xl font-bold text-accent-200">Goal Helper AI</p>
           <Target className="h-8 w-8 text-accent-200" />

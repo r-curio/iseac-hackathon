@@ -45,7 +45,7 @@ const Streak = ({ className }: { className?: string }) => {
                 }
           }
         />
-        <div className="relative flex w-full items-center justify-center">
+        <div className="pointer-events-none relative flex w-full items-center justify-center">
           <Image
             src={"/flame.svg"}
             alt="flame"
