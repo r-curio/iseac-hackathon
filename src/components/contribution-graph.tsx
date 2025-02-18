@@ -14,7 +14,7 @@ const ContributionHeatmap = ({ className }: ContributionHeatmapProps) => {
   // Generate dates for 2025
   const generateYearData = () => {
     const year = 2025;
-    const data = [];
+    const data: ContributionData[] = [];
     const startDate = new Date(year, 0, 1);
     const endDate = new Date(year, 11, 31);
 
