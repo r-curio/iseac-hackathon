@@ -14,6 +14,13 @@
     scrollbar-width: none; /* Firefox */
   }
 
+  .glass-effect {
+    @apply bg-white/5 backdrop-blur-lg;
+    box-shadow:
+      inset 0 0 0.5px 0.5px rgba(255, 255, 255, 0.15),
+      0 0 0 1px rgba(255, 255, 255, 0.05);
+  }
+
   .inner-glow {
     box-shadow: inset 7px 7px 24px rgba(194, 194, 194, 0.1);
   }
@@ -141,9 +148,6 @@
     --foreground: #ededed;
     --radius: 0.5rem;
   }
-    
-
-  
 }
 
 body {
@@ -154,6 +158,6 @@ body {
 
 .custom-dashed {
   border-radius: 26px;
-  border: 4px dashed var(--P6, #2D0F55);
+  border: 4px dashed var(--P6, #2d0f55);
   background: var(--P8, #090311);
 }
