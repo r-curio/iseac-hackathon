@@ -38,7 +38,9 @@ const StudyDeckPage = () => {
       <div className="flex h-[75vh] max-h-[75vh] w-full gap-6">
         <div className="flex w-3/5 flex-col gap-6 rounded-xl bg-[#06080f] p-6 px-8">
           <p className="text-2xl font-semibold">My Courses</p>
-          <div className="scrollbar-none flex flex-col items-center gap-4 overflow-y-auto">
+          <div className="scrollbar-none flex w-full flex-col justify-center gap-4 overflow-y-auto">
+            <RecentFilesContainer title="Test" className="w-full" />
+            <RecentFilesContainer title="Test" className="w-full" />
             <RecentFilesContainer title="Test" className="w-full" />
             <RecentFilesContainer title="Test" className="w-full" />
             <RecentFilesContainer title="Test" className="w-full" />
