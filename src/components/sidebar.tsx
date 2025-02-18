@@ -18,7 +18,7 @@ const Sidebar = () => {
     <MobileNav />
   ) : (
     <div
-      className={`flex h-screen flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50 transition-all duration-300 2xl:gap-6 ${
+      className={`sticky left-0 top-0 flex h-screen flex-col gap-2 rounded-br-2xl rounded-tr-2xl bg-primary bg-opacity-50 transition-all duration-300 2xl:gap-6 ${
         !sidebar.isOpen ? "w-20 min-w-fit" : "w-72 min-w-72"
       }`}
     >

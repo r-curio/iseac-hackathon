@@ -1,7 +1,7 @@
-'use client'
-import { useState } from "react"
-import { UploadMode } from './components/UploadMode';
-import { UploadModeContent } from './components/UploadModeContent';
+"use client";
+import { useState } from "react";
+import { UploadMode } from "./components/UploadMode";
+import { UploadModeContent } from "./components/UploadModeContent";
 import RouteLoading from "../loading";
 import { useRouter } from "next/navigation";
 
@@ -20,22 +20,22 @@ export default function VideoNotes() {
         }
     };
 
-    // Handle file drop
-    const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-        if (event.dataTransfer.files) {
-            setSelectedFile(event.dataTransfer.files[0]);
-        }
-    };
+  // Handle file drop
+  const handleDrop = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (event.dataTransfer.files) {
+      setSelectedFile(event.dataTransfer.files[0]);
+    }
+  };
 
-    // Prevent default behavior when dragging over
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-        event.preventDefault();
-    };
+  // Prevent default behavior when dragging over
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+  };
 
-    const handleRemoveFile = () => {
-        setSelectedFile(undefined);
-    };
+  const handleRemoveFile = () => {
+    setSelectedFile(undefined);
+  };
 
     const handleGenerateNotes = async () => {
         setLoading(true);
