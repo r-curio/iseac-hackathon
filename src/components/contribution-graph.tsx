@@ -1,8 +1,11 @@
+import prismadb from "@/lib/prismadb";
 import { cn } from "@/lib/utils";
 import React from "react";
 
 interface ContributionHeatmapProps {
   className?: string;
+  userId: string;
+  activityData: { [key: string]: number };
 }
 
 interface ContributionData {
@@ -10,18 +13,35 @@ interface ContributionData {
   count: number;
 }
 
-const ContributionHeatmap = ({ className }: ContributionHeatmapProps) => {
-  // Generate dates for 2025
+const ContributionHeatmap = ({
+  className,
+  activityData,
+}: ContributionHeatmapProps) => {
   const generateYearData = () => {
-    const year = 2025;
+    const year = new Date().getFullYear();
     const data: ContributionData[] = [];
-    const startDate = new Date(year, 0, 1);
-    const endDate = new Date(year, 11, 31);
 
-    for (let d = startDate; d <= endDate; d.setDate(d.getDate() + 1)) {
+    // Get the first day of the year
+    const firstDay = new Date(year, 0, 1);
+    // Get the first Sunday before or on January 1st
+    const startDate = new Date(year, 0, 1);
+    startDate.setDate(startDate.getDate() - firstDay.getDay());
+
+    const endDate = new Date(year, 11, 31);
+    // Add remaining days to complete the last week
+    endDate.setDate(endDate.getDate() + (6 - endDate.getDay()));
+
+    for (
+      let d = new Date(startDate);
+      d <= endDate;
+      d.setDate(d.getDate() + 1)
+    ) {
+      const localDate = new Date(d.getTime() - d.getTimezoneOffset() * 60000);
+      const dateString = localDate.toISOString().split("T")[0];
+
       data.push({
-        date: new Date(d),
-        count: Math.floor(Math.random() * 5),
+        date: localDate,
+        count: activityData[dateString] || 0,
       });
     }
     return data;
@@ -29,8 +49,8 @@ const ContributionHeatmap = ({ className }: ContributionHeatmapProps) => {
 
   const getContributionColor = (count: number) => {
     if (count === 0) return "bg-primary/10";
-    if (count <= 1) return "bg-primary/50";
-    if (count <= 3) return "bg-primary";
+    if (count <= 2) return "bg-primary/50";
+    if (count <= 5) return "bg-primary";
     return "bg-[#9900FF]";
   };
 
@@ -126,16 +146,23 @@ const ContributionHeatmap = ({ className }: ContributionHeatmapProps) => {
           <div className="flex gap-1">
             {weeks.map((week, weekIndex) => (
               <div key={weekIndex} className="flex flex-col gap-1">
-                {week.map((day, dayIndex) => (
-                  <div
-                    key={`${weekIndex}-${dayIndex}`}
-                    className={cn(
-                      "h-3 w-3 rounded-sm",
-                      getContributionColor(day.count),
-                    )}
-                    title={`${day.date.toLocaleDateString()}: ${day.count} contributions`}
-                  />
-                ))}
+                {week.map((day, dayIndex) =>
+                  day.date.getFullYear() !== new Date().getFullYear() ? (
+                    <div
+                      key={`${weekIndex}-${dayIndex}`}
+                      className="h-3 w-3 bg-transparent"
+                    />
+                  ) : (
+                    <div
+                      key={`${weekIndex}-${dayIndex}`}
+                      className={cn(
+                        "h-3 w-3 rounded-sm",
+                        getContributionColor(day.count),
+                      )}
+                      title={`${day.date.toLocaleDateString()}: ${day.count} contributions`}
+                    />
+                  ),
+                )}
               </div>
             ))}
           </div>

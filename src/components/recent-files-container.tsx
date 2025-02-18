@@ -12,7 +12,10 @@ const RecentFilesContainer = ({
 }) => {
   return (
     <div
-      className="flex cursor-pointer rounded-xl bg-[linear-gradient(300deg,_var(--P7,_#120622)_14.64%,_var(--S8,_#00020A)_109.56%)] transition-all duration-200 hover:bg-[linear-gradient(120deg,_var(--P7,_#120622)_0%,_var(--S8,_#00020A)_100%)]"
+      className={cn(
+        "flex cursor-pointer rounded-xl bg-[linear-gradient(300deg,_var(--P7,_#120622)_14.64%,_var(--S8,_#00020A)_109.56%)] transition-all duration-200 hover:bg-[linear-gradient(120deg,_var(--P7,_#120622)_0%,_var(--S8,_#00020A)_100%)]",
+        className,
+      )}
       style={{
         backdropFilter: `blur(12.5px)`,
       }}

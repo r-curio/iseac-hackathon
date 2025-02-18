@@ -4,8 +4,12 @@ import { cn } from "@/lib/utils";
 import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import GlowButton from "../ui/glow-button";
+import axios from "axios";
+import { createClient } from "@/utils/supabase/server";
 
 interface GoalSettingModalProps {
+  goal: number;
+  userId: string;
   isOpen: boolean;
   onClose: () => void;
   loading: boolean;
@@ -13,6 +17,8 @@ interface GoalSettingModalProps {
 }
 
 const GoalSettingModal: React.FC<GoalSettingModalProps> = ({
+  goal: _goal,
+  userId,
   isOpen,
   onClose,
   loading,
@@ -20,7 +26,8 @@ const GoalSettingModal: React.FC<GoalSettingModalProps> = ({
 }) => {
   const [isMounted, setisMounted] = useState(false);
 
-  const [goal, setGoal] = useState(10);
+  const [goal, setGoal] = useState(_goal);
+
   const [feedback, setFeedback] = useState("");
   const [isTextAnimating, setIsTextAnimating] = useState(false);
 
@@ -52,9 +59,14 @@ const GoalSettingModal: React.FC<GoalSettingModalProps> = ({
     setisMounted(true);
   }, []);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     try {
       setLoading(true);
+
+      const data = await axios.patch(`/api/${userId}`, {
+        studyHrsGoal: goal,
+      });
+      console.log(data);
       onClose();
     } catch (error) {
       console.log(error);
@@ -79,7 +91,12 @@ const GoalSettingModal: React.FC<GoalSettingModalProps> = ({
           isOpen && "scale-100 opacity-100",
         )}
       >
-        <button onClick={onClose}>
+        <button
+          onClick={() => {
+            setGoal(_goal);
+            onClose();
+          }}
+        >
           <p className="text-accent-100">Cancel</p>
         </button>
         <div className="flex h-full w-full flex-col items-center justify-evenly gap-6">

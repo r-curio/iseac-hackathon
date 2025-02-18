@@ -1,5 +1,4 @@
 import Glare from "@/components/glare";
-import Progress from "@/components/progress-bar";
 import RecentFilesContainer from "@/components/recent-files-container";
 import RecentFlashcard from "@/components/recent-flashcard";
 import GlowButton from "@/components/ui/glow-button";
@@ -79,7 +78,9 @@ const StudyDeckPage = () => {
           />
           <div className="max-w-3/4 mt-6 flex w-3/4 flex-col gap-2">
             <p className="text-3xl font-medium">Track Your Study Progress!</p>
-            <p className="w-3/4">See how much you've accomplished this week.</p>
+            <p className="w-3/4">
+              See how much you&apos;ve accomplished this week.
+            </p>
           </div>
           <div className="flex w-full items-center justify-center">
             <Link href="/progress-tracker">

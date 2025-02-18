@@ -2,11 +2,10 @@
 import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CircleProgress from "@/components/circle-progress";
+import { Progress } from "@prisma/client";
+import { DAYS } from "@/lib/utils";
 
-const WeeklyProgress = () => {
-  const weeklyProgress = [75, 80, 100, 25, 18, 76, 45];
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
-
+const WeeklyProgress = ({ values }: { values: Progress[] }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -30,11 +29,13 @@ const WeeklyProgress = () => {
           ref={scrollRef}
           className="scrollbar-none grid snap-x snap-mandatory grid-flow-col gap-2 overflow-auto xl:auto-cols-[22.5%] 2xl:auto-cols-[21.5%]"
         >
-          {days.map((day, index) => (
-            <div key={day} className="flex flex-col items-center gap-1">
-              <p className="select-none text-lg font-medium">{day}</p>
+          {values.map((progress) => (
+            <div key={progress.id} className="flex flex-col items-center gap-1">
+              <p className="select-none text-lg font-medium">
+                {DAYS[progress.dayOfTheWeek]}
+              </p>
               <div className="flex items-center justify-center rounded-3xl bg-gradient-2 p-3 backdrop-blur-xl">
-                <CircleProgress progress={weeklyProgress[index]} />
+                <CircleProgress progress={progress.progress} />
               </div>
             </div>
           ))}

@@ -4,7 +4,13 @@ import React, { useCallback, useState } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
 
-const Streak = ({ className }: { className?: string }) => {
+const Streak = ({
+  value,
+  className,
+}: {
+  value: number;
+  className?: string;
+}) => {
   const router = useRouter();
 
   const [mousePosition, setMousePosition] = useState({ x: 50, y: 50 });
@@ -65,7 +71,7 @@ const Streak = ({ className }: { className?: string }) => {
       <div className="flex w-full flex-1 flex-col items-center justify-center gap-4 2xl:gap-6">
         <div className="flex flex-col items-center">
           <p className="bg-gradient-1 bg-clip-text text-[2.75rem] font-bold leading-none text-transparent 2xl:text-[5rem]">
-            4
+            {value}
           </p>
           <p className="bg-gradient-1 bg-clip-text text-3xl font-semibold leading-none text-transparent 2xl:text-4xl">
             days streak
