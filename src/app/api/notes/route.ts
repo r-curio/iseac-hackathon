@@ -39,10 +39,10 @@ export async function POST(req: NextRequest) {
         } else {
             return NextResponse.json({ message: "Failed to insert note" }, { status: 500 });
         }
-    } catch (error: any) {
+    } catch (error: unknown) {
         console.error("An error occurred:", error);
         return NextResponse.json({ 
-            message: error.message || 'An unexpected error occurred' 
+            message: error instanceof Error ? error.message : 'An unexpected error occurred' 
         }, { status: 500 });
     }
 }
