@@ -67,6 +67,10 @@ export default function VideoNotes() {
             }
 
             const aiData = await aiResponse.json();
+
+            const flashcards = JSON.parse(aiData.flashcards.replace(/```json\n|\n```/g, '').trim());
+
+            console.log(flashcards);
             
             const saveResponse = await fetch('/api/notes', {
                 method: 'POST',
@@ -75,7 +79,8 @@ export default function VideoNotes() {
                 },
                 body: JSON.stringify({ 
                     title: aiData.title, 
-                    content: aiData.content
+                    content: aiData.content,
+                    flashcards: flashcards
                 }) 
             });
             

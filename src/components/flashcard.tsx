@@ -11,7 +11,7 @@ export default function Flashcard({ front, back }: FlashcardProps) {
 
   return (
     <div
-      className="relative w-full h-[480px] cursor-pointer perspective-1000 "
+      className="relative w-full h-full cursor-pointer"
       onClick={() => setIsFlipped(!isFlipped)}
     >
       <div

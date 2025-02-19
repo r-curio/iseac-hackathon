@@ -1,14 +1,21 @@
+import prismadb from "@/lib/prismadb";
 import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
 
 interface RequestBody {
     title: string;
     content: string;
+    flashcards: {
+        Front: string;
+        Back: string;
+    }[];
 }
 
 export async function POST(req: NextRequest) {
     try {
         const data: RequestBody = await req.json();
+
+        console.log(data.flashcards)
 
         const supabase = await createClient();
 
@@ -18,27 +25,34 @@ export async function POST(req: NextRequest) {
             return NextResponse.json({ message: "User is not logged in" }, { status: 401 });
         }
 
-        const { data: notes, error } = await supabase
-            .from('notes')
-            .insert([
-                {
-                    user_id: user.id,
-                    title: data.title,
-                    content: data.content,
-                },
-            ])
-            .select(); // Add select() to return the inserted row
+       const note = await prismadb.note.create({
+            data: {
+                title: data.title,
+                content: data.content,
+                userId: user.id
+            }
+        });
 
-        if (error) {
-            console.error("Error inserting data:", error);
-            return NextResponse.json({ message: error.message }, { status: 400 });
-        }
-
-        if (notes && notes.length > 0) {
-            return NextResponse.json({ id: notes[0].id }, { status: 200 });
-        } else {
+        if (!note) {
             return NextResponse.json({ message: "Failed to insert note" }, { status: 500 });
         }
+
+        const flashcards = await prismadb.flashcard.createMany({
+            data: data.flashcards.map((flashcard) => ({
+                noteId: note.id,
+                userId: user.id,
+                isAiGenerated: true,
+                front: flashcard.Front,
+                back: flashcard.Back
+            }))
+        });
+
+        if (!flashcards) {
+            return NextResponse.json({ message: "Failed to insert flashcards" }, { status: 500 });
+        }
+        
+        return NextResponse.json({ id: note.id }, { status: 200 });
+
     } catch (error: unknown) {
         console.error("An error occurred:", error);
         return NextResponse.json({ 
