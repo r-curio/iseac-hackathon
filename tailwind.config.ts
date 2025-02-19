@@ -41,6 +41,8 @@ export default {
           "linear-gradient(139deg, rgba(89, 29, 169, 0.20) -6.39%, rgba(5, 25, 96, 0.00) 112.17%)",
         "flashcard-gradient":
           "linear-gradient(139deg, var(--Primary, rgba(89, 29, 169, 0.70)) -6.39%, rgba(5, 25, 96, 0.00) 112.17%)",
+        "flashcard-background-gradient":
+          "linear-gradient(180deg, var(--P7, #120622) 0%, var(--S8, #00020A) 100%)"
       },
       borderRadius: {
         lg: "var(--radius)",

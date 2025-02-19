@@ -8,27 +8,14 @@ import { createClient } from "@/utils/supabase/server";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import React from "react";
+import { createClient } from "@/utils/supabase/server";
+import prismadb from "@/lib/prismadb";
 
-const StudyDeckPage = async () => {
-  const supabase = await createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  const notes = await prismadb.note.findMany({
-    where: {
-      userId: user?.id,
-    },
-  });
-
-  if (!user) redirect("/login");
-
+const StudyDeckPage = () => {
   return (
     <div className="flex w-full flex-col gap-6 rounded-3xl p-8">
       <div className="flex w-full items-center justify-between">
-        <p className="text-2xl">Hi, Sam! 👋</p>
+        <p className="text-2xl">Hi, {username?.username} 👋</p>
         <div className="flex items-center justify-center gap-4 rounded-full border border-transparent bg-[#0c1017] px-6 py-3 focus-within:border-gray/25">
           <Search className="h-5 w-5 text-gray" />
           <input
@@ -41,13 +28,11 @@ const StudyDeckPage = async () => {
       <div className="flex flex-col gap-6 rounded-xl bg-[#06080f] p-6 px-8">
         <p className="text-2xl font-semibold">Recent Flashcards</p>
         <div className="scrollbar-none flex items-center gap-4 overflow-x-auto">
-          <RecentFlashcard progress={75} />
-          <RecentFlashcard progress={75} />
-          <RecentFlashcard progress={75} />
-          <RecentFlashcard progress={75} />
-          <RecentFlashcard progress={75} />
-          <RecentFlashcard progress={75} />
-          <RecentFlashcard progress={75} />
+          {notes.map((note) => (
+            <Link key={note.id} href={`/study-deck/${note.id}/flashcard`}>
+              <RecentFlashcard progress={note.flashcardProgress || 0} />
+            </Link>
+          ))}
         </div>
       </div>
       <div className="flex h-[75vh] max-h-[75vh] w-full gap-6">
@@ -115,5 +100,3 @@ const StudyDeckPage = async () => {
     </div>
   );
 };
-
-export default StudyDeckPage;
