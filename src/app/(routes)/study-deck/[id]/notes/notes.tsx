@@ -9,7 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Note } from "@prisma/client";
-import EditorProvider from "@/providers/editor-provider";
+import EditorProvider, { CustomElement } from "@/providers/editor-provider";
 import RichTextbox from "@/components/ui/rich-textbox";
 import { Descendant } from "slate";
 import { useRouter } from "next/navigation";
@@ -21,7 +21,7 @@ const NoteContainer = ({ note }: { note: Note }) => {
     JSON.parse(note.content!.toString()),
   );
 
-  const headings = extractHeadings(contentValue);
+  const headings = extractHeadings(contentValue as CustomElement[]);
   console.log(headings);
 
   const router = useRouter();
