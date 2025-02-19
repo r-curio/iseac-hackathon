@@ -13,44 +13,79 @@ export async function PUT(req: NextRequest) {
             return NextResponse.json({ message: 'User is not logged in' }, { status: 401 })
         }
 
-        const response = await prismadb.flashcard.update({
-            where: {
-                id: data.id
-            },
-            data: {
-                isAnswered: data.isAnswered
+        if (data.type === 'progress update') {
+
+            const response = await prismadb.flashcard.update({
+                where: {
+                    id: data.id
+                },
+                data: {
+                    isAnswered: data.isAnswered
+                }
+            })
+
+            if (!response) {
+                return NextResponse.json({ message: 'Failed to update flashcard' }, { status: 500 })
             }
-        })
 
-        if (!response) {
-            return NextResponse.json({ message: 'Failed to update flashcard' }, { status: 500 })
-        }
+            const note = await prismadb.note.update({
+                where: {
+                    id: response.noteId
+                },
+                data: {
+                    flashcardProgress: data.progress
+                }   
+            })
 
-        const note = await prismadb.note.update({
-            where: {
-                id: response.noteId
-            },
-            data: {
-                flashcardProgress: data.progress
-            }   
-        })
-
-        if (!note) {
-            return NextResponse.json({ message: 'Failed to update note' }, { status: 500 })
-        }
-
-        const activity = await prismadb.activity.create({
-            data: {
-                userId: user.id,
-                activityType: 'FLASHCARDS',
+            if (!note) {
+                return NextResponse.json({ message: 'Failed to update note' }, { status: 500 })
             }
-        })
 
-        if (!activity) {
-            return NextResponse.json({ message: 'Failed to create activity' }, { status: 500 })
+            const activity = await prismadb.activity.create({
+                data: {
+                    userId: user.id,
+                    activityType: 'FLASHCARDS',
+                }
+            })
+
+            if (!activity) {
+                return NextResponse.json({ message: 'Failed to create activity' }, { status: 500 })
+            }
+
+            return NextResponse.json(response)
+        } 
+
+        else {
+
+            const response = await prismadb.flashcard.update({
+                where: {
+                    id: data.id
+                },
+                data: {
+                    front: data.front,
+                    back: data.back
+                }
+            })
+    
+            if (!response) {
+                return NextResponse.json({ message: 'Failed to update flashcard' }, { status: 500 })
+            }
+    
+            const activity = await prismadb.activity.create({
+                data: {
+                    userId: user.id,
+                    activityType: 'FLASHCARDS',
+                }
+            })
+    
+            if (!activity) {
+                return NextResponse.json({ message: 'Failed to create activity' }, { status: 500 })
+            }
+    
+            return NextResponse.json(response)
         }
+        
 
-        return NextResponse.json(response)
     } catch (error) {
         console.error('An error occurred:', error)
         if (error instanceof Error) {

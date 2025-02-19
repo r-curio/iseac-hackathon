@@ -9,6 +9,7 @@ interface flashcardListProps {
         front: string;
         back: string;
     }[];
+    handleFlashcardsChange: (flashcards: flashcard[]) => void;
 }
 
 interface flashcard {
@@ -17,14 +18,38 @@ interface flashcard {
     back: string;
 }
 
-const FlashcardComponent = (props: { flashcard: flashcard }) => {
+const FlashcardComponent = (props: { flashcard: flashcard, handleFlashcardChange: (flashcard: flashcard) => void }) => {
     const [isEditing, setIsEditing] = useState(false);
     const [front, setFront] = useState(props.flashcard.front);
     const [back, setBack] = useState(props.flashcard.back);
 
     const handleSave = () => {
-        
         setIsEditing(false);
+
+        try {
+            fetch('/api/flashcard', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'PUT',
+                body: JSON.stringify({
+                    id: props.flashcard.id,
+                    front,
+                    back,
+                    type: 'update'
+                })
+            })
+        } catch (error) {
+            console.error('An error occurred:', error)
+            return;
+        }
+
+        props.handleFlashcardChange({
+            id: props.flashcard.id,
+            front,
+            back
+        });
+
     };
 
     return (
@@ -71,12 +96,24 @@ const FlashcardComponent = (props: { flashcard: flashcard }) => {
     )
 }
 
-export default function FlashcardList({ flashcards }: flashcardListProps) {
+export default function FlashcardList({ flashcards, handleFlashcardsChange }: flashcardListProps) {
+
+    const handleFlashcardChange = (flashcard: flashcard) => {
+        const updatedFlashcards = flashcards.map((f) => {
+            if (f.id === flashcard.id) {
+                return flashcard;
+            }
+            return f;
+        });
+
+        handleFlashcardsChange(updatedFlashcards);
+    }
+
     return (
         <div className="w-full mt-7 py-[42px] px-[80px] bg-[#0C101780]/50 space-y-8">
             <h1 className="text-2xl font-normal mb-4">Flashcards</h1>
             {flashcards.map((flashcard, index) => (
-                <FlashcardComponent key={index} flashcard={flashcard} />
+                <FlashcardComponent key={index} flashcard={flashcard} handleFlashcardChange={handleFlashcardChange}/>
             ))}
         </div>
     )

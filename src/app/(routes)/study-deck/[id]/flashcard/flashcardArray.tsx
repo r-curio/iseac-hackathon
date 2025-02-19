@@ -36,15 +36,14 @@ export default function FlashcardArray({flashcard, progress} : FlashcardArrayPro
                 body: JSON.stringify({
                     id: flashcard[currentCard].id,
                     isAnswered: true,
-                    progress: (currentCard + 1) / flashcard.length * 100
+                    progress: (currentCard + 1) / flashcard.length * 100,
+                    type: 'progress update'
                 })
             })
         } catch (error) {
             console.error('An error occurred:', error)
             return;
         }
-
-        
     }
 
     const handlePrevCard = async () => {
@@ -64,7 +63,8 @@ export default function FlashcardArray({flashcard, progress} : FlashcardArrayPro
                 body: JSON.stringify({
                     id: flashcard[currentCard].id,
                     isAnswered: false,
-                    progress: (currentCard / flashcard.length * 100)
+                    progress: (currentCard / flashcard.length * 100),
+                    type: 'progress update'
                 })
             })
         } catch (error) {
