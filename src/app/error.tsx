@@ -1,6 +1,6 @@
 "use client"; // Error boundaries must be Client Components
 
-import { useSearchParams } from 'next/navigation';
+import { useSearchParams } from "next/navigation";
 
 const ErrorPage = ({
   error,
@@ -10,7 +10,8 @@ const ErrorPage = ({
   reset: () => void;
 }) => {
   const searchParams = useSearchParams();
-  const errorMessage = searchParams.get('message') || error.message || 'An unknown error occurred';
+  const errorMessage =
+    searchParams.get("message") || error.message || "An unknown error occurred";
 
   return (
     // global-error must include html and body tags
@@ -23,7 +24,7 @@ const ErrorPage = ({
         className="rounded-lg bg-primary px-6 py-3 text-white"
         onClick={() => {
           reset();
-          window.location.href = '/';  // Redirect to home page after reset
+          window.location.href = "/"; // Redirect to home page after reset
         }}
       >
         Back to Home

@@ -4,11 +4,17 @@ import { Sparkles } from "lucide-react";
 
 interface GlowButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
+  showIcon?: boolean;
   className?: string;
   children?: React.ReactNode;
 }
 
-const GlowButton = ({ className, children, ...props }: GlowButtonProps) => {
+const GlowButton = ({
+  className,
+  showIcon = true,
+  children,
+  ...props
+}: GlowButtonProps) => {
   return (
     <button
       className={cn(
@@ -22,8 +28,8 @@ const GlowButton = ({ className, children, ...props }: GlowButtonProps) => {
       )}
       {...props}
     >
-      <span className="relative z-10">{children}</span>
-      <Sparkles className="z-10 h-4 w-4 fill-white" />
+      <span className="relative z-10 select-none">{children}</span>
+      {showIcon && <Sparkles className="z-10 h-4 w-4 fill-white" />}
     </button>
   );
 };

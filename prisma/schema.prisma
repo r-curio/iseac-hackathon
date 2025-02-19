@@ -1,0 +1,140 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+
+}
+
+model Profile {
+  id            String    @id @default(cuid())
+  username      String    @unique
+  full_name     String
+  email         String    @unique
+  avatar_url    String
+  dateJoined    DateTime  @default(now())
+  lastActive    DateTime  @default(now())
+  currentStreak Int       @default(1)
+  highestStreak Int       @default(1)
+  totalScore    Int       @default(0)
+  studyHrsGoal  Float     @default(2)
+  wrap          Json?     // Stringified JSON for weekly wrap
+
+  // Relations
+  progress      Progress[]
+  sessions      Session[]
+  activities    Activity[]
+  notes         Note[]
+  flashcards    Flashcard[]
+  exams         Exam[]
+  prompts       Prompt[]
+
+}
+
+model Progress {
+  id           String   @id @default(cuid())
+  userId       String
+  progress     Float
+  dayOfTheWeek Int     // 0-6 for Sunday-Saturday
+  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  userId       String
+  totalHr      Float
+  prevTotalHr  Float
+  date         DateTime @default(now())
+  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Activity {
+  id           String      @id @default(cuid())
+  userId       String
+  activityType ActivityType
+  dateCreated  DateTime    @default(now())
+  profile      Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model Note {
+  id                String      @id @default(cuid())
+  userId           String
+  dateCreated      DateTime    @default(now())
+  title            String
+  content          Json        // Stringified JSON
+  lastModified     DateTime    @updatedAt
+  isAiGenerated    Boolean     @default(false)
+  flashcardProgress Float?
+  examScores       Float[]
+
+  // Relations
+  profile          Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  flashcards       Flashcard[]
+  exams            Exam[]
+
+  @@index([userId])
+}
+
+model Flashcard {
+  id            String    @id @default(cuid())
+  noteId        String
+  userId        String
+  createdAt     DateTime  @default(now())
+  isAiGenerated Boolean   @default(false)
+  lastModified  DateTime  @updatedAt
+  front         String
+  back          String
+  isAnswered    Boolean   @default(false)
+
+  // Relations
+  note          Note      @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  profile       Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([noteId])
+  @@index([userId])
+}
+
+model Exam {
+  id            String     @id @default(cuid())
+  noteId        String
+  userId        String
+  dateSubmitted DateTime   @default(now())
+  score         Float
+
+  // Relations
+  note          Note       @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  profile       Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([noteId])
+  @@index([userId])
+}
+
+
+model Prompt {
+  id          String    @id @default(cuid())
+  userId      String
+  dateCreated DateTime  @default(now())
+  content     String
+  isAI        Boolean   @default(false)
+
+  // Relations
+  profile     Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+enum ActivityType {
+  NOTES
+  FLASHCARDS
+  EXAM
+  CHAT
+}

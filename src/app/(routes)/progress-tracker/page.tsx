@@ -1,40 +1,69 @@
-import CircleProgress from "@/components/circle-progress";
-import ContributionHeatmap from "@/components/contribution-graph";
-import Streak from "@/components/streak";
+import prismadb from "@/lib/prismadb";
+import { createClient } from "@/utils/supabase/server";
+import { redirect } from "next/navigation";
 import React from "react";
+import ProgressTracker from "./progress-tracker";
 
-const ProgressTracker = () => {
-  const weeklyProgress = [75, 80, 100, 25, 18, 76, 45];
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const ProgressTrackerPage = async () => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const profile = await prismadb.profile.findUnique({
+    where: {
+      email: user?.email,
+    },
+  });
+
+  const weeklyProgress = await prismadb.progress.findMany({
+    where: {
+      userId: profile?.id,
+    },
+  });
+
+  const activities = await prismadb.activity.findMany({
+    where: {
+      userId: profile?.id,
+    },
+    select: {
+      dateCreated: true,
+    },
+    orderBy: {
+      dateCreated: "asc",
+    },
+  });
+
+  // Create a map to count activities per day
+
+  const activityMap = activities.reduce(
+    (acc: { [key: string]: number }, activity) => {
+      // Convert to local timezone and get date string
+      const date = new Date(activity.dateCreated);
+      const localDate = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000,
+      )
+        .toISOString()
+        .split("T")[0];
+
+      acc[localDate] = (acc[localDate] || 0) + 1;
+      return acc;
+    },
+    {},
+  );
+
+  console.log(activityMap);
+
+  if (!profile) redirect("/login");
 
   return (
-    <div className="relative grid h-full max-h-[calc(100vh_-_64px)] flex-1 grid-cols-2 grid-rows-[6fr_4fr] gap-4 overflow-hidden px-6 text-center lg:m-8 lg:my-0 lg:h-[calc(100%_-_3rem)] lg:rounded-2xl 2xl:p-0">
-      <div className="col-span-2 row-span-1 grid h-full grid-cols-2 space-x-4 rounded-xl bg-[#060810] px-6 py-5 2xl:px-10 2xl:py-8">
-        <div className="col-span-1">
-          <Streak className="h-full items-center justify-center gap-6 p-4 pt-8 2xl:pt-8" />
-        </div>
-        <div className="col-span-1 row-span-1 flex h-full flex-col items-center justify-center space-y-2">
-          <p className="text-start text-xl font-semibold">Weekly Progress</p>
-          <div className="grid h-full w-full grid-cols-4 grid-rows-2">
-            {days.map((day, index) => (
-              <div
-                key={day}
-                className="col-span-1 row-span-1 flex flex-col items-center gap-1"
-              >
-                <p className="select-none text-lg font-medium">{day}</p>
-                <div className="flex items-center justify-center rounded-3xl bg-gradient-2 p-3 backdrop-blur-xl">
-                  <CircleProgress progress={weeklyProgress[index]} />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div className="col-span-2 row-span-1 flex h-full flex-col gap-4 rounded-xl bg-[#060810] px-6 py-5 2xl:px-10 2xl:py-8">
-        <ContributionHeatmap className="h-full w-full px-2" />
-      </div>
-    </div>
+    <ProgressTracker
+      profile={profile}
+      progresses={weeklyProgress}
+      activityData={activityMap}
+    />
   );
 };
 
-export default ProgressTracker;
+export default ProgressTrackerPage;

@@ -1,16 +1,15 @@
 import { IconType } from "react-icons";
-import { 
-  LayoutDashboard, 
-  Trophy, 
-  Swords,
-  Video,
+import {
+  LayoutDashboard,
+  Trophy,
+  Timer,
+  Notebook,
   Target,
   BookOpen,
-  ClipboardList,
   Settings,
   Bell,
   HelpCircle,
-} from 'lucide-react';
+} from "lucide-react";
 
 interface MenuItem {
   title: string;
@@ -28,23 +27,18 @@ export const menuList: MenuItem[] = [
     title: "",
     groupLabels: [
       { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-      { label: "AI Weekly Wrap", icon: Trophy, path: "/weekly-wrap" },
-      { label: "Battle", icon: Swords, path: "/battle" },
+      { label: "Study Deck", icon: BookOpen, path: "/study-deck" },
+      { label: "Pomodoro", icon: Timer, path: "/pomodoro" },
     ],
   },
   {
     key: 2,
 
-    title: "Study Tools",
+    title: "",
     groupLabels: [
-      { label: "AI Video Notes", icon: Video, path: "/video-notes" },
-      { label: "Goal Helper AI", icon: Target, path: "/goal-helper" },
-      { label: "Study Deck", icon: BookOpen, path: "/study-deck" },
-      {
-        label: "Practice Tests",
-        icon: ClipboardList,
-        path: "/practice-tests",
-      },
+      { label: "AI Notes", icon: Notebook, path: "/video-notes" },
+      { label: "AI Goal Helper", icon: Target, path: "/goal-helper" },
+      { label: "AI Weekly Wrap", icon: Trophy, path: "/weekly-wrap" },
     ],
   },
   {
