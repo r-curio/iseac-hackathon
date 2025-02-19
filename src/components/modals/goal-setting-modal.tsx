@@ -5,7 +5,6 @@ import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import GlowButton from "../ui/glow-button";
 import axios from "axios";
-import { createClient } from "@/utils/supabase/server";
 
 interface GoalSettingModalProps {
   goal: number;

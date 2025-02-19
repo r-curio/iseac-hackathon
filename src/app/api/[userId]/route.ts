@@ -4,7 +4,7 @@ import { createClient } from "@/utils/supabase/server";
 
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: { userId: string } },
+  { params }: { params: Promise<{ userId: string }> },
 ) {
   try {
     // Verify authentication
@@ -28,7 +28,7 @@ export async function PATCH(
     // Update the profile
     const updatedProfile = await prismadb.profile.update({
       where: {
-        id: params.userId,
+        id: (await params).userId,
       },
       data: {
         studyHrsGoal,

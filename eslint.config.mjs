@@ -15,6 +15,7 @@ const eslintConfig = [
     extends: ["next"],
     rules: {
       "react-hooks/exhaustive-deps": "off",
+      "no-var": "off",
     },
   }),
 ];

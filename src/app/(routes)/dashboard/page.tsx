@@ -66,7 +66,9 @@ const Dashboard = async () => {
             <p className="text-3xl font-semibold">Recent Courses</p>
             <div className="flex flex-col gap-4">
               {notes.length > 0 ? (
-                notes.map((note) => <RecentFilesContainer title={note.title} />)
+                notes.map((note) => (
+                  <RecentFilesContainer title={note.title} key={note.id} />
+                ))
               ) : (
                 <div className="flex w-full items-center justify-center">
                   <p className="text-gray">No courses yet</p>

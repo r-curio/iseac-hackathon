@@ -1,4 +1,3 @@
-import prismadb from "@/lib/prismadb";
 import { cn } from "@/lib/utils";
 import React from "react";
 
