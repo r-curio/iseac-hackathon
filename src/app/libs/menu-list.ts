@@ -3,17 +3,12 @@ import {
   LayoutDashboard,
   Trophy,
   Timer,
-  Notebook,
   Target,
-  BookOpen,
   Settings,
-  Bell,
   HelpCircle,
-  Sparkle,
   SparklesIcon,
   Layers2,
 } from "lucide-react";
-import WeeklyWrapIcon from "@/components/ui/weekly-wrap-icon";
 
 interface MenuItem {
   title: string;

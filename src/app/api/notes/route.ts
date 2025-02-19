@@ -1,6 +1,5 @@
 import prismadb from "@/lib/prismadb";
 import { createClient } from "@/utils/supabase/server";
-import { Flashcard } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 export async function POST(req: NextRequest) {
@@ -26,18 +25,20 @@ export async function POST(req: NextRequest) {
         title: body.title,
         content: body.content,
         isAiGenerated: body.isAiGenerated,
-        lastModified: body.lastModified
+        lastModified: body.lastModified,
       },
     });
 
     await prismadb.flashcard.createMany({
-      data: body.flashcards.map((flashcard: {Front: string, Back: string}) => ({
-        noteId: newNote.id,
-        userId: user.id,
-        isAiGenerated: true,
-        front: flashcard.Front,
-        back: flashcard.Back,
-      })),
+      data: body.flashcards.map(
+        (flashcard: { Front: string; Back: string }) => ({
+          noteId: newNote.id,
+          userId: user.id,
+          isAiGenerated: true,
+          front: flashcard.Front,
+          back: flashcard.Back,
+        }),
+      ),
     });
 
     await prismadb.activity.create({

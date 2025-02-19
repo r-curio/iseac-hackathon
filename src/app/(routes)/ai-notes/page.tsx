@@ -7,7 +7,6 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { Descendant } from "slate";
 import { cn, parseMarkdown } from "@/lib/utils";
-import RouteLoading from "../loading";
 
 export default function VideoNotes() {
   const router = useRouter();
