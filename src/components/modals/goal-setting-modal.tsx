@@ -5,6 +5,7 @@ import { Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import GlowButton from "../ui/glow-button";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 interface GoalSettingModalProps {
   goal: number;
@@ -61,14 +62,31 @@ const GoalSettingModal: React.FC<GoalSettingModalProps> = ({
   const handleSubmit = async () => {
     try {
       setLoading(true);
+      toast.loading("Updating goal...", {
+        toastId: "updateGoal",
+      });
 
       const data = await axios.patch(`/api/${userId}`, {
         studyHrsGoal: goal,
       });
       console.log(data);
+      toast.update("updateGoal", {
+        render: "Goal updated successfully!",
+        type: "success",
+        isLoading: false,
+        closeButton: true,
+        autoClose: 2000,
+      });
       onClose();
     } catch (error) {
       console.log(error);
+      toast.update("updateGoal", {
+        render: "Failed to update goal. Please try again.",
+        type: "error",
+        isLoading: false,
+        closeButton: true,
+        autoClose: 2000,
+      });
     } finally {
       setLoading(false);
     }
