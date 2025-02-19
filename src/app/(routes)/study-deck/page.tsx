@@ -2,15 +2,16 @@ import Glare from "@/components/glare";
 import RecentFilesContainer from "@/components/recent-files-container";
 import RecentFlashcard from "@/components/recent-flashcard";
 import GlowButton from "@/components/ui/glow-button";
+import prismadb from "@/lib/prismadb";
 import { glaresPositions } from "@/lib/utils";
+import { createClient } from "@/utils/supabase/server";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/server";
-import prismadb from "@/lib/prismadb";
+import { redirect } from "next/navigation";
+import React from "react";
 
 export default async function StudyDeckPage() {
-
   const supabase = await createClient();
   const { data: user, error } = await supabase.auth.getUser();
 
@@ -24,7 +25,7 @@ export default async function StudyDeckPage() {
     },
   });
 
-  const username = await prismadb.profile.findUnique({
+  const profile = await prismadb.profile.findUnique({
     where: {
       id: user.user.id,
     },
@@ -33,12 +34,14 @@ export default async function StudyDeckPage() {
     },
   });
 
-
+  if (!profile) {
+    redirect("/auth/login");
+  }
 
   return (
     <div className="flex w-full flex-col gap-6 rounded-3xl p-8">
       <div className="flex w-full items-center justify-between">
-        <p className="text-2xl">Hi, {username?.username} 👋</p>
+        <p className="text-2xl">Hi, {profile?.username} 👋</p>
         <div className="flex items-center justify-center gap-4 rounded-full border border-transparent bg-[#0c1017] px-6 py-3 focus-within:border-gray/25">
           <Search className="h-5 w-5 text-gray" />
           <input
@@ -53,21 +56,29 @@ export default async function StudyDeckPage() {
         <div className="scrollbar-none flex items-center gap-4 overflow-x-auto">
           {notes.map((note) => (
             <Link key={note.id} href={`/study-deck/${note.id}/flashcard`}>
-              <RecentFlashcard  progress={note.flashcardProgress || 0} />
+              <RecentFlashcard progress={note.flashcardProgress || 0} />
             </Link>
           ))}
-
         </div>
       </div>
       <div className="flex h-[75vh] max-h-[75vh] w-full gap-6">
         <div className="flex w-3/5 flex-col gap-6 rounded-xl bg-[#06080f] p-6 px-8">
           <p className="text-2xl font-semibold">My Courses</p>
           <div className="scrollbar-none flex w-full flex-col justify-center gap-4 overflow-y-auto">
-            {notes.map((note) => (
-              <Link key={note.id} href={`/study-deck/${note.id}`}>
-                <RecentFilesContainer  title={note.title} className="w-full"/>
-              </Link>
-            ))}
+            {notes.length > 0 ? (
+              notes.map((note) => (
+                <RecentFilesContainer
+                  title={note.title}
+                  key={note.id}
+                  id={note.id}
+                  className="w-full"
+                />
+              ))
+            ) : (
+              <div className="flex w-full items-center justify-center">
+                <p className="text-gray">No courses yet</p>
+              </div>
+            )}
           </div>
         </div>
         <div
@@ -106,7 +117,7 @@ export default async function StudyDeckPage() {
             </p>
           </div>
           <div className="flex w-full items-center justify-center">
-            <Link href="/progress-tracker">
+            <Link href="/weekly-wrap">
               <GlowButton className="w-fit">Check Progress</GlowButton>
             </Link>
           </div>
@@ -114,5 +125,4 @@ export default async function StudyDeckPage() {
       </div>
     </div>
   );
-};
-
+}

@@ -24,8 +24,8 @@ model Profile {
   wrap          Json?     // Stringified JSON for weekly wrap
 
   // Relations
+  session       Session?  // Changed from sessions array to single optional relation
   progress      Progress[]
-  sessions      Session[]
   activities    Activity[]
   notes         Note[]
   flashcards    Flashcard[]
@@ -46,7 +46,7 @@ model Progress {
 
 model Session {
   id           String   @id @default(cuid())
-  userId       String
+  userId       String   @unique  // 
   totalHr      Float
   prevTotalHr  Float
   date         DateTime @default(now())
