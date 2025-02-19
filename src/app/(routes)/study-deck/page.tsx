@@ -2,13 +2,29 @@ import Glare from "@/components/glare";
 import RecentFilesContainer from "@/components/recent-files-container";
 import RecentFlashcard from "@/components/recent-flashcard";
 import GlowButton from "@/components/ui/glow-button";
+import prismadb from "@/lib/prismadb";
 import { glaresPositions } from "@/lib/utils";
+import { createClient } from "@/utils/supabase/server";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import React from "react";
 
-const StudyDeckPage = () => {
+const StudyDeckPage = async () => {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  const notes = await prismadb.note.findMany({
+    where: {
+      userId: user?.id,
+    },
+  });
+
+  if (!user) redirect("/login");
+
   return (
     <div className="flex w-full flex-col gap-6 rounded-3xl p-8">
       <div className="flex w-full items-center justify-between">
@@ -38,13 +54,20 @@ const StudyDeckPage = () => {
         <div className="flex w-3/5 flex-col gap-6 rounded-xl bg-[#06080f] p-6 px-8">
           <p className="text-2xl font-semibold">My Courses</p>
           <div className="scrollbar-none flex w-full flex-col justify-center gap-4 overflow-y-auto">
-            <RecentFilesContainer title="Test" className="w-full" />
-            <RecentFilesContainer title="Test" className="w-full" />
-            <RecentFilesContainer title="Test" className="w-full" />
-            <RecentFilesContainer title="Test" className="w-full" />
-            <RecentFilesContainer title="Test" className="w-full" />
-            <RecentFilesContainer title="Test" className="w-full" />
-            <RecentFilesContainer title="Test" className="w-full" />
+            {notes.length > 0 ? (
+              notes.map((note) => (
+                <RecentFilesContainer
+                  title={note.title}
+                  key={note.id}
+                  id={note.id}
+                  className="w-full"
+                />
+              ))
+            ) : (
+              <div className="flex w-full items-center justify-center">
+                <p className="text-gray">No courses yet</p>
+              </div>
+            )}
           </div>
         </div>
         <div
@@ -83,7 +106,7 @@ const StudyDeckPage = () => {
             </p>
           </div>
           <div className="flex w-full items-center justify-center">
-            <Link href="/progress-tracker">
+            <Link href="/weekly-wrap">
               <GlowButton className="w-fit">Check Progress</GlowButton>
             </Link>
           </div>

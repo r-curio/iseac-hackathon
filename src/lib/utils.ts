@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { Descendant } from "slate";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -63,3 +64,104 @@ export const glaresPositions = [
     duration: "6.8s",
   },
 ];
+interface HotKeyMap {
+  [key: string]: string;
+}
+
+export type CustomElementType =
+  | "paragraph"
+  | "code"
+  | "block_quote"
+  | "list_item"
+  | "heading_one"
+  | "heading_two"
+  | "heading_three"
+  | "heading_four"
+  | "heading_five"
+  | "heading_six"
+  | "block-quote"
+  | "ul_list"
+  | "ol_list"
+  | "bulleted_list"
+  | "numbered_list"
+  | "list-item"
+  | "heading-one"
+  | "heading-two"
+  | "bulleted-list"
+  | "numbered-list";
+
+export const ICON_SIZE = 18;
+export const HOTKEYS: HotKeyMap = {
+  b: "bold",
+  i: "italic",
+  u: "underline",
+  "`": "code",
+};
+export const LIST_TYPES = ["numbered-list", "bulleted-list"];
+export const TEXT_ALIGN_TYPES = ["left", "center", "right", "justify"];
+
+export type ListType = (typeof LIST_TYPES)[number];
+export type AlignType = (typeof TEXT_ALIGN_TYPES)[number];
+
+import markdown from "remark-parse";
+import slate from "remark-slate";
+import { unified } from "unified";
+
+export const parseMarkdown = async (md: string): Promise<Descendant[]> => {
+  try {
+    const result = await unified().use(markdown).use(slate).process(md);
+    return result.result as Descendant[];
+  } catch (error) {
+    console.error("Failed to parse markdown:", error);
+    return [
+      {
+        type: "paragraph",
+        children: [{ text: "" }],
+      },
+    ];
+  }
+};
+
+interface Heading {
+  id: string;
+  text: string;
+  level: number;
+  type: "heading-one" | "heading-two" | "paragraph";
+}
+
+export const extractHeadings = (nodes: Descendant[]): Heading[] => {
+  const headings: Heading[] = [];
+
+  nodes.forEach((node: any, idx) => {
+    if (
+      node.type === "heading-one" ||
+      node.type === "heading_one" ||
+      node.type === "heading_two" ||
+      node.type === "heading-two"
+    ) {
+      const text = node.children.map((child: any) => child.text).join("");
+      headings.push({
+        id: text.toLowerCase().replace(/\s+/g, "-"),
+        text,
+        level: node.type.includes("one") ? 1 : 2,
+        type: node.type,
+      });
+    }
+    // Check for paragraphs with bold text
+    else if (node.type === "paragraph") {
+      const hasBoldText = node.children.some((child: any) => child.bold);
+      if (hasBoldText) {
+        const text = node.children.map((child: any) => child.text).join("");
+        headings.push({
+          id: `paragraph-${text.toLowerCase().replace(/\s+/g, "-")}`,
+          text,
+          level: 3, // Give paragraphs a lower level than headings
+          type: "paragraph",
+        });
+      }
+    }
+  });
+
+  // Sort by appearance in document (maintain reading order)
+  return headings;
+};

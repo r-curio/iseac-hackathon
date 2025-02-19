@@ -36,7 +36,7 @@ export const menuList: MenuItem[] = [
 
     title: "",
     groupLabels: [
-      { label: "AI Notes", icon: Notebook, path: "/video-notes" },
+      { label: "AI Notes", icon: Notebook, path: "/ai-notes" },
       { label: "AI Goal Helper", icon: Target, path: "/goal-helper" },
       { label: "AI Weekly Wrap", icon: Trophy, path: "/weekly-wrap" },
     ],

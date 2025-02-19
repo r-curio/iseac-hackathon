@@ -67,7 +67,11 @@ const Dashboard = async () => {
             <div className="flex flex-col gap-4">
               {notes.length > 0 ? (
                 notes.map((note) => (
-                  <RecentFilesContainer title={note.title} key={note.id} />
+                  <RecentFilesContainer
+                    title={note.title}
+                    key={note.id}
+                    id={note.id}
+                  />
                 ))
               ) : (
                 <div className="flex w-full items-center justify-center">
