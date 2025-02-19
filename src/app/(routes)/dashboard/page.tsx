@@ -44,7 +44,7 @@ const Dashboard = async () => {
           height={538}
           unoptimized
           quality={100}
-          className="min-h-72 w-full object-cover"
+          className="h-72 w-full object-cover"
         />
         <div className="absolute bottom-[10%] left-[2.5%]">
           <p className="text-5xl font-bold">Time to Learn,</p>
@@ -53,39 +53,44 @@ const Dashboard = async () => {
           </p>
         </div>
       </div>
-      <div className="grid h-full w-full grid-cols-[1fr_1fr_1.5fr] grid-rows-3 gap-6">
-        <div className="col-span-2 row-span-1 flex flex-col gap-2 rounded-xl bg-[#060810] px-8 py-6">
-          <div className="flex items-center gap-2">
-            <p className="text-2xl font-semibold">Weekly Progress</p>
-            <ChartNoAxesCombined className="h-8 w-8 rounded-lg bg-gradient-1 p-1 text-secondary-900" />
+      <div className="grid h-[700px] max-h-[700px] w-full grid-cols-[1fr_1fr_1.5fr] grid-rows-3 gap-6 2xl:h-[800px] 2xl:max-h-[800px]">
+        <div className="col-span-2 row-span-3 flex h-full flex-col gap-4">
+          <div className="flex flex-col gap-2 rounded-xl bg-[#060810] px-8 py-6">
+            <div className="flex items-center gap-2">
+              <p className="text-2xl font-semibold">Weekly Progress</p>
+              <ChartNoAxesCombined className="h-8 w-8 rounded-lg bg-gradient-1 p-1 text-secondary-900" />
+            </div>
+            <WeeklyProgress values={weeklyProgress} />
           </div>
-          <WeeklyProgress values={weeklyProgress} />
+          <Streak
+            className="col-span-2 row-span-2 h-full p-8 pt-12"
+            value={profile?.currentStreak}
+          />
         </div>
-        <div className="col-span-1 row-span-3 h-fit rounded-xl bg-[#060810] px-8 py-6 pb-8">
-          <div className="flex flex-col gap-8">
-            <p className="text-3xl font-semibold">Recent Courses</p>
-            <div className="flex flex-col gap-4">
-              {notes.length > 0 ? (
-                notes.map((note) => (
-                  <RecentFilesContainer
-                    title={note.title}
-                    key={note.id}
-                    id={note.id}
-                  />
-                ))
-              ) : (
-                <div className="flex w-full items-center justify-center">
-                  <p className="text-gray">No courses yet</p>
-                </div>
-              )}
+        <div className="col-span-1 row-span-3 flex h-full flex-col rounded-xl bg-[#060810] px-8 py-6">
+          <div className="flex h-full flex-col">
+            <p className="mb-8 text-3xl font-semibold">Recent Courses</p>
+            <div className="scrollbar-none flex-1 overflow-y-auto">
+              <div className="flex flex-col gap-4">
+                {notes.length > 0 ? (
+                  notes.map((note) => (
+                    <RecentFilesContainer
+                      title={note.title}
+                      key={note.id}
+                      id={note.id}
+                    />
+                  ))
+                ) : (
+                  <div className="flex w-full items-center justify-center">
+                    <p className="text-gray">No courses yet</p>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
-        <Streak
-          className="col-span-2 row-span-2 h-fit p-8 pt-12"
-          value={profile?.currentStreak}
-        />
       </div>
+
       {/* <p>Leaderboards</p> */}
       {/* <div className="h-72 border border-red-500"></div> */}
     </div>

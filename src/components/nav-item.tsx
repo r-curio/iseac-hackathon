@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "../app/libs/utils";
 import Tooltip from "./ui/tooltip";
+import { Trophy } from "lucide-react";
 
 interface NavItemProps {
   label: string;
@@ -29,7 +30,19 @@ const NavItem = ({ label, icon: Icon, path, isCollapsed }: NavItemProps) => {
             : "text-gray hover:bg-accent-200/20 active:bg-nav-click",
         )}
       >
-        <Icon className={cn("h-5 w-5", isActive && "text-accent-200")} />
+        {path === "/weekly-wrap" ? (
+          <div className="group relative">
+            {/* Glow effect */}
+            <div className="absolute -inset-1 animate-pulse rounded-full bg-accent-200 opacity-10 blur-xl transition-all duration-1000" />
+
+            {/* Trophy icon */}
+            <div className="relative">
+              <Trophy className="h-5 w-5 text-accent-200 transition-colors duration-500" />
+            </div>
+          </div>
+        ) : (
+          <Icon className={cn("h-5 w-5", isActive && "text-accent-200")} />
+        )}
       </Link>
     </Tooltip>
   ) : (

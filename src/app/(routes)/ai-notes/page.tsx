@@ -6,12 +6,13 @@ import { useRouter } from "next/navigation";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { Descendant } from "slate";
-import { parseMarkdown } from "@/lib/utils";
+import { cn, parseMarkdown } from "@/lib/utils";
+import RouteLoading from "../loading";
 
 export default function VideoNotes() {
   const router = useRouter();
   const [mode, setMode] = useState("upload");
-  const [, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [contentValue, setContentValue] = useState<Descendant[]>([
     {
@@ -49,12 +50,12 @@ export default function VideoNotes() {
     setLoading(true);
     setError(null);
 
+    toast.loading("Updating goal...", {
+      toastId: "addNote",
+    });
+
     if (mode === "paste") {
       // Handle paste mode
-
-      toast.loading("Updating goal...", {
-        toastId: "addNote",
-      });
 
       try {
         await axios.post("/api/notes", {
@@ -108,12 +109,12 @@ export default function VideoNotes() {
       }
 
       const aiData = await aiResponse.json();
+      const flashcards = JSON.parse(
+        aiData.flashcards.replace(/```json\n|\n```/g, "").trim(),
+      );
 
-      console.log(aiData);
-
+      console.log(flashcards);
       const parsed = await parseMarkdown(aiData.content);
-
-      console.log(parsed);
 
       const saveResponse = await fetch("/api/notes", {
         method: "POST",
@@ -124,6 +125,7 @@ export default function VideoNotes() {
           title: aiData.title,
           content: JSON.stringify(parsed),
           isAiGenerated: true,
+          flashcards: flashcards,
           flashcardProgress: 0,
           examScores: [],
           lastModified: new Date(),
@@ -134,9 +136,24 @@ export default function VideoNotes() {
         throw new Error(`Save error: ${saveResponse.status}`);
       }
 
+      toast.update("addNote", {
+        render: "Note added successfully!",
+        type: "success",
+        isLoading: false,
+        closeButton: true,
+        autoClose: 2000,
+      });
+
       const savedData = await saveResponse.json();
-      router.push(`/study-deck/${savedData.id}/notes`);
+      router.push(`/study-deck/${savedData.id}`);
     } catch (error) {
+      toast.update("addNote", {
+        render: "Failed to add note. Please try again.",
+        type: "error",
+        isLoading: false,
+        closeButton: true,
+        autoClose: 2000,
+      });
       console.error("Error:", error);
       setError(
         error instanceof Error ? error.message : "An unexpected error occurred",
@@ -146,27 +163,40 @@ export default function VideoNotes() {
     }
   };
 
-  //   if (loading) {
-  //     return <RouteLoading />;
-  //   }
-
   return (
-    <div className="w-full px-4">
-      {error && (
-        <div className="mb-4 rounded bg-red-100 p-2 text-red-500">{error}</div>
+    <>
+      {loading && (
+        <div className="absolute left-0 top-0 flex h-full w-full items-center justify-center">
+          <div className="relative h-24 w-24">
+            <div className="absolute h-full w-full animate-spin rounded-full border-[16px] border-accent-200 border-t-primary" />
+          </div>
+        </div>
       )}
-      <UploadMode mode={mode} setMode={setMode} />
-      <UploadModeContent
-        mode={mode}
-        selectedFile={selectedFile}
-        handleFileChange={handleFileChange}
-        handleDrop={handleDrop}
-        handleDragOver={handleDragOver}
-        handleRemoveFile={handleRemoveFile}
-        handleGenerateNotes={handleGenerateNotes}
-        setText={setContentValue}
-        text={contentValue}
-      />
-    </div>
+
+      <div
+        className={cn(
+          "w-full px-4 opacity-100 blur-none transition-all",
+          loading && "select-none opacity-10 blur-sm",
+        )}
+      >
+        {error && (
+          <div className="mb-4 rounded bg-red-100 p-2 text-red-500">
+            {error}
+          </div>
+        )}
+        <UploadMode mode={mode} setMode={setMode} />
+        <UploadModeContent
+          mode={mode}
+          selectedFile={selectedFile}
+          handleFileChange={handleFileChange}
+          handleDrop={handleDrop}
+          handleDragOver={handleDragOver}
+          handleRemoveFile={handleRemoveFile}
+          handleGenerateNotes={handleGenerateNotes}
+          setText={setContentValue}
+          text={contentValue}
+        />
+      </div>
+    </>
   );
 }

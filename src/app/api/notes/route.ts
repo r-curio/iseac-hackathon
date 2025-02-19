@@ -22,18 +22,21 @@ export async function POST(req: NextRequest) {
 
     const newNote = await prismadb.note.create({
       data: {
-        ...body,
         userId: user.id,
+        title: body.title,
+        content: body.content,
+        isAiGenerated: body.isAiGenerated,
+        lastModified: body.lastModified
       },
     });
 
     await prismadb.flashcard.createMany({
-      data: body.flashcards.map((flashcard: Flashcard) => ({
+      data: body.flashcards.map((flashcard: {Front: string, Back: string}) => ({
         noteId: newNote.id,
         userId: user.id,
         isAiGenerated: true,
-        front: flashcard.front,
-        back: flashcard.back,
+        front: flashcard.Front,
+        back: flashcard.Back,
       })),
     });
 
@@ -46,7 +49,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newNote, { status: 200 });
   } catch (error) {
-    console.error("An error occurred:", error);
+    console.log("An error occurred:", error);
     return NextResponse.json(
       {
         message:

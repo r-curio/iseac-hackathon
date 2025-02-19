@@ -9,7 +9,11 @@ import {
   Settings,
   Bell,
   HelpCircle,
+  Sparkle,
+  SparklesIcon,
+  Layers2,
 } from "lucide-react";
+import WeeklyWrapIcon from "@/components/ui/weekly-wrap-icon";
 
 interface MenuItem {
   title: string;
@@ -27,8 +31,7 @@ export const menuList: MenuItem[] = [
     title: "",
     groupLabels: [
       { label: "Dashboard", icon: LayoutDashboard, path: "/dashboard" },
-      { label: "Study Deck", icon: BookOpen, path: "/study-deck" },
-      { label: "Pomodoro", icon: Timer, path: "/pomodoro" },
+      { label: "AI Weekly Wrap", icon: Trophy, path: "/weekly-wrap" },
     ],
   },
   {
@@ -36,9 +39,10 @@ export const menuList: MenuItem[] = [
 
     title: "",
     groupLabels: [
-      { label: "AI Notes", icon: Notebook, path: "/ai-notes" },
+      { label: "Study Deck", icon: Layers2, path: "/study-deck" },
+      { label: "AI Notes", icon: SparklesIcon, path: "/ai-notes" },
       { label: "AI Goal Helper", icon: Target, path: "/goal-helper" },
-      { label: "AI Weekly Wrap", icon: Trophy, path: "/weekly-wrap" },
+      { label: "Pomodoro", icon: Timer, path: "/pomodoro" },
     ],
   },
   {
@@ -46,11 +50,6 @@ export const menuList: MenuItem[] = [
     title: "",
     groupLabels: [
       { label: "Settings", icon: Settings, path: "/settings" },
-      {
-        label: "Notifications",
-        icon: Bell,
-        path: "/notifications",
-      },
       { label: "Support", icon: HelpCircle, path: "/support" },
     ],
   },

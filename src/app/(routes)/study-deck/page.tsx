@@ -51,12 +51,15 @@ export default async function StudyDeckPage() {
           />
         </div>
       </div>
-      <div className="flex flex-col gap-6 rounded-xl bg-[#06080f] p-6 px-8">
+      <div className="flex h-full flex-col gap-6 rounded-xl bg-[#06080f] p-6 px-8">
         <p className="text-2xl font-semibold">Recent Flashcards</p>
-        <div className="scrollbar-none flex items-center gap-4 overflow-x-auto">
+        <div className="scrollbar-none flex h-full gap-4 overflow-x-auto">
           {notes.map((note) => (
             <Link key={note.id} href={`/study-deck/${note.id}/flashcard`}>
-              <RecentFlashcard progress={note.flashcardProgress || 0} />
+              <RecentFlashcard
+                title={note.title}
+                progress={note.flashcardProgress || 0}
+              />
             </Link>
           ))}
         </div>
@@ -101,7 +104,7 @@ export default async function StudyDeckPage() {
               />
             );
           })}
-          <div className="absolute -bottom-[60%] left-1/2 aspect-square w-[600px] -translate-x-1/2 rounded-full bg-primary blur-[100px]" />
+          <div className="absolute -bottom-[60%] left-1/2 aspect-square w-[600px] -translate-x-1/2 rotate-0 rounded-full bg-primary blur-[100px] transition-all duration-200 direction-alternate" />
           <Image
             src={"/study-deck-character.png"}
             width={0}

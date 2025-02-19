@@ -1,9 +1,8 @@
 import React from "react";
 
 const Progress = ({ value }: { value: number }) => {
-
   const roundedValue = value.toFixed(2);
-  
+
   return (
     <div className="flex flex-col gap-1">
       <p className="text-xs text-gray/90">{roundedValue}% completed</p>
