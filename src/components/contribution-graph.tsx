@@ -158,7 +158,9 @@ const ContributionHeatmap = ({
                         "h-3 w-3 rounded-sm",
                         getContributionColor(day.count),
                       )}
-                      title={`${day.date.toLocaleDateString()}: ${day.count} contributions`}
+                      title={`${day.date.toLocaleDateString()}: ${day.count} ${
+                        day.count === 1 ? "activity" : "activities"
+                      }`}
                     />
                   ),
                 )}
