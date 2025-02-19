@@ -2,7 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import Markdown from 'react-markdown'
 import remarkGfm from 'remark-gfm'
-import { NotebookPen, PenLine } from 'lucide-react'
+import { NotebookPen, PenLine, ChevronLeft } from 'lucide-react'
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -22,7 +22,8 @@ interface Notes {
 export default function Notes() {
 
     const pathName = usePathname();
-    const id = pathName.split('/').pop();
+    // Extract the id from the pathname
+    const id = pathName.split('/')[2];
     const [notes, setNotes] = useState<Notes>();
 
     useEffect(() => {
@@ -57,7 +58,15 @@ export default function Notes() {
 
     
     return (
-        <div className="w-full px-4">
+        <div className="w-full">
+            <div className='flex items-center justify-center w-full relative mb-8'>
+                <div className='absolute left-0'>
+                    <button>
+                        <ChevronLeft size={36} />
+                    </button>
+                </div>
+                <h1 className='text-3xl'>Study Highlights</h1>
+            </div>
             <div className="sticky top-0 bg-black/95 backdrop-blur-sm z-10">
                 <div className="flex items-center justify-between py-4 border-b border-white/20">
                     <div className="text-2xl font-semibold">
@@ -67,13 +76,13 @@ export default function Notes() {
                         <DropdownMenu>
                             <DropdownMenuTrigger className="inline-flex items-center justify-center px-4 py-2 gap-2
                                 text-white rounded-xl bg-[radial-gradient(50%_50%_at_50%_50%,#9B77CB_0%,#591DA9_100%)] 
-                                hover:opacity-90 transition-opacity duration-200">
+                                hover:opacity-90 transition-opacity duration-200 min-w-fit">
                                 <NotebookPen size={18} />
-                                <span>Study Deck</span>
+                                <span>Notes</span>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent className="bg-black border-purple-600 text-white">
                                 <DropdownMenuItem className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
-                                    Study
+                                    Notes
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
                                     Quiz
@@ -99,7 +108,7 @@ export default function Notes() {
                         p: ({...props}) => <p className="my-4 leading-relaxed" {...props} />,
                         ul: ({...props}) => <ul className="my-4 space-y-2" {...props} />,
                         li: ({...props}) => (
-                            <li className="ml-4 pl-2 text-white" {...props}>
+                            <li className="ml-4 pl-2 text-white list-disc" {...props}>
                                 <span className="ml-2">{props.children}</span>
                             </li>
                         ),

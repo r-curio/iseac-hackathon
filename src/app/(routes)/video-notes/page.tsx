@@ -84,7 +84,7 @@ export default function VideoNotes() {
             }
 
             const savedData = await saveResponse.json();
-            router.push(`/study-deck/${savedData.id}`);
+            router.push(`/study-deck/${savedData.id}/notes`);
 
         } catch(error) {
             console.error('Error:', error);
