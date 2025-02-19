@@ -8,14 +8,40 @@ import { createClient } from "@/utils/supabase/server";
 import { Search } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { createClient } from "@/utils/supabase/server";
-import prismadb from "@/lib/prismadb";
+import { redirect } from "next/navigation";
+import React from "react";
 
-const StudyDeckPage = () => {
+export default async function StudyDeckPage() {
+  const supabase = await createClient();
+  const { data: user, error } = await supabase.auth.getUser();
+
+  if (error) {
+    return <div>Error: {error.message}</div>;
+  }
+
+  const notes = await prismadb.note.findMany({
+    where: {
+      userId: user.user.id,
+    },
+  });
+
+  const profile = await prismadb.profile.findUnique({
+    where: {
+      id: user.user.id,
+    },
+    select: {
+      username: true,
+    },
+  });
+
+  if (!profile) {
+    redirect("/auth/login");
+  }
+
   return (
     <div className="flex w-full flex-col gap-6 rounded-3xl p-8">
       <div className="flex w-full items-center justify-between">
-        <p className="text-2xl">Hi, {username?.username} 👋</p>
+        <p className="text-2xl">Hi, {profile?.username} 👋</p>
         <div className="flex items-center justify-center gap-4 rounded-full border border-transparent bg-[#0c1017] px-6 py-3 focus-within:border-gray/25">
           <Search className="h-5 w-5 text-gray" />
           <input
@@ -99,4 +125,4 @@ const StudyDeckPage = () => {
       </div>
     </div>
   );
-};
+}
