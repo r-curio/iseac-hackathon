@@ -1,7 +1,6 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import Markdown from "react-markdown";
-import remarkGfm from "remark-gfm";
 import { NotebookPen, PenLine, ChevronLeft } from "lucide-react";
 import {
   DropdownMenu,
@@ -13,11 +12,11 @@ import { Note } from "@prisma/client";
 import EditorProvider from "@/providers/editor-provider";
 import RichTextbox from "@/components/ui/rich-textbox";
 import { Descendant } from "slate";
-import { redirect, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { extractHeadings } from "@/lib/utils";
 import NoteSidebar from "./component/note-sidebar";
 
-const note = ({ note }: { note: Note }) => {
+const NoteContainer = ({ note }: { note: Note }) => {
   const [contentValue, setContentValue] = useState<Descendant[]>(
     JSON.parse(note.content!.toString()),
   );
@@ -106,4 +105,4 @@ const note = ({ note }: { note: Note }) => {
   );
 };
 
-export default note;
+export default NoteContainer;

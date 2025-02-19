@@ -1,5 +1,5 @@
 "use client";
-import { useContext, useRef, useState } from "react";
+import { useState } from "react";
 import {
   MdCode,
   MdFormatAlignCenter,
@@ -65,6 +65,7 @@ const CustomEditor: CustomEditorType = {
       const marks = Editor.marks(editor);
       return marks ? marks[format] === true : false;
     } catch (error) {
+      console.error(error);
       return false;
     }
   },
@@ -86,6 +87,7 @@ const CustomEditor: CustomEditorType = {
 
       return !!match;
     } catch (error) {
+      console.error(error);
       return false;
     }
   },

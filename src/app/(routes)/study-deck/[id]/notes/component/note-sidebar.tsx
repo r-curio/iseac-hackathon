@@ -102,7 +102,7 @@ const NoteSidebar: React.FC<NoteSidebarProps> = ({ headings }) => {
     }
   };
 
-  const getLevelClass = (level: number, isActive: boolean, type: string) => {
+  const getLevelClass = (level: number, isActive: boolean) => {
     const baseStyles = "relative group";
     const activeStyles = isActive
       ? "text-purple-400"
@@ -156,11 +156,7 @@ const NoteSidebar: React.FC<NoteSidebarProps> = ({ headings }) => {
                     e.preventDefault();
                     handleHeadingClick(heading.id);
                   }}
-                  className={getLevelClass(
-                    heading.level,
-                    isActive,
-                    heading.type,
-                  )}
+                  className={getLevelClass(heading.level, isActive)}
                 >
                   {isActive && heading.type === "paragraph" && (
                     <div className="absolute -left-2 top-1/2 h-2 w-2 -translate-y-1/2 rounded-full bg-purple-400" />

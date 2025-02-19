@@ -106,6 +106,7 @@ export type AlignType = (typeof TEXT_ALIGN_TYPES)[number];
 import markdown from "remark-parse";
 import slate from "remark-slate";
 import { unified } from "unified";
+import { CustomElement, CustomText } from "@/providers/editor-provider";
 
 export const parseMarkdown = async (md: string): Promise<Descendant[]> => {
   try {
@@ -126,20 +127,27 @@ interface Heading {
   id: string;
   text: string;
   level: number;
-  type: "heading-one" | "heading-two" | "paragraph";
+  type:
+    | "heading-one"
+    | "heading-two"
+    | "paragraph"
+    | "heading_one"
+    | "heading_two";
 }
 
-export const extractHeadings = (nodes: Descendant[]): Heading[] => {
+export const extractHeadings = (nodes: CustomElement[]): Heading[] => {
   const headings: Heading[] = [];
 
-  nodes.forEach((node: any, idx) => {
+  nodes.forEach((node: CustomElement) => {
     if (
       node.type === "heading-one" ||
       node.type === "heading_one" ||
       node.type === "heading_two" ||
       node.type === "heading-two"
     ) {
-      const text = node.children.map((child: any) => child.text).join("");
+      const text = node.children
+        .map((child: CustomText) => child.text)
+        .join("");
       headings.push({
         id: text.toLowerCase().replace(/\s+/g, "-"),
         text,
@@ -149,9 +157,11 @@ export const extractHeadings = (nodes: Descendant[]): Heading[] => {
     }
     // Check for paragraphs with bold text
     else if (node.type === "paragraph") {
-      const hasBoldText = node.children.some((child: any) => child.bold);
+      const hasBoldText = node.children.some((child: CustomText) => child.bold);
       if (hasBoldText) {
-        const text = node.children.map((child: any) => child.text).join("");
+        const text = node.children
+          .map((child: CustomText) => child.text)
+          .join("");
         headings.push({
           id: `paragraph-${text.toLowerCase().replace(/\s+/g, "-")}`,
           text,

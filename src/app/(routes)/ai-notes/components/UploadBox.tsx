@@ -1,7 +1,6 @@
 import { Upload, X, FileText } from "lucide-react";
 import Image from "next/image";
 import gdrive from "../../../../../public/icons/gdrive.svg";
-import { Textarea } from "@/components/ui/textarea";
 import useDrivePicker from "react-google-drive-picker";
 import RichTextbox from "@/components/ui/rich-textbox";
 import EditorProvider from "@/providers/editor-provider";

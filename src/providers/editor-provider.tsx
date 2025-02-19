@@ -1,4 +1,4 @@
-import { BaseEditor, Descendant, Element } from "slate";
+import { BaseEditor, Descendant } from "slate";
 import { ReactEditor } from "slate-react";
 import {
   createContext,
@@ -6,11 +6,7 @@ import {
   JSX,
   useCallback,
   useContext,
-  useState,
 } from "react";
-import { MdDelete } from "react-icons/md";
-import { Transforms } from "slate";
-import { useFocused, useSelected, useSlate } from "slate-react";
 import { AlignType, CustomElementType } from "@/lib/utils";
 
 // Define custom types for Slate
@@ -47,20 +43,12 @@ interface EditorContextType {
 interface CustomElementProps {
   attributes: {
     "data-slate-node": "element";
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
   children: React.ReactNode;
   element: CustomElement;
 }
-
-const ICON_SIZE = 18;
-
-const initialValue: CustomElement[] = [
-  {
-    type: "paragraph",
-    children: [{ text: "" }],
-  },
-];
 
 const EditorContext = createContext<EditorContextType | null>(null);
 
@@ -74,8 +62,12 @@ const CustomElement = ({
   };
 
   if (element.type === "paragraph") {
-    const text = element.children?.map((child: any) => child.text).join("");
-    const hasBoldText = element.children?.some((child: any) => child.bold);
+    const text = element.children
+      ?.map((child: CustomText) => child.text)
+      .join("");
+    const hasBoldText = element.children?.some(
+      (child: CustomText) => child.bold,
+    );
 
     if (hasBoldText) {
       const paragraphId = `paragraph-${text.toLowerCase().replace(/\s+/g, "-")}`;
@@ -87,8 +79,8 @@ const CustomElement = ({
     }
   }
 
-  const headingText = element.children?.[0]?.text || "";
-  const headingId = headingText.toLowerCase().replace(/\s+/g, "-");
+  const headingText: string = element.children?.[0]?.text || "";
+  const headingId: string = headingText.toLowerCase().replace(/\s+/g, "-");
 
   switch (element.type) {
     case "block-quote":
@@ -192,6 +184,7 @@ const CustomElement = ({
 interface LeafProps {
   attributes: {
     "data-slate-leaf": true;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     [key: string]: any;
   };
   children: React.ReactNode;
