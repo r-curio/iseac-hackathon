@@ -11,12 +11,7 @@ interface AddCardModalProps {
   setLoading: (isLoading: boolean) => void;
 }
 
-const AddCardModal = ({
-  isOpen,
-  onClose,
-  loading,
-  setLoading,
-}: AddCardModalProps) => {
+const AddCardModal = ({ isOpen, onClose }: AddCardModalProps) => {
   const [isMounted, setisMounted] = useState(false);
 
   useEffect(() => {
