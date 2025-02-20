@@ -1,9 +1,14 @@
 'use client'
 import { useState } from "react";
-import { Pencil, Check } from "lucide-react";
+import { Ellipsis, Check } from "lucide-react";
 import { Textarea } from "./ui/modified-textarea";
 import Flashcardmodal from "./modals/add-flashcard-modal"; 
-
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
 interface flashcardListProps {
     flashcards: {
         id: string;
@@ -82,16 +87,28 @@ const FlashcardComponent = (props: { flashcard: flashcard, handleFlashcardChange
                 </div>
             </div>
             <div>
-                <button 
-                    onClick={() => isEditing ? handleSave() : setIsEditing(true)}
-                    className="hover:opacity-80 transition-opacity"
-                >
-                    {isEditing ? (
+                {isEditing ? (
+                    <button 
+                        onClick={() => handleSave()}
+                        className="hover:opacity-80 transition-opacity"
+                    >
                         <Check size={24} />
-                    ) : (
-                        <Pencil size={24} />
-                    )}
-                </button>
+                    </button>
+                ) : (
+                    <DropdownMenu>
+                        <DropdownMenuTrigger>
+                            <Ellipsis size={24} /> 
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent className="bg-black border-purple-600 text-white">
+                            <DropdownMenuItem onClick={() => setIsEditing(true)} className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
+                                Edit
+                            </DropdownMenuItem>
+                            <DropdownMenuItem className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
+                                Delete
+                            </DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
+                )}
             </div>
         </div>
     )
