@@ -60,8 +60,11 @@ const ProgressTracker = ({
                   <div className="flex items-center justify-center rounded-3xl bg-gradient-2 p-3 backdrop-blur-xl">
                     <CircleProgress
                       progress={
-                        progresses[idx]
-                          ? (progresses[idx].progress /
+                        progresses.filter((v) => v.date.getDay() === idx)
+                          .length > 0
+                          ? (progresses.filter(
+                              (v) => v.date.getDay() === idx,
+                            )[0].progress /
                               (profile.studyHrsGoal * 60)) *
                             100
                           : 0

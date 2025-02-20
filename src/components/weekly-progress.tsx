@@ -41,7 +41,12 @@ const WeeklyProgress = ({
               <div className="flex items-center justify-center rounded-3xl bg-gradient-2 p-3 backdrop-blur-xl">
                 <CircleProgress
                   progress={
-                    values[idx] ? (values[idx].progress / (goal * 60)) * 100 : 0
+                    values.filter((v) => v.date.getDay() === idx).length > 0
+                      ? (values.filter((v) => v.date.getDay() === idx)[0]
+                          .progress /
+                          (goal * 60)) *
+                        100
+                      : 0
                   }
                 />
               </div>
