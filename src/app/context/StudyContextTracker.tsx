@@ -17,8 +17,8 @@ export const StudySessionProvider = ({
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const intervalTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-  const THRESHOLD = 2000;
-  const IDLE_TIMEOUT = 5000;
+  const THRESHOLD = 5000;
+  const IDLE_TIMEOUT = 30000;
   const UPDATE_INTERVAL = 1000;
 
   // Function to start the session
