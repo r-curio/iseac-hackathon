@@ -3,131 +3,118 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
   directUrl = env("DIRECT_URL")
-
 }
 
 model Profile {
-  id            String    @id @default(cuid())
-  username      String    @unique
-  full_name     String
-  email         String    @unique
+  id            String      @id @default(cuid())
+  username      String      @unique
+  email         String      @unique
   avatar_url    String
-  dateJoined    DateTime  @default(now())
-  lastActive    DateTime  @default(now())
-  currentStreak Int       @default(1)
-  highestStreak Int       @default(1)
-  totalScore    Int       @default(0)
-  studyHrsGoal  Float     @default(2)
-  wrap          Json?     // Stringified JSON for weekly wrap
-
-  // Relations
-  session       Session?  // Changed from sessions array to single optional relation
-  progress      Progress[]
+  dateJoined    DateTime    @default(now())
+  lastActive    DateTime    @default(now())
+  currentStreak Int         @default(1)
+  highestStreak Int         @default(1)
+  totalScore    Int         @default(0)
+  studyHrsGoal  Float       @default(2)
+  wrap          Json?
+  full_name     String
   activities    Activity[]
-  notes         Note[]
-  flashcards    Flashcard[]
   exams         Exam[]
+  flashcards    Flashcard[]
+  notes         Note[]
+  progress      Progress[]
   prompts       Prompt[]
-
+  session       Session?
 }
 
 model Progress {
-  id           String   @id @default(cuid())
-  userId       String
-  progress     Float
-  date         DateTime
-  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id       String   @id @default(cuid())
+  userId   String
+  progress Float
+  date     DateTime
+  profile  Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model Session {
-  id           String   @id @default(cuid())
-  userId       String   @unique  // 
-  totalHr      Float
-  prevTotalHr  Float
-  date         DateTime @default(now())
-  profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  totalHr     Float
+  prevTotalHr Float
+  date        DateTime @default(now())
+  profile     Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model Activity {
-  id           String      @id @default(cuid())
+  id           String       @id @default(cuid())
   userId       String
   activityType ActivityType
-  dateCreated  DateTime    @default(now())
-  profile      Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  dateCreated  DateTime     @default(now())
+  profile      Profile      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model Note {
   id                String      @id @default(cuid())
-  userId           String
-  dateCreated      DateTime    @default(now())
-  title            String
-  content          Json        // Stringified JSON
-  lastModified     DateTime    @updatedAt
-  isAiGenerated    Boolean     @default(false)
+  userId            String
+  dateCreated       DateTime    @default(now())
+  title             String
+  content           Json
+  lastModified      DateTime    @updatedAt
+  isAiGenerated     Boolean     @default(false)
   flashcardProgress Float?
-  examScores       Float[]
-
-  // Relations
-  profile          Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  flashcards       Flashcard[]
-  exams            Exam[]
+  examScores        Float[]
+  exams             Exam[]
+  flashcards        Flashcard[]
+  profile           Profile     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
 
 model Flashcard {
-  id            String    @id @default(cuid())
+  id            String   @id @default(cuid())
   noteId        String
   userId        String
-  createdAt     DateTime  @default(now())
-  isAiGenerated Boolean   @default(false)
-  lastModified  DateTime  @updatedAt
+  createdAt     DateTime @default(now())
+  isAiGenerated Boolean  @default(false)
+  lastModified  DateTime @updatedAt
   front         String
   back          String
-  isAnswered    Boolean   @default(false)
-
-  // Relations
-  note          Note      @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  profile       Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isAnswered    Boolean  @default(false)
+  note          Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  profile       Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([noteId])
   @@index([userId])
 }
 
 model Exam {
-  id            String     @id @default(cuid())
+  id            String   @id @default(cuid())
   noteId        String
   userId        String
-  dateSubmitted DateTime   @default(now())
+  dateSubmitted DateTime @default(now())
   score         Float
-
-  // Relations
-  note          Note       @relation(fields: [noteId], references: [id], onDelete: Cascade)
-  profile       Profile    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  note          Note     @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  profile       Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([noteId])
   @@index([userId])
 }
 
-
 model Prompt {
-  id          String    @id @default(cuid())
+  id          String   @id @default(cuid())
   userId      String
-  dateCreated DateTime  @default(now())
+  dateCreated DateTime @default(now())
   content     String
-  isAI        Boolean   @default(false)
-
-  // Relations
-  profile     Profile   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  isAI        Boolean  @default(false)
+  profile     Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
 }
