@@ -3,6 +3,7 @@ import { Poppins } from "next/font/google";
 import "./globals.css";
 import Sidebar from "../components/sidebar";
 import ToastProvider from "@/providers/toast-provider";
+import { StudySessionProvider } from "./context/StudyContextTracker";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -35,9 +36,11 @@ export default function RootLayout({
       <body
         className={`${poppins.className} flex bg-secondary-900 antialiased`}
       >
-        <ToastProvider />
-        <Sidebar />
-        {children}
+        <StudySessionProvider >
+          <ToastProvider />
+          <Sidebar />
+          {children}
+        </StudySessionProvider>
       </body>
     </html>
   );
