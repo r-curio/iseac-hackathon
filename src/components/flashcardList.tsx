@@ -15,6 +15,7 @@ interface flashcardListProps {
         front: string;
         back: string;
     }[];
+    id: string;
     handleFlashcardsChange: (flashcards: flashcard[]) => void;
 }
 
@@ -24,10 +25,16 @@ interface flashcard {
     back: string;
 }
 
-const FlashcardComponent = (props: { flashcard: flashcard, handleFlashcardChange: (flashcard: flashcard) => void }) => {
+interface FlashcardComponentProps {
+    flashcard: flashcard;
+    handleFlashcardChange: (flashcard: flashcard) => void;
+    handleDeleteFlashcard: (flashcard: flashcard) => void;
+}
+
+const FlashcardComponent = ({flashcard, handleFlashcardChange, handleDeleteFlashcard}: FlashcardComponentProps) => {
     const [isEditing, setIsEditing] = useState(false);
-    const [front, setFront] = useState(props.flashcard.front);
-    const [back, setBack] = useState(props.flashcard.back);
+    const [front, setFront] = useState(flashcard.front);
+    const [back, setBack] = useState(flashcard.back);
 
     const handleSave = () => {
         setIsEditing(false);
@@ -39,7 +46,7 @@ const FlashcardComponent = (props: { flashcard: flashcard, handleFlashcardChange
                 },
                 method: 'PUT',
                 body: JSON.stringify({
-                    id: props.flashcard.id,
+                    id: flashcard.id,
                     front,
                     back,
                     type: 'update'
@@ -50,13 +57,32 @@ const FlashcardComponent = (props: { flashcard: flashcard, handleFlashcardChange
             return;
         }
 
-        props.handleFlashcardChange({
-            id: props.flashcard.id,
+        handleFlashcardChange({
+            id: flashcard.id,
             front,
             back
         });
-
     };
+
+    const handleDelete = () => {
+        try {
+            fetch('/api/flashcard', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                method: 'DELETE',
+                body: JSON.stringify({
+                    id: flashcard.id,
+                })
+            })
+        } catch (error) {
+            console.error('An error occurred:', error)
+            return;
+        }
+
+        handleDeleteFlashcard(flashcard)
+            
+    }
 
     return (
         <div className="bg-flashcard-gradient text-white p-7 rounded-xl border-[#591DA9] border-2 flex min-h-[110px] justify-between">
@@ -103,7 +129,7 @@ const FlashcardComponent = (props: { flashcard: flashcard, handleFlashcardChange
                             <DropdownMenuItem onClick={() => setIsEditing(true)} className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
                                 Edit
                             </DropdownMenuItem>
-                            <DropdownMenuItem className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
+                            <DropdownMenuItem className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white" onClick={() => handleDelete()}>
                                 Delete
                             </DropdownMenuItem>
                         </DropdownMenuContent>
@@ -114,7 +140,7 @@ const FlashcardComponent = (props: { flashcard: flashcard, handleFlashcardChange
     )
 }
 
-export default function FlashcardList({ flashcards, handleFlashcardsChange }: flashcardListProps) {
+export default function FlashcardList({ flashcards, id, handleFlashcardsChange }: flashcardListProps) {
 
     const handleFlashcardChange = (flashcard: flashcard) => {
         const updatedFlashcards = flashcards.map((f) => {
@@ -127,14 +153,23 @@ export default function FlashcardList({ flashcards, handleFlashcardsChange }: fl
         handleFlashcardsChange(updatedFlashcards);
     }
 
+    const handleAddFlashcard = (flashcard: flashcard) => {
+        handleFlashcardsChange([...flashcards, flashcard]);
+    }
+
+    const handleDeleteFlashcard = (flashcard: flashcard) => {
+        const updatedFlashcards = flashcards.filter((f) => f.id !== flashcard.id);
+        handleFlashcardsChange(updatedFlashcards);
+    }
+
     return (
         <div className="w-full mt-7 py-[42px] px-[80px] bg-[#0C101780]/50 space-y-8">
             <div className="flex justify-between items-center"> 
                 <h1 className="text-2xl font-normal mb-4">Flashcards</h1>
-                <Flashcardmodal />
+                <Flashcardmodal handleFlashcardChange={handleAddFlashcard} id={id}/>
             </div>
             {flashcards.map((flashcard, index) => (
-                <FlashcardComponent key={index} flashcard={flashcard} handleFlashcardChange={handleFlashcardChange}/>
+                <FlashcardComponent key={index} flashcard={flashcard} handleFlashcardChange={handleFlashcardChange} handleDeleteFlashcard={handleDeleteFlashcard}/>
             ))}
         </div>
     )

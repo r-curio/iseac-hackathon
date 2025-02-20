@@ -8,8 +8,55 @@ import {
 } from "@/components/ui/dialog"
 import { Plus } from "lucide-react";
 import { Textarea } from "../ui/modified-textarea";
+import { useState } from "react";
 
-export default function Flashcardmodal() {
+interface flashcard {
+    id: string;
+    front: string;
+    back: string;
+}
+
+interface FlashcardModalProps {
+    handleFlashcardChange: (flashcard: flashcard) => void;
+    id: string;
+}
+
+export default function Flashcardmodal( { handleFlashcardChange, id }: FlashcardModalProps ) {
+
+    const [front, setFront] = useState('');
+    const [back, setBack] = useState('');
+
+    const handleSave = async () => {
+        try {
+            const response = await fetch('/api/flashcard', {
+                headers: {
+                    contentType: 'application/json'
+                },
+                body: JSON.stringify({
+                    id: id,
+                    front,
+                    back,
+                })
+            })
+
+            if (!response.ok) {
+                console.error('Failed to save flashcard')
+                return;
+            }
+
+            const data = await response.json();
+            handleFlashcardChange({
+                id: data.id,
+                front,
+                back
+            });
+        } catch (error) {
+            console.error('An error occurred:', error)
+            return;
+        }
+
+        
+    }
 
     return (
         <Dialog>
@@ -29,12 +76,16 @@ export default function Flashcardmodal() {
                                 type="text" 
                                 placeholder="Enter Term" 
                                 className="bg-transparent text-white resize-none text-2xl font-normal w-full py-4 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none whitespace-pre-wrap break-words placeholder:text-[#C0B4D0]"
+                                value={front}
+                                onChange={(e) => setFront(e.target.value)}
                             />                                
                         </div>
                         <div className=" px-[40px] border border-white rounded-2xl min-h-[140px]">
                             <Textarea
                                 placeholder="Enter Definition" 
                                 className="bg-transparent text-white resize-none text-2xl font-normal w-full py-4 border-none outline-none focus:outline-none focus:ring-0 focus-visible:ring-0 focus-visible:outline-none whitespace-pre-wrap break-words placeholder:text-[#C0B4D0]"
+                                value={back}
+                                onChange={(e) => setBack(e.target.value)}
                             />                                
                         </div>
                         <div className="flex justify-end gap-2">
@@ -44,7 +95,9 @@ export default function Flashcardmodal() {
                                 </button>
                             </DialogClose>
                             <button className="bg-[radial-gradient(50%_50%_at_50%_50%,#9B77CB_0%,#591DA9_100%)] hover:opacity-90 transition-opacity flex py-[16px] px-6 rounded-xl"
-                            style={{boxShadow: "0px 2px 1px 0px rgba(255, 255, 255, 0.25) inset, 0px -4px 2px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 1px 4px rgba(255, 255, 255, 0.10)"}}>
+                                style={{boxShadow: "0px 2px 1px 0px rgba(255, 255, 255, 0.25) inset, 0px -4px 2px 0px rgba(0, 0, 0, 0.25) inset, 0px 0px 1px 4px rgba(255, 255, 255, 0.10)"}}
+                                onClick={() => handleSave()}
+                            >
                                 <p>Add Card</p>
                             </button>
                         </div>
