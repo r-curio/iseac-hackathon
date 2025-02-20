@@ -51,16 +51,22 @@ const ProgressTracker = ({
               </GlowButton>
             </div>
             <div className="grid h-full w-full grid-cols-4 grid-rows-2">
-              {progresses.map((progress) => (
+              {Array.from({ length: 7 }).map((_, idx) => (
                 <div
-                  key={progress.id}
+                  key={idx}
                   className="col-span-1 row-span-1 flex flex-col items-center gap-1"
                 >
-                  <p className="select-none text-lg font-medium">
-                    {DAYS[progress.dayOfTheWeek]}
-                  </p>
+                  <p className="select-none text-lg font-medium">{DAYS[idx]}</p>
                   <div className="flex items-center justify-center rounded-3xl bg-gradient-2 p-3 backdrop-blur-xl">
-                    <CircleProgress progress={progress.progress} />
+                    <CircleProgress
+                      progress={
+                        progresses[idx]
+                          ? (progresses[idx].progress /
+                              (profile.studyHrsGoal * 60)) *
+                            100
+                          : 0
+                      }
+                    />
                   </div>
                 </div>
               ))}

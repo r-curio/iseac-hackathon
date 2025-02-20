@@ -38,7 +38,7 @@ model Progress {
   id           String   @id @default(cuid())
   userId       String
   progress     Float
-  dayOfTheWeek Int     // 0-6 for Sunday-Saturday
+  date         DateTime
   profile      Profile  @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
