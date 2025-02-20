@@ -111,3 +111,96 @@ export async function PUT(req: NextRequest) {
     );
   }
 }
+
+export async function POST(req: NextRequest) {
+
+  try {
+      const data = await req.json();
+      const supabase = await createClient();
+
+      const { data: { user } } = await supabase.auth.getUser();
+
+      if (!user) {
+          return NextResponse.json({ message: "User is not logged in" }, { status: 401 });
+      }
+
+      const response = await prismadb.flashcard.create({
+          data: {
+            noteId: data.id,
+            userId: user.id,
+            isAiGenerated: false,
+            front: data.front,
+            back: data.back,
+            isAnswered: false
+          }
+      })
+
+      if (!response) {
+          return NextResponse.json({ message: "Failed to create flashcard" }, { status: 500 });
+      }
+
+      const activity = await prismadb.activity.create({
+          data: {
+              userId: user.id,
+              activityType: "FLASHCARDS"
+          }
+      })
+
+      if (!activity) {
+          return NextResponse.json({ message: "Failed to create activity" }, { status: 500 });
+      }
+
+      return NextResponse.json(response);
+  } catch (error) {
+      console.error('An error occurred:', error)
+      if (error instanceof Error) {
+          return NextResponse.json({ message: error.message }, { status: 500 });
+      }
+      return NextResponse.json({ message: "An unknown error occurred" }, { status: 500 });
+  }
+}
+
+export async function DELETE(req: NextRequest) {
+  try {
+    const data = await req.json();
+    const supabase = await createClient();
+
+    const { data: { user } } = await supabase.auth.getUser();
+
+    if (!user) {
+      return NextResponse.json({ message: "User is not logged in" }, { status: 401 } );
+    }
+
+    const response = await prismadb.flashcard.delete({
+      where: {
+        id: data.id,
+      },
+    });
+
+    if (!response) {
+      return NextResponse.json(
+        { message: "Failed to delete flashcard" },
+        { status: 500 },
+      );
+    }
+
+    const activity = await prismadb.activity.create({
+      data: {
+        userId: user.id,
+        activityType: "FLASHCARDS",
+      },
+    });
+
+    if (!activity) {
+      return NextResponse.json({ message: "Failed to create activity" }, { status: 500 });
+    }
+
+    return NextResponse.json(response);
+  } catch (error) {
+    console.error("An error occurred:", error);
+    if (error instanceof Error) {
+      return NextResponse.json({ message: error.message }, { status: 500 });
+    }
+    return NextResponse.json({ message: "An unknown error occurred" }, { status: 500 });
+  }
+}
