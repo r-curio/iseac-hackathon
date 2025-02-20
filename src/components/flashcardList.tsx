@@ -1,4 +1,4 @@
-'use client'
+"use client";
 import { useState } from "react";
 import { Ellipsis, Check } from "lucide-react";
 import { Textarea } from "./ui/modified-textarea";
@@ -20,9 +20,9 @@ interface flashcardListProps {
 }
 
 interface flashcard {
-    id: string;
-    front: string;
-    back: string;
+  id: string;
+  front: string;
+  back: string;
 }
 
 interface FlashcardComponentProps {
@@ -36,8 +36,8 @@ const FlashcardComponent = ({flashcard, handleFlashcardChange, handleDeleteFlash
     const [front, setFront] = useState(flashcard.front);
     const [back, setBack] = useState(flashcard.back);
 
-    const handleSave = () => {
-        setIsEditing(false);
+  const handleSave = () => {
+    setIsEditing(false);
 
         try {
             fetch('/api/flashcard', {
@@ -142,13 +142,13 @@ const FlashcardComponent = ({flashcard, handleFlashcardChange, handleDeleteFlash
 
 export default function FlashcardList({ flashcards, id, handleFlashcardsChange }: flashcardListProps) {
 
-    const handleFlashcardChange = (flashcard: flashcard) => {
-        const updatedFlashcards = flashcards.map((f) => {
-            if (f.id === flashcard.id) {
-                return flashcard;
-            }
-            return f;
-        });
+  const handleFlashcardChange = (flashcard: flashcard) => {
+    const updatedFlashcards = flashcards.map((f) => {
+      if (f.id === flashcard.id) {
+        return flashcard;
+      }
+      return f;
+    });
 
         handleFlashcardsChange(updatedFlashcards);
     }

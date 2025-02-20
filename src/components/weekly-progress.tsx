@@ -5,7 +5,13 @@ import CircleProgress from "@/components/circle-progress";
 import { Progress } from "@prisma/client";
 import { DAYS } from "@/lib/utils";
 
-const WeeklyProgress = ({ values }: { values: Progress[] }) => {
+const WeeklyProgress = ({
+  goal,
+  values,
+}: {
+  goal: number;
+  values: Progress[];
+}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const scroll = (direction: "left" | "right") => {
@@ -29,13 +35,20 @@ const WeeklyProgress = ({ values }: { values: Progress[] }) => {
           ref={scrollRef}
           className="scrollbar-none grid snap-x snap-mandatory grid-flow-col gap-2 overflow-auto xl:auto-cols-[22.5%] 2xl:auto-cols-[21.5%]"
         >
-          {values.map((progress) => (
-            <div key={progress.id} className="flex flex-col items-center gap-1">
-              <p className="select-none text-lg font-medium">
-                {DAYS[progress.dayOfTheWeek]}
-              </p>
+          {Array.from({ length: 7 }).map((_, idx) => (
+            <div key={idx} className="flex flex-col items-center gap-1">
+              <p className="select-none text-lg font-medium">{DAYS[idx]}</p>
               <div className="flex items-center justify-center rounded-3xl bg-gradient-2 p-3 backdrop-blur-xl">
-                <CircleProgress progress={progress.progress} />
+                <CircleProgress
+                  progress={
+                    values.filter((v) => v.date.getDay() === idx).length > 0
+                      ? (values.filter((v) => v.date.getDay() === idx)[0]
+                          .progress /
+                          (goal * 60)) *
+                        100
+                      : 0
+                  }
+                />
               </div>
             </div>
           ))}

@@ -3,9 +3,53 @@ import Streak from "@/components/streak";
 import WeeklyProgress from "@/components/weekly-progress";
 import prismadb from "@/lib/prismadb";
 import { createClient } from "@/utils/supabase/server";
+import { Activity } from "@prisma/client";
 import { ChartNoAxesCombined } from "lucide-react";
 import Image from "next/image";
 import { redirect } from "next/navigation";
+
+const updateCurrentStreak = async (activities: Activity[]) => {
+  const activityMap = activities.reduce(
+    (acc: { [key: string]: number }, activity) => {
+      // Convert to local timezone and get date string
+      const date = new Date(activity.dateCreated);
+      const localDate = new Date(
+        date.getTime() - date.getTimezoneOffset() * 60000,
+      )
+        .toISOString()
+        .split("T")[0];
+
+      acc[localDate] = (acc[localDate] || 0) + 1;
+      return acc;
+    },
+    {},
+  );
+
+  // Calculate streak from today
+  let currentStreak = 0;
+  const today = new Date();
+  const checkDate = today;
+
+  while (true) {
+    // Format the date to match activityMap keys (YYYY-MM-DD)
+    const dateKey = new Date(
+      checkDate.getTime() - checkDate.getTimezoneOffset() * 60000,
+    )
+      .toISOString()
+      .split("T")[0];
+
+    // Check if there's activity on this date
+    if (!activityMap[dateKey]) {
+      break;
+    }
+
+    currentStreak++;
+    // Move to previous day
+    checkDate.setDate(checkDate.getDate() - 1);
+  }
+
+  return currentStreak;
+};
 
 const Dashboard = async () => {
   const supabase = await createClient();
@@ -23,6 +67,15 @@ const Dashboard = async () => {
   const weeklyProgress = await prismadb.progress.findMany({
     where: {
       userId: profile?.id,
+      date: {
+        gte: new Date(
+          new Date().setDate(new Date().getDate() - new Date().getDay()),
+        ),
+        lte: new Date(),
+      },
+    },
+    orderBy: {
+      date: "asc",
     },
   });
 
@@ -33,6 +86,30 @@ const Dashboard = async () => {
   });
 
   if (!profile) redirect("/login");
+
+  const activities = await prismadb.activity.findMany({
+    where: {
+      userId: profile?.id,
+    },
+    orderBy: [
+      {
+        dateCreated: "desc",
+      },
+    ],
+  });
+
+  const currentStreak = await updateCurrentStreak(activities);
+
+  await prismadb.profile.update({
+    where: {
+      email: profile.email,
+    },
+    data: {
+      lastActive: new Date(),
+      currentStreak: currentStreak,
+      highestStreak: Math.max(currentStreak, profile.currentStreak),
+    },
+  });
 
   return (
     <div className="flex flex-col items-center gap-8">
@@ -60,7 +137,10 @@ const Dashboard = async () => {
               <p className="text-2xl font-semibold">Weekly Progress</p>
               <ChartNoAxesCombined className="h-8 w-8 rounded-lg bg-gradient-1 p-1 text-secondary-900" />
             </div>
-            <WeeklyProgress values={weeklyProgress} />
+            <WeeklyProgress
+              goal={profile.studyHrsGoal}
+              values={weeklyProgress}
+            />
           </div>
           <Streak
             className="col-span-2 row-span-2 h-full p-8 pt-12"

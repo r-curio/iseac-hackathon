@@ -48,8 +48,8 @@ const ContributionHeatmap = ({
 
   const getContributionColor = (count: number) => {
     if (count === 0) return "bg-primary/10";
-    if (count <= 2) return "bg-primary/50";
-    if (count <= 5) return "bg-primary";
+    if (count <= 50) return "bg-primary/50";
+    if (count <= 100) return "bg-primary";
     return "bg-[#9900FF]";
   };
 

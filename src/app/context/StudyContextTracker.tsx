@@ -1,5 +1,5 @@
-'use client'
-import { createContext, useContext, useEffect, useState } from "react";
+"use client";
+import { createContext, useContext, useEffect, useRef, useState } from "react";
 
 const StudySessionContext = createContext({
   startSession: () => {},
@@ -7,75 +7,129 @@ const StudySessionContext = createContext({
   isStudying: false,
 });
 
-export const StudySessionProvider = ({ children }: { children: React.ReactNode }) => {
-    const [isStudying, setIsStudying] = useState(false);
-    let inactivityTimer: NodeJS.Timeout;
+export const StudySessionProvider = ({
+  children,
+}: {
+  children: React.ReactNode;
+}) => {
+  const [isStudying, setIsStudying] = useState(false);
+  const [, setSessionDuration] = useState(0);
+  const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalTimerRef = useRef<NodeJS.Timeout | null>(null);
 
-    // Function to start the session
-    const startSession = () => {
-        console.log("Starting session");
-        setIsStudying(true);
-        localStorage.setItem("studyStartTime", Date.now().toString());
-        resetInactivityTimer();
-    };
+  // Function to start the session
+  const startSession = () => {
+    console.log("Starting session");
+    setIsStudying(true);
+  };
 
-    // Function to end the session and record the study time
-    const endSession = async () => {
-        console.log("Ending session");
-        setIsStudying(false);
-        clearTimeout(inactivityTimer);
+  // Function to end the session and record the study time
+  const endSession = async () => {
+    console.log("Ending session");
+    setIsStudying(false);
+    clearInterval(intervalTimerRef.current!);
+    intervalTimerRef.current = null;
 
-        const startTime = localStorage.getItem("studyStartTime");
-        if (!startTime) return;
-        const duration = (Date.now() - parseInt(startTime)) / (1000 * 60 * 60); // hours
+    const totalDuration =
+      parseFloat(localStorage.getItem("sessionDuration")!) / 60;
+    console.log("TotalDuration: ", totalDuration);
+    if (!totalDuration) return;
 
-        try {
-            // Make an API call instead of using Prisma directly
-            const response = await fetch('/api/study-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    duration,
-                }),
-            });
+    try {
+      // Make an API call instead of using Prisma directly
+      const response = await fetch("/api/study-session", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          duration: totalDuration,
+          dateStopped: new Date(localStorage.getItem("currentDate")!),
+        }),
+      });
 
-            if (!response.ok) {
-                throw new Error('Failed to save study session');
-            }
-        } catch (error) {
-            console.error('Error saving study session:', error);
+      if (!response.ok) {
+        throw new Error("Failed to save study session");
+      }
+    } catch (error) {
+      console.error("Error saving study session:", error);
+    }
+  };
+
+  // Function to reset the inactivity timer
+  const resetInactivityTimer = () => {
+    clearTimeout(inactivityTimerRef.current!);
+    inactivityTimerRef.current = setTimeout(endSession, 5000); // 5 minutes of inactivity
+    if (!intervalTimerRef.current) {
+      console.log("here");
+      intervalTimerRef.current = setInterval(() => {
+        setSessionDuration((prevDuration) => {
+          console.log(prevDuration + 1);
+          localStorage.setItem(
+            "sessionDuration",
+            (prevDuration + 1).toString(),
+          );
+          return prevDuration + 1;
+        });
+        localStorage.setItem("currentDate", new Date().toString());
+      }, 1000);
+    }
+  };
+
+  useEffect(() => {
+    startSession();
+
+    const handleSession = async () => {
+      const currentDate = localStorage.getItem("currentDate");
+      if (currentDate) {
+        const storedDate = new Date(currentDate).getTime();
+        const now = Date.now();
+        const timeDifference = Math.abs(now - storedDate);
+
+        // Check if difference is less than 2 seconds (2000 milliseconds)
+        if (timeDifference < 2000) {
+          const savedSessionDuration = localStorage.getItem("sessionDuration");
+
+          if (savedSessionDuration) {
+            setSessionDuration(parseInt(savedSessionDuration));
+          }
+        } else {
+          await endSession();
         }
-
-    };
-  
-    // Function to reset the inactivity timer
-    const resetInactivityTimer = () => {
-        clearTimeout(inactivityTimer);
-        inactivityTimer = setTimeout(endSession, 300000); // 5 minutes of inactivity
+      }
     };
 
-    // Attach global event listeners for activity
-    useEffect(() => {
-        startSession();
+    // Execute the async function
+    handleSession().catch(console.error);
 
-        const handleActivity = () => resetInactivityTimer();
-        document.addEventListener("mousemove", handleActivity);
-        document.addEventListener("keydown", handleActivity);
+    intervalTimerRef.current = setInterval(() => {
+      setSessionDuration((prevDuration) => {
+        console.log(prevDuration + 1);
+        localStorage.setItem("sessionDuration", (prevDuration + 1).toString());
+        return prevDuration + 1;
+      });
+      localStorage.setItem("currentDate", new Date().toString());
+    }, 1000);
 
-        return () => {
-            endSession();
-            document.removeEventListener("mousemove", handleActivity);
-            document.removeEventListener("keydown", handleActivity);
-        };
-    }, []);
+    inactivityTimerRef.current = setTimeout(endSession, 5000); // 5 minutes of inactivity
 
-    return (
-        <StudySessionContext.Provider value={{ startSession, endSession, isStudying }}>
-        {children}
-        </StudySessionContext.Provider>
-    );
+    document.addEventListener("mousemove", resetInactivityTimer);
+    document.addEventListener("keydown", resetInactivityTimer);
+
+    return () => {
+      endSession();
+      document.removeEventListener("mousemove", resetInactivityTimer);
+      document.removeEventListener("keydown", resetInactivityTimer);
+    };
+  }, []);
+
+  return (
+    <StudySessionContext.Provider
+      value={{ startSession, endSession, isStudying }}
+    >
+      {children}
+    </StudySessionContext.Provider>
+  );
 };
 
 // Custom hook for easy access
