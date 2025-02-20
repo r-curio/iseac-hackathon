@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Pencil, Check } from "lucide-react";
 import { Textarea } from "./ui/modified-textarea";
+import Flashcardmodal from "./modals/add-flashcard-modal"; 
 
 interface flashcardListProps {
     flashcards: {
@@ -111,7 +112,10 @@ export default function FlashcardList({ flashcards, handleFlashcardsChange }: fl
 
     return (
         <div className="w-full mt-7 py-[42px] px-[80px] bg-[#0C101780]/50 space-y-8">
-            <h1 className="text-2xl font-normal mb-4">Flashcards</h1>
+            <div className="flex justify-between items-center"> 
+                <h1 className="text-2xl font-normal mb-4">Flashcards</h1>
+                <Flashcardmodal />
+            </div>
             {flashcards.map((flashcard, index) => (
                 <FlashcardComponent key={index} flashcard={flashcard} handleFlashcardChange={handleFlashcardChange}/>
             ))}
