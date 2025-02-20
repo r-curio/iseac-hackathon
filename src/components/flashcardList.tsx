@@ -3,7 +3,6 @@ import { useState } from "react";
 import { Pencil, Check, PlusIcon } from "lucide-react";
 import { Textarea } from "./ui/modified-textarea";
 import { Button } from "./ui/button";
-import AddCardModal from "./modals/add-card-modal";
 
 interface flashcardListProps {
   flashcards: {
@@ -102,8 +101,7 @@ export default function FlashcardList({
   flashcards,
   handleFlashcardsChange,
 }: flashcardListProps) {
-  const [isLoading, setIsLoading] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const [, setIsOpen] = useState(false);
 
   const handleFlashcardChange = (flashcard: flashcard) => {
     const updatedFlashcards = flashcards.map((f) => {
@@ -118,13 +116,7 @@ export default function FlashcardList({
 
   return (
     <>
-      <AddCardModal
-        isOpen={isOpen}
-        onClose={() => setIsOpen(false)}
-        loading={isLoading}
-        setLoading={setIsLoading}
-      />
-      <div className="mt-7 w-full space-y-8 bg-[#0C101780]/50 px-[80px] py-[42px]">
+      <div className="mt-7 w-full space-y-8 rounded-lg bg-[#0C101780]/50 px-[80px] py-[42px]">
         <div className="flex w-full items-center justify-between">
           <h1 className="mb-4 text-2xl font-normal">Flashcards</h1>
           <Button

@@ -1,8 +1,9 @@
 "use client";
+import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
 const CircleProgress = ({ progress }: { progress: number }) => {
-  const [currentProgress, setCurrentProgress] = useState(0);
+  const [, setCurrentProgress] = useState(0);
   const [displayProgress, setDisplayProgress] = useState(0);
 
   useEffect(() => {
@@ -38,8 +39,10 @@ const CircleProgress = ({ progress }: { progress: number }) => {
 
   const radius = 40;
   const circumference = 2 * Math.PI * radius;
+  const circles = Math.floor(progress / 100);
+  const remainingProgress = progress % 100;
   const strokeDashoffset =
-    circumference - (currentProgress / 100) * circumference;
+    circumference - (remainingProgress / 100) * circumference;
 
   return (
     <div className="relative h-24 w-24">
@@ -56,6 +59,7 @@ const CircleProgress = ({ progress }: { progress: number }) => {
             <stop offset="100%" stopColor="#C795E9" />
           </linearGradient>
         </defs>
+
         {/* Background circle */}
         <circle
           cx="48"
@@ -64,24 +68,56 @@ const CircleProgress = ({ progress }: { progress: number }) => {
           className="fill-none stroke-accent-200/20"
           strokeWidth="16"
         />
-        {/* Progress circle */}
-        <circle
-          cx="48"
-          cy="48"
-          r={radius}
-          className="fill-none"
-          stroke="url(#progressGradient)"
-          strokeWidth="16"
-          strokeLinecap="round"
-          style={{
-            strokeDasharray: circumference,
-            strokeDashoffset,
-            transition: "stroke-dashoffset 1s ease-in-out",
-          }}
-        />
+
+        {/* Complete circles for every 100% with rotation offset */}
+        {[...Array(circles)].map((_, i) => (
+          <g key={i} transform={`rotate(${i * 30} 48 48)`}>
+            <circle
+              cx="48"
+              cy="48"
+              r={radius}
+              className="fill-none"
+              stroke="url(#progressGradient)"
+              strokeWidth="16"
+              strokeLinecap="round"
+              style={{
+                strokeDasharray: circumference,
+                strokeDashoffset: 0,
+                opacity: 0.4 + (0.6 * (i + 1)) / circles,
+                transition: "all 1s ease-in-out",
+              }}
+            />
+          </g>
+        ))}
+
+        {/* Remaining progress circle */}
+        {remainingProgress > 0 && (
+          <circle
+            cx="48"
+            cy="48"
+            r={radius}
+            className="fill-none"
+            stroke="url(#progressGradient)"
+            strokeWidth="16"
+            strokeLinecap="round"
+            style={{
+              strokeDasharray: circumference,
+              strokeDashoffset,
+              transition: "stroke-dashoffset 1s ease-in-out",
+            }}
+          />
+        )}
       </svg>
+
       <div className="absolute inset-0 flex items-center justify-center">
-        <p className="text-lg font-bold">{displayProgress}%</p>
+        <p
+          className={cn(
+            "text-lg font-bold text-gray",
+            progress > 100 && "text-accent-200",
+          )}
+        >
+          {displayProgress}%
+        </p>
       </div>
     </div>
   );
