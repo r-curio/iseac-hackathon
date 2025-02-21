@@ -2,6 +2,7 @@
 import { useState } from "react";
 import { Ellipsis, Check } from "lucide-react";
 import { Textarea } from "./ui/modified-textarea";
+
 import Flashcardmodal from "./modals/add-flashcard-modal"; 
 import {
     DropdownMenu,
@@ -9,6 +10,7 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+
 interface flashcardListProps {
     flashcards: {
         id: string;
@@ -172,6 +174,7 @@ export default function FlashcardList({ flashcards, id, handleFlashcardsChange }
             {flashcards.map((flashcard, index) => (
                 <FlashcardComponent key={index} flashcard={flashcard} handleFlashcardChange={handleFlashcardChange} handleDeleteFlashcard={handleDeleteFlashcard}/>
             ))}
+
         </div>
     )
 }

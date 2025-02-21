@@ -34,10 +34,10 @@ export default function Dashboard({ notes, flashcards, id }: DashboardProps) {
       <div className="w full border-b border-white pb-4 text-2xl font-normal">
         <Markdown>{notes?.title}</Markdown>
       </div>
-      <div className="mt-7 w-full space-y-8 bg-[#0C101780]/50 px-[80px] py-[42px]">
-        <div className="flex justify-between">
+      <div className="mt-7 w-full space-y-8 rounded-lg bg-[#0C101780]/50 px-[80px] py-[42px]">
+        <div className="flex w-full justify-between gap-4">
           <Link
-            className="flex gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient px-20 py-4 hover:bg-[#591DA9]/30"
+            className="flex w-full items-center justify-center gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient py-4 hover:bg-[#591DA9]/30"
             href="/study-deck/[id]/notes"
             as={`/study-deck/${id}/notes`}
           >
@@ -45,7 +45,7 @@ export default function Dashboard({ notes, flashcards, id }: DashboardProps) {
             <p className="text-xl font-normal">Summary</p>
           </Link>
           <Link
-            className="flex gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient px-20 py-4 hover:bg-[#591DA9]/30"
+            className="flex w-full items-center justify-center gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient py-4 hover:bg-[#591DA9]/30"
             href="/study-deck/[id]/flashcard"
             as={`/study-deck/${id}/flashcard`}
           >
@@ -53,7 +53,7 @@ export default function Dashboard({ notes, flashcards, id }: DashboardProps) {
             <p className="text-xl font-normal">Flashcards</p>
           </Link>
           <Link
-            className="flex gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient px-20 py-4 hover:bg-[#591DA9]/30"
+            className="flex w-full items-center justify-center gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient py-4 hover:bg-[#591DA9]/30"
             href="/study-deck/[id]/flashcard"
             as={`/study-deck/${id}/flashcard`}
           >

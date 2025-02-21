@@ -17,6 +17,10 @@ export const StudySessionProvider = ({
   const inactivityTimerRef = useRef<NodeJS.Timeout | null>(null);
   const intervalTimerRef = useRef<NodeJS.Timeout | null>(null);
 
+  const THRESHOLD = 5000;
+  const IDLE_TIMEOUT = 30000;
+  const UPDATE_INTERVAL = 1000;
+
   // Function to start the session
   const startSession = () => {
     console.log("Starting session");
@@ -54,12 +58,15 @@ export const StudySessionProvider = ({
     } catch (error) {
       console.error("Error saving study session:", error);
     }
+
+    localStorage.setItem("sessionDuration", "0");
+    setSessionDuration(0);
   };
 
   // Function to reset the inactivity timer
   const resetInactivityTimer = () => {
     clearTimeout(inactivityTimerRef.current!);
-    inactivityTimerRef.current = setTimeout(endSession, 5000); // 5 minutes of inactivity
+    inactivityTimerRef.current = setTimeout(endSession, IDLE_TIMEOUT); // 5 minutes of inactivity
     if (!intervalTimerRef.current) {
       console.log("here");
       intervalTimerRef.current = setInterval(() => {
@@ -72,7 +79,7 @@ export const StudySessionProvider = ({
           return prevDuration + 1;
         });
         localStorage.setItem("currentDate", new Date().toString());
-      }, 1000);
+      }, UPDATE_INTERVAL);
     }
   };
 
@@ -87,7 +94,7 @@ export const StudySessionProvider = ({
         const timeDifference = Math.abs(now - storedDate);
 
         // Check if difference is less than 2 seconds (2000 milliseconds)
-        if (timeDifference < 2000) {
+        if (timeDifference < THRESHOLD) {
           const savedSessionDuration = localStorage.getItem("sessionDuration");
 
           if (savedSessionDuration) {
@@ -109,9 +116,9 @@ export const StudySessionProvider = ({
         return prevDuration + 1;
       });
       localStorage.setItem("currentDate", new Date().toString());
-    }, 1000);
+    }, UPDATE_INTERVAL);
 
-    inactivityTimerRef.current = setTimeout(endSession, 5000); // 5 minutes of inactivity
+    inactivityTimerRef.current = setTimeout(endSession, IDLE_TIMEOUT); // 5 minutes of inactivity
 
     document.addEventListener("mousemove", resetInactivityTimer);
     document.addEventListener("keydown", resetInactivityTimer);
