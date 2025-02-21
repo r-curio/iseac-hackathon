@@ -1,13 +1,12 @@
 'use client'
-import React, { useState } from 'react';
-
 interface FlashcardProps {
   front: string;
   back: string;
+  isFlipped: boolean;
+  setIsFlipped: (flipped: boolean) => void;
 }
 
-export default function Flashcard({ front, back }: FlashcardProps) {
-  const [isFlipped, setIsFlipped] = useState(false);
+export default function Flashcard({ front, back, isFlipped, setIsFlipped }: FlashcardProps) {
 
   return (
     <div
