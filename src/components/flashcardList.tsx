@@ -154,6 +154,7 @@ export default function FlashcardList({ flashcards, id, handleFlashcardsChange }
     }
 
     const handleAddFlashcard = (flashcard: flashcard) => {
+        console.log('Adding flashcard with id:', id); // Add this log to debug
         handleFlashcardsChange([...flashcards, flashcard]);
     }
 

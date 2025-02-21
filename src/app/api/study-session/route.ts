@@ -6,8 +6,6 @@ export async function POST(req: NextRequest) {
   try {
     const { duration, dateStopped } = await req.json();
 
-    console.log("Duration:", duration);
-
     const supabase = await createClient();
     const {
       data: { user },
@@ -17,7 +15,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const previousSession = await prismadb.session.findFirst({
+    const previousSession = await prismadb.session.findUnique({
       where: {
         userId: user.id,
       },

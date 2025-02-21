@@ -72,6 +72,7 @@ export default function Dashboard({ notes, flashcards, id }: DashboardProps) {
         <FlashcardList
           flashcards={updatedFlashcards}
           handleFlashcardsChange={setUpdatedFlashcards}
+          id={id}
         />
       )}
     </div>

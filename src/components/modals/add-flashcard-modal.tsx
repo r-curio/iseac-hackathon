@@ -9,6 +9,7 @@ import {
 import { Plus } from "lucide-react";
 import { Textarea } from "../ui/modified-textarea";
 import { useState } from "react";
+import { useToast } from "@/hooks/use-toast";
 
 interface flashcard {
     id: string;
@@ -25,13 +26,16 @@ export default function Flashcardmodal( { handleFlashcardChange, id }: Flashcard
 
     const [front, setFront] = useState('');
     const [back, setBack] = useState('');
+    const { toast } = useToast();
 
     const handleSave = async () => {
         try {
+
             const response = await fetch('/api/flashcard', {
                 headers: {
                     contentType: 'application/json'
                 },
+                method: 'POST',
                 body: JSON.stringify({
                     id: id,
                     front,
@@ -41,6 +45,10 @@ export default function Flashcardmodal( { handleFlashcardChange, id }: Flashcard
 
             if (!response.ok) {
                 console.error('Failed to save flashcard')
+                toast({
+                    description: 'Failed to save flashcard',
+                    variant: 'destructive'
+                })
                 return;
             }
 
@@ -50,6 +58,14 @@ export default function Flashcardmodal( { handleFlashcardChange, id }: Flashcard
                 front,
                 back
             });
+
+            setFront('');
+            setBack('');
+            toast({
+                description: 'Flashcard saved',
+            })
+
+
         } catch (error) {
             console.error('An error occurred:', error)
             return;

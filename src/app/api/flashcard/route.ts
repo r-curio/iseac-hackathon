@@ -118,6 +118,8 @@ export async function POST(req: NextRequest) {
       const data = await req.json();
       const supabase = await createClient();
 
+      console.log(data)
+
       const { data: { user } } = await supabase.auth.getUser();
 
       if (!user) {
