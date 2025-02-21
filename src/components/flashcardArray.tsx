@@ -15,12 +15,14 @@ interface FlashcardArrayProps {
 export default function FlashcardArray({flashcard, isFlashcard} : FlashcardArrayProps) {
 
     const [currentCard, setCurrentCard] = useState(0);
+    const [isFlipped, setIsFlipped] = useState(false);
 
     const handleNextCard = () => {
         if (currentCard === flashcard.length - 1) {
             return;
         }
         setCurrentCard((prev) => prev + 1);
+        setIsFlipped(false);
     }
 
     const handlePrevCard = () => {
@@ -28,13 +30,14 @@ export default function FlashcardArray({flashcard, isFlashcard} : FlashcardArray
             return;
         }
         setCurrentCard((prev) => prev - 1);
+        setIsFlipped(false);
     }
 
     return (
         <div className='mt-8'>
             {isFlashcard && <Progress value={33} />}
             <div className='flex items-center justify-center mt-4 h-[480px]'>
-                <Flashcard front={flashcard[currentCard].front} back={flashcard[currentCard].back}/>
+                <Flashcard front={flashcard[currentCard].front} back={flashcard[currentCard].back} isFlipped={isFlipped} setIsFlipped={setIsFlipped}/>
             </div>
             <div>
                 <div className="flex items-center justify-center gap-12 mt-8">

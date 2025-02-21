@@ -18,6 +18,7 @@ export default function FlashcardArray({flashcard, progress} : FlashcardArrayPro
 
     const [currentCard, setCurrentCard] = useState((flashcard.filter(flashcard => flashcard.isAnswered).length));
     const [progressState, setProgressState] = useState(progress);
+    const [isFlipped, setIsFlipped] = useState(false);
 
     const handleNextCard = async () => {
         if (currentCard === flashcard.length - 1) {
@@ -26,6 +27,7 @@ export default function FlashcardArray({flashcard, progress} : FlashcardArrayPro
 
         setProgressState((currentCard + 1) / flashcard.length * 100);
         setCurrentCard((prev) => prev + 1);
+        setIsFlipped(false);
 
         try {
             await fetch('/api/flashcard', {
@@ -53,6 +55,7 @@ export default function FlashcardArray({flashcard, progress} : FlashcardArrayPro
 
         setProgressState(currentCard / flashcard.length * 100);
         setCurrentCard((prev) => prev - 1);
+        setIsFlipped(false);
 
         try {
             await fetch('/api/flashcard', {
@@ -79,7 +82,7 @@ export default function FlashcardArray({flashcard, progress} : FlashcardArrayPro
             <Progress value={progressState} />
             <div>
                 <div className='flex items-center justify-center mt-4 h-[530px] px-[70px] py-[50px] rounded-xl overflow-hidden'>
-                    <Flashcard front={flashcard[currentCard].front} back={flashcard[currentCard].back}/>
+                    <Flashcard front={flashcard[currentCard].front} back={flashcard[currentCard].back} isFlipped={isFlipped} setIsFlipped={setIsFlipped}/>
                 </div>
                 <div>
                     <div className="flex items-center justify-center gap-12 mt-6">

@@ -4,6 +4,7 @@ import "./globals.css";
 import Sidebar from "../components/sidebar";
 import ToastProvider from "@/providers/toast-provider";
 import { StudySessionProvider } from "./context/StudyContextTracker";
+import { Toaster } from "@/components/ui/toaster";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -38,6 +39,7 @@ export default function RootLayout({
       >
         <StudySessionProvider >
           <ToastProvider />
+          <Toaster />
           <Sidebar />
           {children}
         </StudySessionProvider>
