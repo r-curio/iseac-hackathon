@@ -3,7 +3,6 @@ import StatsCard from "./stats-card";
 import CircleProgress from "./circle-progress";
 
 interface ScoreResultProps {
-    score: number;
     totalQuestions: number;
     questions: {
         question: string;
@@ -13,7 +12,9 @@ interface ScoreResultProps {
     }[];
 }
 
-export default function ScoreResult({ score, totalQuestions, questions }: ScoreResultProps) {
+export default function ScoreResult({ totalQuestions, questions }: ScoreResultProps) {
+
+    const score = questions.filter(question => question.answer.toLowerCase() === question.selectedAnswer.toLowerCase()).length;
     const isPassed = score >= (totalQuestions * 0.75);
 
     return (
@@ -45,13 +46,56 @@ export default function ScoreResult({ score, totalQuestions, questions }: ScoreR
                     </div>
                 </div>
             </div>
-            <div>
+            <div className="mt-32 px-12 space-y-8">
                 {questions.map((question, index) => (
-                    <div key={index} className="w-full bg-[#0C101780] p-8 mt-8 rounded-lg">
-                        <h3 className="text-2xl font-semibold">{question.question}</h3>
-                        <div className="mt-4">
-                            <p className="text-xl font-normal">Your Answer: {question.selectedAnswer}</p>
-                            <p className="text-xl font-normal">Correct Answer: {question.answer}</p>
+                    <div className="space-y-6" key={index}>
+                        <div className="flex justify-end">
+                            <p className="text-lg text-white">{question.selectedAnswer === question.answer ? '1' : '0'}/1</p>
+                        </div>
+                        <div className="w-full max-h-fit bg-flashcard-gradient min-h-[140px]
+                            rounded-xl shadow-lg p-8 flex items-center justify-center border border-[#591DA9]">
+                            <p className="text-2xl font-medium text-gray-800">{question.question}</p>
+                        </div>
+                        <div className="min-h-[140px] flex items-center w-full">
+                            {question.choices.length === 0 ? (
+                                <div
+                                    className="bg-transparent border-2 border-[#591DA9] text-white resize-none text-2xl font-normal w-full py-4 whitespace-pre-wrap break-words placeholder:text-[#C0B4D0] outline-none focus:outline-none focus:ring-0 focus:border-[#591DA9] rounded-xl px-4"
+                                >
+                                    <div className="flex justify-between w-full gap-4">
+                                        <div className={`flex-1 p-2 rounded-xl ${
+                                            question.selectedAnswer === question.answer 
+                                                ? 'bg-green-600' 
+                                                : 'bg-red-600'
+                                        }`}>
+                                            <div className="text-sm text-gray-200 mb-2">Your Answer:</div>
+                                            <div className="text-xl">{question.selectedAnswer}</div>
+                                        </div>
+                                        <div className="flex-1 p-2 rounded-xl bg-green-600">
+                                            <div className="text-sm text-gray-200 mb-2">Correct Answer:</div>
+                                            <div className="text-xl">{question.answer}</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            ) : (
+                                <div className="grid-cols-2 grid gap-5 w-full">
+                                    {question.choices.map((choice, index) => (
+                                        <div
+                                            key={index}
+                                            className={`w-full p-4 text-xl rounded-xl text-white transition-colors ${
+                                                choice === question.selectedAnswer
+                                                    ? choice === question.answer
+                                                        ? 'bg-green-600'
+                                                        : 'bg-red-600'
+                                                    : choice === question.answer
+                                                        ? 'bg-green-600'
+                                                        : 'bg-[#591DA9]'
+                                            }`}
+                                        >
+                                            {choice}
+                                        </div>
+                                    ))}
+                                </div>
+                            )}
                         </div>
                     </div>
                 ))}
