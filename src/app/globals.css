@@ -152,6 +152,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --S8: #00020A;
 }
 
 @media (prefers-color-scheme: dark) {
