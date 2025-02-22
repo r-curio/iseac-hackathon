@@ -54,8 +54,8 @@ export default function Dashboard({ notes, flashcards, id }: DashboardProps) {
           </Link>
           <Link
             className="flex w-full items-center justify-center gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient py-4 hover:bg-[#591DA9]/30"
-            href="/study-deck/[id]/flashcard"
-            as={`/study-deck/${id}/flashcard`}
+            href="/study-deck/[id]/test"
+            as={`/study-deck/${id}/test`}
           >
             <NotebookPen size={30} />
             <p className="text-xl font-normal">Practice Test</p>
