@@ -2,42 +2,44 @@
 import { Test } from '@/components/test';
 import { ChevronLeft } from 'lucide-react'
 import Link from 'next/link'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import ScoreResult from '@/components/score-result';
+import { useRouter } from 'next/navigation';
 
-
-const DemoQuestions = [
-    {
-        question: "What is the capital of France?",
-        choices: [],
-        answer: "Paris",
-        selectedAnswer: ""
-    },
-    {
-        question: "What is the capital of Germany?",
-        choices: ["Paris", "London", "Berlin", "Madrid"],
-        answer: "Berlin",
-        selectedAnswer: ""
-    },
-    {
-        question: "What is the capital of Spain?",
-        choices: [],
-        answer: "Madrid",
-        selectedAnswer: ""
-    },
-    {
-        question: "London is the capital of England?",
-        choices: ["True", "False"],
-        answer: "True",
-        selectedAnswer: ""
-    }
-]
+interface Question {
+    choices: string[];
+    question: string;
+    answer: string;
+    selectedAnswer: string;
+}
 
 export default function PracticeTest() {
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [questions, setQuestions] = useState(DemoQuestions);
+    const [questions, setQuestions] = useState<Question[]>([]);
     const [showResult, setShowResult] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
+    const router = useRouter();
+
+    useEffect(() => {
+        // Get questions from localStorage when component mounts
+        const storedQuestions = localStorage.getItem('testQuestions');
+        console.log('stored questions:', storedQuestions);
+        if (storedQuestions) {
+            setQuestions(JSON.parse(storedQuestions));
+            setIsLoading(false);
+            localStorage.removeItem('testQuestions');
+        } else {
+            // If no questions found, redirect back
+            router.push('/study-deck');
+        }
+    }, [router]);
+
+    if (isLoading || !questions || questions.length === 0) {
+        return <div className="w-full min-h-screen bg-result-gradient flex items-center justify-center">
+            Loading...
+        </div>;
+    }
 
     const handleAnswer = (answer: string) => {
         setQuestions(questions.map((question, index) => {
@@ -52,7 +54,12 @@ export default function PracticeTest() {
     }
 
     const handleSubmit = () => {
-        setShowResult(true);
+        const allQuestionsAnswered = questions.every(q => q.selectedAnswer);
+        if (allQuestionsAnswered) {
+            setShowResult(true);
+        } else {
+            alert('Please answer all questions before submitting.');
+        }
     }
 
     const handleNextQuestion = () => {

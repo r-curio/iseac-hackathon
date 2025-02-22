@@ -12,6 +12,7 @@ interface ScoreResultProps {
     }[];
 }
 
+
 export default function ScoreResult({ totalQuestions, questions }: ScoreResultProps) {
 
     const score = questions.filter(question => question.answer.toLowerCase() === question.selectedAnswer.toLowerCase()).length;

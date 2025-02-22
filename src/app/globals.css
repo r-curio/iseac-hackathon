@@ -174,3 +174,7 @@ body {
   border: 4px dashed var(--P6, #2d0f55);
   background: var(--P8, #090311);
 }
+
+
+
+@layer base {}

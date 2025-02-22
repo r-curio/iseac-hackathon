@@ -33,6 +33,10 @@ export function Test({
     handleNextQuestion,
     handleSubmit
 }: TestProps) {
+    if (!questions || questions.length === 0 || !questions[currentQuestion]) {
+        return null;
+    }
+
   return <><div className="w full border-b border-white pb-4 text-2xl font-normal">
                     <div className="flex items-center justify-between py-4 border-b border-white/20">
                         <div className="text-2xl font-semibold">
@@ -77,4 +81,3 @@ export function Test({
                 </div>
             </div></>;
 }
-  
