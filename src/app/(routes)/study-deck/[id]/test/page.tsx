@@ -5,10 +5,11 @@ import Link from 'next/link'
 import { useState } from 'react';
 import ScoreResult from '@/components/score-result';
 
-const questions = [
+
+const DemoQuestions = [
     {
         question: "What is the capital of France?",
-        choices: ["Paris", "London", "Berlin", "Madrid"],
+        choices: [],
         answer: "Paris",
         selectedAnswer: ""
     },
@@ -35,36 +36,30 @@ const questions = [
 export default function PracticeTest() {
 
     const [currentQuestion, setCurrentQuestion] = useState(0);
-    const [score, setScore] = useState(0);
-    const [showResult, setShowResult] = useState(true);
+    const [questions, setQuestions] = useState(DemoQuestions);
+    const [showResult, setShowResult] = useState(false);
 
     const handleAnswer = (answer: string) => {
-        if (answer === questions[currentQuestion].answer) {
-            setScore(score + 1);
-            if (currentQuestion === questions.length - 1) {
-                setShowResult(true);
-                return;
+        setQuestions(questions.map((question, index) => {
+            if (index === currentQuestion) {
+                return {
+                    ...question,
+                    selectedAnswer: answer
+                }
             }
-        } else {
-            console.log("Incorrect");
-        }
-        setCurrentQuestion(currentQuestion + 1);
+            return question;
+        }));
+    }
+
+    const handleSubmit = () => {
+        setShowResult(true);
     }
 
     const handleNextQuestion = () => {
-        if (currentQuestion === questions.length - 1) {
-            setShowResult(true);
-            return;
-        }
-
         setCurrentQuestion(currentQuestion + 1);
     }
 
     const handlePrevQuestion = () => {
-        if (currentQuestion === 0) {
-            return;
-        }
-
         setCurrentQuestion(currentQuestion - 1);
     }
 
@@ -79,14 +74,15 @@ export default function PracticeTest() {
                     <h1 className="text-2xl">Practice Exam</h1>
                 </div>
                 {showResult ? (
-                    <ScoreResult score={score} totalQuestions={questions.length} questions={questions}/> 
+                    <ScoreResult totalQuestions={questions.length} questions={questions}/> 
                 ): (
                     <Test
                         questions={questions} 
                         handleAnswer={handleAnswer} 
                         handlePrevQuestion={handlePrevQuestion} 
                         currentQuestion={currentQuestion} 
-                        handleNextQuestion={handleNextQuestion}  
+                        handleNextQuestion={handleNextQuestion}
+                        handleSubmit={handleSubmit}  
                     />
                 )}
         </div>
