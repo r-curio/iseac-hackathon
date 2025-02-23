@@ -52,7 +52,7 @@ export async function POST(req: NextRequest) {
         const prompt = `Generate a practice test based on the following educational content: "${note.content}"
 
             Instructions:
-            - Create 35 questions
+            - Create 5 questions
             - Only use the following question types: ${selectedTypes.join(', ')}
             - Each question should test understanding of the provided content
             - Format the response as a JSON array
@@ -91,9 +91,6 @@ export async function POST(req: NextRequest) {
             - Format response as valid JSON
 
             Return only the JSON output without any additional text or explanations.`;
-
-        
-        // ...existing note fetching code...
 
         const result = await model.generateContent(prompt);
         const response = await result.response;

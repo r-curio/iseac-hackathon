@@ -5,7 +5,8 @@ import Link from 'next/link'
 import { useState, useEffect } from 'react';
 import ScoreResult from '@/components/score-result';
 import { useRouter } from 'next/navigation';
-
+import { usePathname } from 'next/navigation';
+import RouteLoading from '@/app/(routes)/loading';
 interface Question {
     choices: string[];
     question: string;
@@ -19,6 +20,8 @@ export default function PracticeTest() {
     const [questions, setQuestions] = useState<Question[]>([]);
     const [showResult, setShowResult] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
+    const pathname = usePathname();
+    const id = pathname.split('/').filter(Boolean)[1];
     const router = useRouter();
 
     useEffect(() => {
@@ -29,16 +32,11 @@ export default function PracticeTest() {
             setQuestions(JSON.parse(storedQuestions));
             setIsLoading(false);
             localStorage.removeItem('testQuestions');
-        } else {
-            // If no questions found, redirect back
-            router.push('/study-deck');
         }
     }, [router]);
 
     if (isLoading || !questions || questions.length === 0) {
-        return <div className="w-full min-h-screen bg-result-gradient flex items-center justify-center">
-            Loading...
-        </div>;
+        return <RouteLoading />;
     }
 
     const handleAnswer = (answer: string) => {
@@ -53,10 +51,30 @@ export default function PracticeTest() {
         }));
     }
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const allQuestionsAnswered = questions.every(q => q.selectedAnswer);
         if (allQuestionsAnswered) {
             setShowResult(true);
+
+            const score = questions.filter(question => question.answer.toLowerCase() === question.selectedAnswer.toLowerCase()).length;
+            console.log('score:', score);
+            console.log('id:', id);
+
+            try {
+                 await fetch('/api/exam-score', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        id: id,
+                        score: questions.filter(question => question.answer.toLowerCase() === question.selectedAnswer.toLowerCase()).length
+                    })
+                })
+            } catch (error) {
+                console.error('Error submitting score:', error);
+            }
+
         } else {
             alert('Please answer all questions before submitting.');
         }

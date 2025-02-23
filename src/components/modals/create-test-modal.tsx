@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation"
 
 interface CreateTestProps {
     id: string;
-    title: string;
+    title?: string;
 }
 
 interface TestOptions {

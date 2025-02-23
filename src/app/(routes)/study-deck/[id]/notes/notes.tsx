@@ -15,6 +15,7 @@ import { Descendant } from "slate";
 import { useRouter } from "next/navigation";
 import { extractHeadings } from "@/lib/utils";
 import NoteSidebar from "./component/note-sidebar";
+import CreateTest from "@/components/modals/create-test-modal";
 
 const NoteContainer = ({ note }: { note: Note }) => {
   const [contentValue, setContentValue] = useState<Descendant[]>(
@@ -49,10 +50,7 @@ const NoteContainer = ({ note }: { note: Note }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="border-purple-600 bg-black text-white">
                 <DropdownMenuItem className="from-[#9B77CB] to-[#591DA9] hover:bg-gradient-to-r hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
-                  Notes
-                </DropdownMenuItem>
-                <DropdownMenuItem className="from-[#9B77CB] to-[#591DA9] hover:bg-gradient-to-r hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
-                  Quiz
+                  <CreateTest id={note.id} title={note?.title}/>
                 </DropdownMenuItem>
                 <DropdownMenuItem className="from-[#9B77CB] to-[#591DA9] hover:bg-gradient-to-r hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
                   Flashcards
