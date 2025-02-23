@@ -2,6 +2,7 @@ import RecentFilesContainer from "@/components/recent-files-container";
 import Streak from "@/components/streak";
 import WeeklyProgress from "@/components/weekly-progress";
 import prismadb from "@/lib/prismadb";
+import { getCurrentWeekProgress } from "@/lib/utils";
 import { createClient } from "@/utils/supabase/server";
 import { Activity } from "@prisma/client";
 import { ChartNoAxesCombined } from "lucide-react";
@@ -64,28 +65,15 @@ const Dashboard = async () => {
     },
   });
 
-  const weeklyProgress = await prismadb.progress.findMany({
-    where: {
-      userId: profile?.id,
-      date: {
-        gte: new Date(
-          new Date().setDate(new Date().getDate() - new Date().getDay()),
-        ),
-        lte: new Date(),
-      },
-    },
-    orderBy: {
-      date: "asc",
-    },
-  });
+  if (!profile) redirect("/login");
+
+  const weeklyProgress = await getCurrentWeekProgress(profile.id);
 
   const notes = await prismadb.note.findMany({
     where: {
       userId: profile?.id,
     },
   });
-
-  if (!profile) redirect("/login");
 
   const activities = await prismadb.activity.findMany({
     where: {
@@ -126,7 +114,7 @@ const Dashboard = async () => {
         <div className="absolute bottom-[10%] left-[2.5%]">
           <p className="text-5xl font-bold">Time to Learn,</p>
           <p className="bg-gradient-1 bg-clip-text text-5xl font-bold text-transparent">
-            {profile?.full_name}!
+            {profile?.username || profile?.full_name}!
           </p>
         </div>
       </div>

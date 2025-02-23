@@ -107,6 +107,7 @@ import markdown from "remark-parse";
 import slate from "remark-slate";
 import { unified } from "unified";
 import { CustomElement, CustomText } from "@/providers/editor-provider";
+import prismadb from "./prismadb";
 
 export const parseMarkdown = async (md: string): Promise<Descendant[]> => {
   try {
@@ -174,4 +175,30 @@ export const extractHeadings = (nodes: CustomElement[]): Heading[] => {
 
   // Sort by appearance in document (maintain reading order)
   return headings;
+};
+
+export const getCurrentWeekProgress = async (id: string) => {
+  const today = new Date();
+  const startOfWeek = new Date(today);
+  startOfWeek.setDate(today.getDate() - today.getDay()); // Go back to Sunday
+  startOfWeek.setHours(0, 0, 0, 0); // Start of the day
+
+  const endOfWeek = new Date(today);
+  endOfWeek.setDate(today.getDate() + (6 - today.getDay())); // Go forward to Saturday
+  endOfWeek.setHours(23, 59, 59, 999); // End of the day
+
+  const weeklyProgress = await prismadb.progress.findMany({
+    where: {
+      userId: id,
+      date: {
+        gte: startOfWeek,
+        lte: today,
+      },
+    },
+    orderBy: {
+      date: "asc",
+    },
+  });
+
+  return weeklyProgress;
 };

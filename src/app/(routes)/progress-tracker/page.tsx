@@ -3,6 +3,7 @@ import { createClient } from "@/utils/supabase/server";
 import { redirect } from "next/navigation";
 import React from "react";
 import ProgressTracker from "./progress-tracker";
+import { getCurrentWeekProgress } from "@/lib/utils";
 
 const ProgressTrackerPage = async () => {
   const supabase = await createClient();
@@ -17,11 +18,9 @@ const ProgressTrackerPage = async () => {
     },
   });
 
-  const weeklyProgress = await prismadb.progress.findMany({
-    where: {
-      userId: profile?.id,
-    },
-  });
+  if (!profile) redirect("/login");
+
+  const weeklyProgress = await getCurrentWeekProgress(profile.id);
 
   const activities = await prismadb.activity.findMany({
     where: {
@@ -54,8 +53,6 @@ const ProgressTrackerPage = async () => {
   );
 
   console.log(activityMap);
-
-  if (!profile) redirect("/login");
 
   return (
     <ProgressTracker

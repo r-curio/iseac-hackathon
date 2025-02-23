@@ -2,7 +2,6 @@ import { IconType } from "react-icons";
 import {
   LayoutDashboard,
   Trophy,
-  Timer,
   Target,
   Settings,
   HelpCircle,
@@ -37,7 +36,6 @@ export const menuList: MenuItem[] = [
       { label: "Study Deck", icon: Layers2, path: "/study-deck" },
       { label: "AI Notes", icon: SparklesIcon, path: "/ai-notes" },
       { label: "AI Goal Helper", icon: Target, path: "/goal-helper" },
-      { label: "Pomodoro", icon: Timer, path: "/pomodoro" },
     ],
   },
   {
