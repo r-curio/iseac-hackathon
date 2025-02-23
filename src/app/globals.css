@@ -152,6 +152,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
+  --S8: #00020A;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -173,3 +174,7 @@ body {
   border: 4px dashed var(--P6, #2d0f55);
   background: var(--P8, #090311);
 }
+
+
+
+@layer base {}
