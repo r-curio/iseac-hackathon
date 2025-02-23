@@ -99,6 +99,7 @@ const PomodoroModal = ({ isOpen, onClose }: PomodoroModalProps) => {
         className={cn(
           "fixed inset-0 flex w-[300px] scale-90 flex-col gap-2 rounded-[50px] bg-[#9b77cb] py-6 text-white opacity-0 shadow-[0px_0px_32px_2px_rgba(0,0,0,0.25)] transition-all duration-100",
           settingsIsOpen && "z-[101] scale-100 opacity-100",
+          !settingsIsOpen && "-z-50 opacity-0",
         )}
       >
         <div className="flex w-full items-center justify-between p-8 py-2 pb-2">
@@ -178,6 +179,7 @@ const PomodoroModal = ({ isOpen, onClose }: PomodoroModalProps) => {
           minimized &&
             isOpen &&
             "left-[99%] top-[99%] -translate-x-[100%] -translate-y-[100%] opacity-25 hover:opacity-100",
+          !isOpen && "-z-50 opacity-0",
         )}
         style={{
           background: `linear-gradient(180deg, var(--Primary, #591DA9) 0%, var(--Text, #120622) 100%)`,

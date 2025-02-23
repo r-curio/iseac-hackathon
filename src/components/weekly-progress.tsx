@@ -3,7 +3,7 @@ import React, { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import CircleProgress from "@/components/circle-progress";
 import { Progress } from "@prisma/client";
-import { DAYS } from "@/lib/utils";
+import { cn, DAYS } from "@/lib/utils";
 
 const WeeklyProgress = ({
   goal,
@@ -13,6 +13,8 @@ const WeeklyProgress = ({
   values: Progress[];
 }) => {
   const scrollRef = useRef<HTMLDivElement>(null);
+
+  const currentDayIdx = new Date().getDay();
 
   const scroll = (direction: "left" | "right") => {
     if (scrollRef.current) {
@@ -37,7 +39,15 @@ const WeeklyProgress = ({
         >
           {Array.from({ length: 7 }).map((_, idx) => (
             <div key={idx} className="flex flex-col items-center gap-1">
-              <p className="select-none text-lg font-medium">{DAYS[idx]}</p>
+              <p
+                className={cn(
+                  "select-none rounded-full px-4 text-lg font-medium",
+                  currentDayIdx === idx &&
+                    "bg-[linear-gradient(180deg,_var(--Primary,_#591DA9)_0%,_var(--Secondary,_#051960)_100%)]",
+                )}
+              >
+                {DAYS[idx]}
+              </p>
               <div className="flex items-center justify-center rounded-3xl bg-gradient-2 p-3 backdrop-blur-xl">
                 <CircleProgress
                   progress={
