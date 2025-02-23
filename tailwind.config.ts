@@ -42,7 +42,9 @@ export default {
         "flashcard-gradient":
           "linear-gradient(139deg, var(--Primary, rgba(89, 29, 169, 0.70)) -6.39%, rgba(5, 25, 96, 0.00) 112.17%)",
         "flashcard-background-gradient":
-          "linear-gradient(180deg, var(--P7, #120622) 0%, var(--S8, #00020A) 100%)"
+          "linear-gradient(180deg, var(--P7, #120622) 0%, var(--S8, #00020A) 100%)",
+        "result-gradient":
+          "radial-gradient(circle at center, #241A4C 0%, #09031C 90%, #00020A)",
       },
       borderRadius: {
         lg: "var(--radius)",

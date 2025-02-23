@@ -5,6 +5,7 @@ import Link from "next/link";
 import Markdown from "react-markdown";
 import FlashcardArray from "@/components/flashcardArray";
 import FlashcardList from "@/components/flashcardList";
+import CreateTest from "@/components/modals/create-test-modal";
 
 interface DashboardProps {
   notes: {
@@ -52,14 +53,10 @@ export default function Dashboard({ notes, flashcards, id }: DashboardProps) {
             <NotebookPen size={30} />
             <p className="text-xl font-normal">Flashcards</p>
           </Link>
-          <Link
-            className="flex w-full items-center justify-center gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient py-4 hover:bg-[#591DA9]/30"
-            href="/study-deck/[id]/flashcard"
-            as={`/study-deck/${id}/flashcard`}
-          >
+          <div className="flex w-full items-center justify-center gap-2 rounded-[20px] border-2 border-[#591DA9] bg-flashcard-gradient py-4 hover:bg-[#591DA9]/30">
             <NotebookPen size={30} />
-            <p className="text-xl font-normal">Practice Test</p>
-          </Link>
+            <CreateTest id={id} title={notes.title}/>
+          </div>
         </div>
 
         {updatedFlashcards.length > 0 && (

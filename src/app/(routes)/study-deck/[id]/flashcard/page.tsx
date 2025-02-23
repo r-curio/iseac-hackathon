@@ -9,6 +9,7 @@ import {
 import FlashcardArray from './flashcardArray'
 import prismadb from '@/lib/prismadb'
 import Link from 'next/link'
+import CreateTest from '@/components/modals/create-test-modal'
 
 
 export default async function Page({
@@ -68,7 +69,7 @@ export default async function Page({
                                     Notes
                                 </DropdownMenuItem>
                                 <DropdownMenuItem className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
-                                    Quiz
+                                    <CreateTest id={id} title={notes?.title}/>
                                 </DropdownMenuItem>
                             </DropdownMenuContent>
                         </DropdownMenu>
