@@ -1,7 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Markdown from "react-markdown";
-import { NotebookPen, PenLine, ChevronLeft } from "lucide-react";
+import { NotebookPen, ChevronLeft } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -50,16 +50,16 @@ const NoteContainer = ({ note }: { note: Note }) => {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="border-purple-600 bg-black text-white">
                 <DropdownMenuItem className="from-[#9B77CB] to-[#591DA9] hover:bg-gradient-to-r hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
-                  <CreateTest id={note.id} title={note?.title}/>
+                  <CreateTest id={note.id} title={note?.title} />
                 </DropdownMenuItem>
                 <DropdownMenuItem className="from-[#9B77CB] to-[#591DA9] hover:bg-gradient-to-r hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white">
                   Flashcards
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <button className="flex items-center justify-center rounded-xl border border-white/20 p-2 transition-colors duration-200 hover:bg-white/10">
+            {/* <button className="flex items-center justify-center rounded-xl border border-white/20 p-2 transition-colors duration-200 hover:bg-white/10">
               <PenLine size={24} />
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

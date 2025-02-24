@@ -49,7 +49,7 @@ export default function VideoNotes() {
     setLoading(true);
     setError(null);
 
-    toast.loading("Updating goal...", {
+    toast.loading("Adding note...", {
       toastId: "addNote",
     });
 
