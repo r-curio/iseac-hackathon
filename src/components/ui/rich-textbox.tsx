@@ -197,7 +197,13 @@ const BlockButton: React.FC<ButtonProps> = ({ format, icon }) => {
   );
 };
 
-const RichTextbox: React.FC = () => {
+const RichTextbox = ({
+  readOnly = false,
+  className,
+}: {
+  readOnly?: boolean;
+  className?: string;
+}) => {
   const { renderElement, renderLeaf, contentValue, changeContentValue } =
     useEditor();
 
@@ -305,96 +311,99 @@ const RichTextbox: React.FC = () => {
         onChange={handleChange}
       >
         <div className="editor w-full rounded-xl">
-          <div className="editor__toolbar">
-            <div
-              className={cn(
-                "flex items-center opacity-100 transition-all duration-200",
-                (!isEditable || isLoading) && "opacity-10",
-              )}
-            >
-              <MarkButton
-                format="bold"
-                icon={<MdFormatBold size={ICON_SIZE} />}
-              />
-              <MarkButton
-                format="italic"
-                icon={<MdFormatItalic size={ICON_SIZE} />}
-              />
-              <MarkButton
-                format="underline"
-                icon={<MdFormatUnderlined size={ICON_SIZE} />}
-              />
-              <MarkButton format="code" icon={<MdCode size={ICON_SIZE} />} />
-              <BlockButton
-                format="heading_one"
-                icon={<MdLooksOne size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="heading_two"
-                icon={<MdLooksTwo size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="block-quote"
-                icon={<MdFormatQuote size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="numbered-list"
-                icon={<MdFormatListNumbered size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="bulleted-list"
-                icon={<MdFormatListBulleted size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="left"
-                icon={<MdFormatAlignLeft size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="center"
-                icon={<MdFormatAlignCenter size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="right"
-                icon={<MdFormatAlignRight size={ICON_SIZE} />}
-              />
-              <BlockButton
-                format="justify"
-                icon={<MdFormatAlignJustify size={ICON_SIZE} />}
-              />
-            </div>
-            {/* Add edit toggle button at the end of toolbar */}
-            {isEditable ? (
-              <div className="ml-auto flex items-center gap-2">
-                <Button
-                  variant={"ghost"}
-                  onClick={handleCancel}
-                  className={"ml-auto"}
-                >
-                  <X size={16} /> Cancel
-                </Button>
-
-                <Button
-                  variant={"ghost"}
-                  onClick={handleSave}
-                  className={"ml-auto"}
-                >
-                  <Save size={16} /> Save
-                </Button>
-              </div>
-            ) : (
-              <Button
-                variant={"ghost"}
-                onClick={() => setIsEditable(true)}
-                className={"ml-auto"}
+          {!readOnly && (
+            <div className="editor__toolbar">
+              <div
+                className={cn(
+                  "flex items-center opacity-100 transition-all duration-200",
+                  (!isEditable || isLoading) && "opacity-10",
+                )}
               >
-                <PenLine size={16} /> Edit
-              </Button>
-            )}
-          </div>
+                <MarkButton
+                  format="bold"
+                  icon={<MdFormatBold size={ICON_SIZE} />}
+                />
+                <MarkButton
+                  format="italic"
+                  icon={<MdFormatItalic size={ICON_SIZE} />}
+                />
+                <MarkButton
+                  format="underline"
+                  icon={<MdFormatUnderlined size={ICON_SIZE} />}
+                />
+                <MarkButton format="code" icon={<MdCode size={ICON_SIZE} />} />
+                <BlockButton
+                  format="heading_one"
+                  icon={<MdLooksOne size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="heading_two"
+                  icon={<MdLooksTwo size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="block-quote"
+                  icon={<MdFormatQuote size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="numbered-list"
+                  icon={<MdFormatListNumbered size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="bulleted-list"
+                  icon={<MdFormatListBulleted size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="left"
+                  icon={<MdFormatAlignLeft size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="center"
+                  icon={<MdFormatAlignCenter size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="right"
+                  icon={<MdFormatAlignRight size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="justify"
+                  icon={<MdFormatAlignJustify size={ICON_SIZE} />}
+                />
+              </div>
+              {/* Add edit toggle button at the end of toolbar */}
+              {isEditable ? (
+                <div className="ml-auto flex items-center gap-2">
+                  <Button
+                    variant={"ghost"}
+                    onClick={handleCancel}
+                    className={"ml-auto"}
+                  >
+                    <X size={16} /> Cancel
+                  </Button>
+
+                  <Button
+                    variant={"ghost"}
+                    onClick={handleSave}
+                    className={"ml-auto"}
+                  >
+                    <Save size={16} /> Save
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant={"ghost"}
+                  onClick={() => setIsEditable(true)}
+                  className={"ml-auto"}
+                >
+                  <PenLine size={16} /> Edit
+                </Button>
+              )}
+            </div>
+          )}
           <Editable
             className={cn(
               "editor__content",
               (!isEditable || isLoading) && "cursor-default",
+              className,
             )}
             readOnly={!isEditable || isLoading}
             id="content"
