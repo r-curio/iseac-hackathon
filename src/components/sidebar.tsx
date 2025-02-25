@@ -10,12 +10,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSidebar } from "../hooks/use-sidebar";
 import { createClient } from "@/utils/supabase/client";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { signout } from "@/app/libs/auth-actions";
 
 const Sidebar = () => {
   const sidebar = useSidebar();
   const isMobile = useIsMobile();
   const supabase = createClient();
-
   const [profile, setProfile] = useState<{ username: string, avatar_url: string } | null>(null);
 
   useEffect(() => {
@@ -31,6 +37,7 @@ const Sidebar = () => {
 
     fetchProfile();
   }, []);
+  
 
   return isMobile ? (
     <MobileNav />
@@ -78,13 +85,23 @@ const Sidebar = () => {
         {sidebar.isOpen && (
           <>
             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-accent-200">
-              <Image
-                src={profile?.avatar_url || '/default-avatar.png'}
-                alt="Avatar"
-                className="h-10 w-10"
-                width={40}
-                height={40}
-              />
+            <DropdownMenu>
+                <DropdownMenuTrigger>
+                  <Image
+                    src={profile?.avatar_url || '/default-avatar.png'}
+                    alt="Avatar"
+                    className="h-10 w-10"
+                    width={40}
+                    height={40}
+                  />
+                </DropdownMenuTrigger>
+                <DropdownMenuContent className="bg-black border-purple-600 text-white">
+                    <DropdownMenuItem className="hover:bg-gradient-to-r from-[#9B77CB] to-[#591DA9] hover:text-white focus:bg-gradient-to-r focus:from-[#9B77CB] focus:to-[#591DA9] focus:text-white cursor-pointer" onClick={signout}>
+                        Logout
+                    </DropdownMenuItem>
+                </DropdownMenuContent>
+            </DropdownMenu>
+
             </div>
             <div className="flex flex-col gap-0.5">
               <p className="text-xs font-medium">Welcome back 👋</p>
