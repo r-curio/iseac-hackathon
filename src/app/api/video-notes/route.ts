@@ -1,63 +1,67 @@
-import { createClient } from "@/utils/supabase/server";
 import { NextRequest, NextResponse } from "next/server";
+import { createClient } from '@/utils/supabase/server';
+import { google } from 'googleapis';
 
-export async function POST(req: NextRequest) {
+export async function GET(req: NextRequest) {
   try {
-    const formData = await req.formData();
-    const file = formData.get("file") as File;
-
-    if (!file) {
-      return NextResponse.json(
-        { message: "No file provided" },
-        { status: 400 },
-      );
+    const fileId = req.nextUrl.searchParams.get('fileId');
+    
+    if (!fileId) {
+      return NextResponse.json({ error: 'File ID is required' }, { status: 400 });
     }
 
-    // Check file size (50MB limit)
-    if (file.size > 50 * 1024 * 1024) {
-      return NextResponse.json(
-        { message: "File size exceeds 50MB limit" },
-        { status: 400 },
-      );
-    }
-
+    // Get the user's session
     const supabase = await createClient();
-    const {
-      data: { user },
-    } = await supabase.auth.getUser();
+    const { data: { session } } = await supabase.auth.getSession();
 
-    if (!user) {
-      return NextResponse.json(
-        { message: "User is not logged in" },
-        { status: 401 },
-      );
+    if (!session?.provider_token) {
+      return NextResponse.json({ error: 'Not authenticated with Google' }, { status: 401 });
     }
 
-    // Create a path that matches the RLS policy structure
-    // The policy expects: storage.foldername(name)[1] to equal auth.uid()
-    const fileName = `${user.id}/${Date.now()}_${file.name}`;
+    // Create OAuth2 client with the provider token
+    const oauth2Client = new google.auth.OAuth2(
+      process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID,
+      process.env.GOOGLE_CLIENT_SECRET
+    );
+    
+    oauth2Client.setCredentials({
+      access_token: session.provider_token
+    });
 
-    const fileArrayBuffer = await file.arrayBuffer();
+    // Initialize Drive API with the authenticated client
+    const drive = google.drive({ version: 'v3', auth: oauth2Client });
 
-    const { data, error } = await supabase.storage
-      .from("video-notes")
-      .upload(fileName, fileArrayBuffer, {
-        cacheControl: "3600",
-        upsert: false,
-      });
+    // Get file metadata first
+    const fileMetadata = await drive.files.get({
+      fileId: fileId,
+      fields: 'name,mimeType,size'
+    });
 
-    if (error) {
-      console.log(error);
-      return NextResponse.json({ message: error.message }, { status: 400 });
-    }
-
-    return NextResponse.json({ data }, { status: 200 });
-  } catch (error) {
-    return NextResponse.json(
+    // Get the actual file content
+    const response = await drive.files.get(
       {
-        message: error instanceof Error ? error.message : "An error occurred",
+        fileId: fileId,
+        alt: 'media'
       },
-      { status: 500 },
+      { responseType: 'arraybuffer' }
+    );
+
+    // Convert the file content to a Buffer
+    const buffer = Buffer.from(response.data as ArrayBuffer);
+
+    // Return the file as a downloadable response
+    return new NextResponse(buffer, {
+      headers: {
+        'Content-Type': fileMetadata.data.mimeType || 'application/octet-stream',
+        'Content-Disposition': `attachment; filename="${fileMetadata.data.name}"`,
+      },
+    });
+
+  } catch (error) {
+    console.error('Error accessing file:', error);
+    return NextResponse.json(
+      { error: 'Failed to access file' },
+      { status: 500 }
     );
   }
 }

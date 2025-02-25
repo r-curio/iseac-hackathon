@@ -1,8 +1,8 @@
-import React from "react";
 import { useGSAP } from "@gsap/react";
 import Slide from "../components/slide";
 
-const FirstSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
+const FirstSlide = ({ timeline, username }: { timeline: GSAPTimeline; username: string }) => {
+
   useGSAP(() => {
     timeline.add("start");
 
@@ -107,7 +107,7 @@ const FirstSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
 
       <div className="group-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-4 space-y-4 text-center text-5xl font-semibold text-white">
         <p className="welcome mt-12">
-          Hi, <span className="text-accent-200">kenn</span>
+          Hi, <span className="text-accent-200">{username}</span>
         </p>
         <p className="quick-study-notes text-4xl">
           Let&lsquo;s take a look at your Study Wrap!
