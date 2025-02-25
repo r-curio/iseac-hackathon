@@ -1,8 +1,13 @@
 import { useGSAP } from "@gsap/react";
 import Slide from "../components/slide";
 
-const FirstSlide = ({ timeline, username }: { timeline: GSAPTimeline; username: string }) => {
-
+const FirstSlide = ({
+  timeline,
+  username,
+}: {
+  timeline: GSAPTimeline;
+  username: string;
+}) => {
   useGSAP(() => {
     timeline.add("start");
 

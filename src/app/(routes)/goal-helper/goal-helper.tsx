@@ -114,7 +114,6 @@ const GoalHelper = ({
     Also, you can definitely recommend other Zen's features such as Weekly Wrap, Study Deck, Progress Tracker, Pomodoro, and AI Notes, Flashcards, and Tests.
 
     If you're mentioning the notes, exams, or other features, you can use the following links to create hyperlinks for the user. 
-    (Note: Don't use heading if you're creating hyperlinks)
 
     These are the relative links:
     - [Weekly Wrap](/weekly-wrap)
@@ -124,6 +123,8 @@ const GoalHelper = ({
     - [Flashcards](/study-deck/[id]/flashcard)
     - [AI Notes](/ai-notes)
     - [Progress Tracker](/progress-tracker)
+
+    Note: Don't use a heading markdown in description for hyperlinks.
 
     Here is the user's prompt: ` + prompt,
     );

@@ -40,34 +40,30 @@ export const generateGlares = () => {
 };
 
 export interface WeeklyWrapProps {
-  weeklyWrapStats: {
-    username: string;
-    startDate: Date;
-    endDate: Date;
-    startDate: string;
-    endDate: string;
-    totalNotes: number;
-    prevTotalNotes: number;
-    longestStudySession: number;
-    studyStreak: number;
-    mostReviewed: string;
-    mostReviewedTotalExam: number;
-    mostReviewedPassedExam: number;
-    weakArea: string;
-    summaryNotes: string;
-    aiSuggestion: string;
-    catPersonality:
-      | "Curious Cat"
-      | "Focused Feline"
-      | "Strategic Stray"
-      | "Goal-Getter Kitten"
-      | "Night Owl Panther"
-      | "Chill Kitty"
-      | "Adaptive Alley Cat";
-  };
+  username: string;
+  startDate: string;
+  endDate: string;
+  totalNotes: number;
+  prevTotalNotes: number;
+  longestStudySession: number;
+  studyStreak: number;
+  mostReviewed: string;
+  mostReviewedTotalExam: number;
+  mostReviewedPassedExam: number;
+  weakArea: string;
+  summaryNotes: string;
+  aiSuggestion: string;
+  catPersonality:
+    | "Curious Cat"
+    | "Focused Feline"
+    | "Strategic Stray"
+    | "Goal-Getter Kitten"
+    | "Night Owl Panther"
+    | "Chill Kitty"
+    | "Adaptive Alley Cat";
 }
 
-const WeeklyWrap: React.FC<WeeklyWrapProps> = ({ weeklyWrapStats }) => {
+const WeeklyWrap: React.FC<WeeklyWrapProps> = (weeklyWrapStats) => {
   console.log("In weekly-wrap.tsx Weekly Wrap: ", weeklyWrapStats);
 
   const [isAtStart, setIsAtStart] = useState(true);
@@ -214,7 +210,10 @@ const WeeklyWrap: React.FC<WeeklyWrapProps> = ({ weeklyWrapStats }) => {
               />
             )}
             {currentPage === 1 && (
-              <FirstSlide timeline={timelines.current[0]} username={weeklyWrapStats.username}/>
+              <FirstSlide
+                timeline={timelines.current[0]}
+                {...weeklyWrapStats}
+              />
             )}
 
             {currentPage === 2 && (
