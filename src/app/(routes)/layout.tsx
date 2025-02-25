@@ -3,6 +3,7 @@ import React from "react";
 import { useSidebar } from "../../hooks/use-sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import PomodoroModal from "@/components/modals/pomodoro-modal";
+import Sidebar from "@/components/sidebar";
 
 const RouteLayout = ({ children }: { children: React.ReactNode }) => {
   const sidebar = useSidebar();
@@ -13,6 +14,7 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <>
+      <Sidebar />
       <PomodoroModal
         isOpen={isOpen}
         onOpen={() => setIsOpen(true)}
@@ -31,6 +33,14 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
         }}
       >
         <div className="h-full w-full xl:max-w-[calc(100%_-_80px)] 2xl:max-w-[1500px]">
+          {!isOpen && (
+            <button
+              onClick={() => setIsOpen(true)}
+              className="fixed left-[95%] top-[95%] z-50 flex aspect-square -translate-x-[100%] -translate-y-[100%] items-center justify-center rounded-xl bg-primary p-4"
+            >
+              <TimerIcon className="h-8 w-8" />
+            </button>
+          )}
           {children}
         </div>
       </div>

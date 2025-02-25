@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import { Poppins } from "next/font/google";
 import "./globals.css";
-import Sidebar from "../components/sidebar";
 import ToastProvider from "@/providers/toast-provider";
 import { StudySessionProvider } from "./context/StudyContextTracker";
 import { Toaster } from "@/components/ui/toaster";
@@ -40,7 +39,6 @@ export default function RootLayout({
         <StudySessionProvider >
           <ToastProvider />
           <Toaster />
-          <Sidebar />
           {children}
         </StudySessionProvider>
       </body>
