@@ -44,13 +44,15 @@ export interface WeeklyWrapProps {
     username: string;
     startDate: Date;
     endDate: Date;
+    startDate: string;
+    endDate: string;
     totalNotes: number;
     prevTotalNotes: number;
     longestStudySession: number;
     studyStreak: number;
     mostReviewed: string;
     mostReviewedTotalExam: number;
-    mostReviewedPassesdExam: number;
+    mostReviewedPassedExam: number;
     weakArea: string;
     summaryNotes: string;
     aiSuggestion: string;
@@ -66,6 +68,8 @@ export interface WeeklyWrapProps {
 }
 
 const WeeklyWrap: React.FC<WeeklyWrapProps> = ({ weeklyWrapStats }) => {
+  console.log("In weekly-wrap.tsx Weekly Wrap: ", weeklyWrapStats);
+
   const [isAtStart, setIsAtStart] = useState(true);
   const [isPaused, setIsPaused] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);

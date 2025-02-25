@@ -45,8 +45,8 @@ const SecondSlide = ({
   studyStreak,
 }: {
   timeline: GSAPTimeline;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
   totalNotes: number;
   prevTotalNotes: number;
   longestStudySession: number;
@@ -320,8 +320,13 @@ const SecondSlide = ({
           </div>
           <div className="day-container absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <p className="flex gap-4 text-5xl font-bold leading-none">
-              <span className="text-accent-200">16</span> to{" "}
-              <span className="text-accent-200">22</span>
+              <span className="text-accent-200">
+                {new Date(startDate).getDate()}
+              </span>{" "}
+              to{" "}
+              <span className="text-accent-200">
+                {new Date(endDate).getDate()}
+              </span>
             </p>
           </div>
           <div className="glow-1 glow absolute left-1/4 top-1/2 -z-10 aspect-square w-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/50 blur-[150px]" />
@@ -334,11 +339,11 @@ const SecondSlide = ({
             <div className="mb-12 flex flex-col items-center justify-center gap-2">
               <p className="text-5xl font-bold">Quick Study Notes</p>
               <p className="text-lg">
-                {startDate.toISOString()} - {endDate.toISOString()}
+                {startDate} - {endDate}
               </p>
             </div>
             <div className="stat flex items-center gap-2">
-              <p className="w-[120px] max-w-[120px] font-[Robinson] text-[120px] font-medium leading-none">
+              <p className="w-[150px] max-w-[150px] font-[Robinson] text-[120px] font-medium leading-none">
                 {totalNotes}
               </p>
               <div className="flex flex-col items-start justify-center gap-1">
@@ -347,15 +352,16 @@ const SecondSlide = ({
                 </p>
                 <p className="text-gray">
                   <span className="font-bold text-white">
-                    +{prevTotalNotes}
+                    {totalNotes - prevTotalNotes > 0 && "+"}
+                    {totalNotes - prevTotalNotes}
                   </span>{" "}
                   from last week
                 </p>
               </div>
             </div>
             <div className="stat flex items-center gap-2">
-              <p className="w-[120px] max-w-[120px] font-[Robinson] text-[120px] font-medium leading-none">
-                {longestStudySession}
+              <p className="w-[150px] max-w-[150px] font-[Robinson] text-[120px] font-medium leading-none">
+                {longestStudySession.toFixed(1)}
               </p>
               <div className="flex flex-col items-center justify-center gap-1">
                 <p className="flex gap-4 text-lg leading-none">
@@ -364,7 +370,7 @@ const SecondSlide = ({
               </div>
             </div>
             <div className="stat flex items-center gap-2">
-              <p className="w-[120px] max-w-[120px] font-[Robinson] text-[120px] font-medium leading-none">
+              <p className="w-[150px] max-w-[150px] font-[Robinson] text-[120px] font-medium leading-none">
                 {studyStreak}
               </p>
               <div className="flex flex-col items-center justify-center gap-1">

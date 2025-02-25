@@ -68,21 +68,29 @@ const FifthSlide = ({
     <Slide className="slide relative">
       <div
         className={cn(
-          "slide-content absolute inset-0 flex h-full w-full flex-col gap-12 bg-[url(/summary-bg.png)] bg-cover bg-center opacity-0",
+          "slide-content absolute inset-0 flex h-full w-full flex-col items-center justify-center gap-12 bg-[url(/summary-bg.png)] bg-cover bg-center opacity-0",
         )}
       >
-        <div className="flex h-full w-full flex-col items-center justify-center gap-2 self-start">
-          <div className="z-50 flex flex-col items-center justify-center gap-12">
+        <div className="flex h-full flex-col items-center justify-center gap-2 self-start">
+          <div className="z-50 flex w-3/4 flex-col items-center justify-center gap-12">
             <p className="stat text-5xl font-bold uppercase">
               Smart Study Insights
             </p>
             <div className="flex flex-col items-start justify-center gap-8 text-start">
-              <p className="stat text-3xl">Notes Taken: {totalNotes}</p>
               <p className="stat text-3xl">
-                Study Streak: {studyStreak} Days in a Row!
+                Notes Taken: <span className="font-bold">{totalNotes}</span>
               </p>
-              <p className="stat text-3xl">Top Focus Area: {mostReviewed}</p>
-              <p className="stat text-3xl">AI Suggests: {aiSuggestion}</p>
+              <p className="stat text-3xl">
+                Study Streak:{" "}
+                <span className="font-bold">{studyStreak} Days in a Row! </span>
+              </p>
+              <p className="stat text-3xl">
+                Top Focus Area:{" "}
+                <span className="font-bold">{mostReviewed}</span>
+              </p>
+              <p className="stat text-3xl">
+                AI Suggests: <span className="font-bold">{aiSuggestion}</span>
+              </p>
             </div>
             <p className="stat-last text-3xl font-bold">
               Keep going! Every note gets you closer to mastery.

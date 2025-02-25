@@ -6,13 +6,13 @@ const FifthSlide = ({
   timeline,
   mostReviewed,
   mostReviewedTotalExam,
-  mostReviewedPassesdExam,
+  mostReviewedPassedExam,
   weakArea,
 }: {
   timeline: GSAPTimeline;
   mostReviewed: string;
   mostReviewedTotalExam: number;
-  mostReviewedPassesdExam: number;
+  mostReviewedPassedExam: number;
   weakArea: string;
 }) => {
   useGSAP(() => {
@@ -261,16 +261,22 @@ const FifthSlide = ({
         </p>
         <p>the most.</p>
         <p className="text-base font-normal">
-          You took {mostReviewedTotalExam} exams this week and passed{" "}
-          {mostReviewedPassesdExam} of them.
+          You took {mostReviewedTotalExam} exam
+          {mostReviewedTotalExam > 1 ? "s" : ""} this week and passed{" "}
+          <span className="font-bold text-accent-200">
+            {mostReviewedPassedExam === mostReviewedTotalExam
+              ? "all"
+              : mostReviewedPassedExam}{" "}
+          </span>
+          of them.
         </p>
       </div>
 
-      <div className="group-3 absolute left-1/2 top-1/2 z-20 w-full -translate-x-[50%] -translate-y-[90%] items-center justify-end gap-4 space-y-4 text-center text-2xl font-semibold text-white">
-        <p>You&lsquo;re doing awesome!</p>
-        <p>To reach even greater heights,</p>
-        <p className="text-5xl text-accent-200">{weakArea}</p>
-        <p>could use a bit more of your magic ✨</p>
+      <div className="group-3 t absolute left-1/2 top-1/2 z-20 flex w-full -translate-x-[50%] -translate-y-[90%] items-center justify-center gap-4 space-y-4 text-center text-2xl font-semibold text-white">
+        {/* <p>You&lsquo;re doing awesome!</p> */}
+        {/* <p>To reach even greater heights,</p> */}
+        <p className="max-w-[80%] text-5xl text-accent-200">{weakArea}</p>
+        {/* <p>could use a bit more of your magic ✨</p> */}
       </div>
     </Slide>
   );

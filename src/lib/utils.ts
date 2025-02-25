@@ -88,7 +88,8 @@ export type CustomElementType =
   | "heading-one"
   | "heading-two"
   | "bulleted-list"
-  | "numbered-list";
+  | "numbered-list"
+  | "link";
 
 export const ICON_SIZE = 18;
 export const HOTKEYS: HotKeyMap = {
