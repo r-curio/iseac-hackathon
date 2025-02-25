@@ -45,6 +45,8 @@ export default {
           "linear-gradient(180deg, var(--P7, #120622) 0%, var(--S8, #00020A) 100%)",
         "result-gradient":
           "radial-gradient(circle at center, #241A4C 0%, #09031C 90%, #00020A)",
+        "text-gradient":
+          "linear-gradient(294deg, rgba(255, 255, 255, 0.00) -10.68%, #FFF 103.67%)",
       },
       borderRadius: {
         lg: "var(--radius)",
