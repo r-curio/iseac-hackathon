@@ -8,7 +8,7 @@ import { cn, parseMarkdown } from "@/lib/utils";
 import { Descendant } from "slate";
 import EditorProvider from "@/providers/editor-provider";
 import RichTextbox from "@/components/ui/rich-textbox";
-import { Note, Profile } from "@prisma/client";
+import { Exam, Note, Profile } from "@prisma/client";
 
 // Add this interface
 interface ChatMessage {
@@ -19,7 +19,9 @@ interface ChatMessage {
 const GoalHelper = ({
   notes,
   profile,
+  exams,
 }: {
+  exams: Exam[];
   notes: Note[];
   profile: Profile;
 }) => {
@@ -105,6 +107,23 @@ const GoalHelper = ({
 
     Here are the notes in a Descendant[] form by the Slate JavaScript library  (this can be empty if the user has no notes yet):
     ${JSON.stringify(notes)}
+
+    Also, here are the data of the user's exams in their notes: ${JSON.stringify(exams)}. The highest score is 5.
+
+    Feel free to use these data as a reference to better provide the user with personalized assistance. 
+    Also, you can definitely recommend other Zen's features such as Weekly Wrap, Study Deck, Progress Tracker, Pomodoro, and AI Notes, Flashcards, and Tests.
+
+    If you're mentioning the notes, exams, or other features, you can use the following links to create hyperlinks for the user. 
+    (Note: Don't use heading if you're creating hyperlinks)
+
+    These are the relative links:
+    - [Weekly Wrap](/weekly-wrap)
+    - [Study Deck](/study-deck)
+    - [Notes](/study-deck/[id]/notes)
+    - [Exams](/study-deck/[id]/test)
+    - [Flashcards](/study-deck/[id]/flashcard)
+    - [AI Notes](/ai-notes)
+    - [Progress Tracker](/progress-tracker)
 
     Here is the user's prompt: ` + prompt,
     );

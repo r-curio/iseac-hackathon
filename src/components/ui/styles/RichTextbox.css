@@ -41,6 +41,12 @@
   gap: 1rem;
 }
 
+.editor__content a {
+  color: #75a3eb;
+  font-weight: 500;
+  text-decoration: underline;
+}
+
 /* .editor__content span[data-slate-placeholder="true"] {
   color: #ccc;
   opacity: 1 !important;

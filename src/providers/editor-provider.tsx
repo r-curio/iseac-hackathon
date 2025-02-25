@@ -13,6 +13,7 @@ import { AlignType, CustomElementType } from "@/lib/utils";
 type CustomElement = {
   type: CustomElementType;
   align?: AlignType;
+  link?: string;
   children: CustomText[];
 };
 
@@ -127,6 +128,9 @@ const CustomElement = ({
           {children}
         </ol>
       );
+
+    case "link":
+      return <a href={element.link}>{children}</a>;
 
     default:
       return (

@@ -23,9 +23,15 @@ const GoalHelperPage = async () => {
     },
   });
 
+  const exams = await prismadb.exam.findMany({
+    where: {
+      userId: profile?.id,
+    },
+  });
+
   if (!profile) redirect("/login");
 
-  return <GoalHelper notes={notes} profile={profile} />;
+  return <GoalHelper notes={notes} profile={profile} exams={exams} />;
 };
 
 export default GoalHelperPage;

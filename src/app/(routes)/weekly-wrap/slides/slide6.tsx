@@ -3,7 +3,30 @@ import { useGSAP } from "@gsap/react";
 import Slide from "../components/slide";
 import Image from "next/image";
 
-const SixthSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
+const SixthSlide = ({
+  timeline,
+  catPersonality,
+}: {
+  timeline: GSAPTimeline;
+  catPersonality:
+    | "Curious Cat"
+    | "Focused Feline"
+    | "Strategic Stray"
+    | "Goal-Getter Kitten"
+    | "Night Owl Panther"
+    | "Chill Kitty"
+    | "Adaptive Alley Cat";
+}) => {
+  const catColors = {
+    "Curious Cat": ["#090311", "#120622"],
+    "Focused Feline": ["#acc8f3", "#051960"],
+    "Strategic Stray": ["#cb98ed", "#2d0f55"],
+    "Goal-Getter Kitten": ["#9b77cb", "#591da9"],
+    "Night Owl Panther": ["#00020a", "#030d30"],
+    "Chill Kitty": ["#75a3eb", "#120622"],
+    "Adaptive Alley Cat": ["#46628d", "#00020a"],
+  };
+
   useGSAP(() => {
     timeline.add("start");
 
@@ -38,7 +61,12 @@ const SixthSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
         opacity: 1,
         y: -1000,
       },
-      { opacity: 0, y: 100, backgroundColor: "#75A3EB", duration: 6 },
+      {
+        opacity: 0,
+        y: 100,
+        backgroundColor: `${catColors[catPersonality][0]}`,
+        duration: 6,
+      },
       "<0.5",
     );
 
@@ -75,16 +103,25 @@ const SixthSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
         </p>
       </div>
 
-      <div className="group-2 absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 bg-[#090210]">
-        <div className="flex h-3/4 w-full items-center justify-center bg-[#090210]" />
-        <div className="flex h-1/4 w-full items-center justify-center bg-[#120622]" />
+      <div className="group-2 absolute left-1/2 top-1/2 h-full w-full -translate-x-1/2 -translate-y-1/2 bg-gradient-2">
+        <div
+          className="flex h-3/4 w-full items-center justify-center opacity-50 blur-[1px]"
+          style={{
+            background: `${catColors[catPersonality][0]}`,
+          }}
+        />
+        <div
+          className="flex h-1/4 w-full items-center justify-center opacity-50 blur-[1px]"
+          style={{
+            background: `${catColors[catPersonality][1]}`,
+          }}
+        />
         <p className="absolute left-1/2 top-[15%] z-50 flex -translate-x-1/2 -translate-y-1/2 gap-2 text-4xl">
-          You are a{" "}
-          <span className="font-semibold text-accent-200">Curious Cat!</span>
+          You are a <span className="font-semibold">{catPersonality}!</span>
         </p>
         <div className="absolute left-1/2 top-[60%] flex -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl border border-primary/25 drop-shadow-2xl">
           <Image
-            src="/cats/curious-cat.png"
+            src={`/cats/${catPersonality.toLowerCase().split(" ").join("-")}.png`}
             width={1300}
             height={950}
             alt="Curious Cat"
