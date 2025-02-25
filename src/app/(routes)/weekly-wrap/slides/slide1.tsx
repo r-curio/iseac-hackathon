@@ -1,8 +1,12 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import Slide from "../components/slide";
+import { createClient } from "@/utils/supabase/client";
 
 const FirstSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
+
+  const [username, setUsername] = useState<string | null>(null);
+
   useGSAP(() => {
     timeline.add("start");
 
@@ -100,6 +104,20 @@ const FirstSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
     );
   });
 
+  useEffect(() => {
+    const fetchProfile = async () => {
+      const supabase = await createClient();
+      const { data: { user } } = await supabase.auth.getUser();
+
+      const response = await fetch(`/api/${user?.id}`);
+      const data = await response.json();
+
+      setUsername(data.username);
+    }
+
+    fetchProfile();
+  }, []);
+
   return (
     <Slide className="slide relative">
       <div className="ml-20 flex h-full w-1/2 flex-col items-center justify-center gap-2"></div>
@@ -107,7 +125,7 @@ const FirstSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
 
       <div className="group-1 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 items-center justify-center gap-4 space-y-4 text-center text-5xl font-semibold text-white">
         <p className="welcome mt-12">
-          Hi, <span className="text-accent-200">kenn</span>
+          Hi, <span className="text-accent-200">{username}</span>
         </p>
         <p className="quick-study-notes text-4xl">
           Let&lsquo;s take a look at your Study Wrap!
