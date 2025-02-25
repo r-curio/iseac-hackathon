@@ -2,6 +2,22 @@ import { NextRequest, NextResponse } from "next/server";
 import prismadb from "@/lib/prismadb";
 import { createClient } from "@/utils/supabase/server";
 
+export async function GET(req: NextRequest) {
+  
+  const id = req.url.split("/").pop();
+  const profile = await prismadb.profile.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!profile) {
+    return new NextResponse("Profile not found", { status: 404 });
+  }
+
+  return NextResponse.json(profile);
+} 
+
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ userId: string }> },

@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import { menuList } from "../app/libs/menu-list";
 import NavItem from "./nav-item";
 import { RxCaretRight, RxCaretLeft } from "react-icons/rx";
@@ -9,10 +9,28 @@ import Logo from "../../public/Logo.svg";
 import Image from "next/image";
 import Link from "next/link";
 import { useSidebar } from "../hooks/use-sidebar";
+import { createClient } from "@/utils/supabase/client";
 
 const Sidebar = () => {
   const sidebar = useSidebar();
   const isMobile = useIsMobile();
+  const supabase = createClient();
+
+  const [profile, setProfile] = useState<{ username: string, avatar_url: string } | null>(null);
+
+  useEffect(() => {
+    const fetchProfile = async () => {
+
+      const { data: {user} } = await supabase.auth.getUser();
+
+      const response = await fetch(`/api/${user?.id}`);
+      const data = await response.json();
+
+      setProfile(data);
+    }
+
+    fetchProfile();
+  }, []);
 
   return isMobile ? (
     <MobileNav />
@@ -61,7 +79,7 @@ const Sidebar = () => {
           <>
             <div className="flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-accent-200">
               <Image
-                src="/avatar.png"
+                src={profile?.avatar_url || '/default-avatar.png'}
                 alt="Avatar"
                 className="h-10 w-10"
                 width={40}
@@ -70,7 +88,7 @@ const Sidebar = () => {
             </div>
             <div className="flex flex-col gap-0.5">
               <p className="text-xs font-medium">Welcome back 👋</p>
-              <p className="text-sm font-medium">Sam</p>
+              <p className="text-sm font-medium">{profile?.username}</p>
             </div>
           </>
         )}

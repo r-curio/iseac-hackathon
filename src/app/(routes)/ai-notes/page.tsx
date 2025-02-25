@@ -10,7 +10,7 @@ import { cn, parseMarkdown } from "@/lib/utils";
 
 export default function VideoNotes() {
   const router = useRouter();
-  const [mode, setMode] = useState("upload");
+  const [mode, setMode] = useState("paste");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [contentValue, setContentValue] = useState<Descendant[]>([
