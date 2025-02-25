@@ -20,18 +20,24 @@ export function SignUpForm() {
           </div>
           <div className="mt-[32px] space-y-5">
             <Input
+              id="name"
+              name="name"
               className="py-6 px-4 rounded-[10px] text-lg placeholder:text-lg border-[#D9D9D9]"
               type="text"
               placeholder="Enter name"
               required
             />
             <Input
+              id="email"
+              name="email"
               className="py-6 px-4 rounded-[10px] text-lg placeholder:text-lg border-[#D9D9D9]"
               type="email"
               placeholder="Enter email"
               required
             />
             <Input
+              id="password"
+              name="password"
               className="py-6 px-4 rounded-[10px] text-lg placeholder:text-lg border-[#D9D9D9]"
               type="password"
               placeholder="Password"
