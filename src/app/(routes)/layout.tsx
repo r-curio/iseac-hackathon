@@ -2,7 +2,6 @@
 import React from "react";
 import { useSidebar } from "../../hooks/use-sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { TimerIcon } from "lucide-react";
 import PomodoroModal from "@/components/modals/pomodoro-modal";
 import Sidebar from "@/components/sidebar";
 
@@ -18,6 +17,7 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
       <Sidebar />
       <PomodoroModal
         isOpen={isOpen}
+        onOpen={() => setIsOpen(true)}
         onClose={() => setIsOpen(false)}
         loading={isLoading}
         setLoading={setIsLoading}

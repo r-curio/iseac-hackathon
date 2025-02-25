@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import {
   MdCode,
   MdFormatAlignCenter,
@@ -29,6 +29,7 @@ import { useEditor } from "@/providers/editor-provider";
 import { CustomElement, CustomText } from "@/providers/editor-provider";
 import {
   AlignType,
+  cn,
   CustomElementType,
   HOTKEYS,
   ICON_SIZE,
@@ -38,6 +39,10 @@ import {
 } from "@/lib/utils";
 
 import "./styles/RichTextbox.css";
+import { PenLine, PenLineIcon, Save, X } from "lucide-react";
+import { Button } from "./button";
+import { toast } from "react-toastify";
+import { useParams } from "next/navigation";
 
 interface CustomEditorType {
   isMarkActive: (
@@ -192,10 +197,23 @@ const BlockButton: React.FC<ButtonProps> = ({ format, icon }) => {
   );
 };
 
-const RichTextbox: React.FC = () => {
+const RichTextbox = ({
+  readOnly = false,
+  className,
+}: {
+  readOnly?: boolean;
+  className?: string;
+}) => {
   const { renderElement, renderLeaf, contentValue, changeContentValue } =
     useEditor();
+
+  const initialValueRef = useRef<Descendant[]>(contentValue);
+
   const [editor] = useState(() => withHistory(withReact(createEditor())));
+  const [isEditable, setIsEditable] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const params = useParams();
 
   const handleChange = (value: Descendant[]) => {
     const isAstChange = editor.operations.some(
@@ -205,78 +223,210 @@ const RichTextbox: React.FC = () => {
     if (isAstChange) changeContentValue(value);
   };
 
+  const handleCancel = () => {
+    setIsEditable(false);
+    Transforms.deselect(editor);
+
+    const resetValue = JSON.parse(JSON.stringify(initialValueRef.current));
+    editor.children = resetValue;
+    editor.onChange();
+
+    // const point = { path: [0, 0], offset: 0 };
+    Transforms.deselect(editor);
+  };
+
+  const handleSave = async () => {
+    setIsEditable(false);
+    // Reset content to initial value if needed
+    Transforms.deselect(editor);
+
+    toast.loading("Updating note...", {
+      toastId: "updateNote",
+    });
+
+    try {
+      setIsLoading(true);
+
+      const response = await fetch(`/api/notes/${params.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          content: JSON.stringify(contentValue),
+          lastModified: new Date(),
+        }),
+      });
+
+      console.log(response);
+
+      toast.update("updateNote", {
+        render: "Note updated successfully!",
+        type: "success",
+        isLoading: false,
+        closeButton: true,
+        autoClose: 2000,
+      });
+    } catch (error) {
+      console.log(JSON.stringify(error));
+      toast.update("updateNote", {
+        render: "Failed to update note. Please try again.",
+        type: "error",
+        isLoading: false,
+        closeButton: true,
+        autoClose: 2000,
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
-    <Slate editor={editor} initialValue={contentValue} onChange={handleChange}>
-      <div className="editor w-full rounded-xl">
-        <div className="editor__toolbar">
-          <MarkButton format="bold" icon={<MdFormatBold size={ICON_SIZE} />} />
-          <MarkButton
-            format="italic"
-            icon={<MdFormatItalic size={ICON_SIZE} />}
-          />
-          <MarkButton
-            format="underline"
-            icon={<MdFormatUnderlined size={ICON_SIZE} />}
-          />
-          <MarkButton format="code" icon={<MdCode size={ICON_SIZE} />} />
-          <BlockButton
-            format="heading_one"
-            icon={<MdLooksOne size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="heading_two"
-            icon={<MdLooksTwo size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="block-quote"
-            icon={<MdFormatQuote size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="numbered-list"
-            icon={<MdFormatListNumbered size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="bulleted-list"
-            icon={<MdFormatListBulleted size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="left"
-            icon={<MdFormatAlignLeft size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="center"
-            icon={<MdFormatAlignCenter size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="right"
-            icon={<MdFormatAlignRight size={ICON_SIZE} />}
-          />
-          <BlockButton
-            format="justify"
-            icon={<MdFormatAlignJustify size={ICON_SIZE} />}
+    <>
+      {/* Floating Alert */}
+      {isEditable && (
+        <div
+          className="fixed left-1/2 top-4 z-50 -translate-x-1/2 transform"
+          role="alert"
+        >
+          <div className="flex items-center justify-between gap-4 rounded-lg bg-purple-500/90 px-4 py-2 text-sm text-white shadow-lg backdrop-blur-sm transition-all duration-200">
+            <div className="flex items-center gap-2">
+              <PenLineIcon size={16} />
+              <span>You are currently editing this note</span>
+            </div>
+
+            <button
+              onClick={handleSave}
+              className="flex items-center gap-2 rounded-md px-2 py-1 hover:bg-white/10"
+            >
+              <Save size={16} />
+              <span className="text-sm">Save</span>
+            </button>
+          </div>
+        </div>
+      )}
+      <Slate
+        editor={editor}
+        initialValue={contentValue}
+        onChange={handleChange}
+      >
+        <div className="editor w-full rounded-xl">
+          {!readOnly && (
+            <div className="editor__toolbar">
+              <div
+                className={cn(
+                  "flex items-center opacity-100 transition-all duration-200",
+                  (!isEditable || isLoading) && "opacity-10",
+                )}
+              >
+                <MarkButton
+                  format="bold"
+                  icon={<MdFormatBold size={ICON_SIZE} />}
+                />
+                <MarkButton
+                  format="italic"
+                  icon={<MdFormatItalic size={ICON_SIZE} />}
+                />
+                <MarkButton
+                  format="underline"
+                  icon={<MdFormatUnderlined size={ICON_SIZE} />}
+                />
+                <MarkButton format="code" icon={<MdCode size={ICON_SIZE} />} />
+                <BlockButton
+                  format="heading_one"
+                  icon={<MdLooksOne size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="heading_two"
+                  icon={<MdLooksTwo size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="block-quote"
+                  icon={<MdFormatQuote size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="numbered-list"
+                  icon={<MdFormatListNumbered size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="bulleted-list"
+                  icon={<MdFormatListBulleted size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="left"
+                  icon={<MdFormatAlignLeft size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="center"
+                  icon={<MdFormatAlignCenter size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="right"
+                  icon={<MdFormatAlignRight size={ICON_SIZE} />}
+                />
+                <BlockButton
+                  format="justify"
+                  icon={<MdFormatAlignJustify size={ICON_SIZE} />}
+                />
+              </div>
+              {/* Add edit toggle button at the end of toolbar */}
+              {isEditable ? (
+                <div className="ml-auto flex items-center gap-2">
+                  <Button
+                    variant={"ghost"}
+                    onClick={handleCancel}
+                    className={"ml-auto"}
+                  >
+                    <X size={16} /> Cancel
+                  </Button>
+
+                  <Button
+                    variant={"ghost"}
+                    onClick={handleSave}
+                    className={"ml-auto"}
+                  >
+                    <Save size={16} /> Save
+                  </Button>
+                </div>
+              ) : (
+                <Button
+                  variant={"ghost"}
+                  onClick={() => setIsEditable(true)}
+                  className={"ml-auto"}
+                >
+                  <PenLine size={16} /> Edit
+                </Button>
+              )}
+            </div>
+          )}
+          <Editable
+            className={cn(
+              "editor__content",
+              (!isEditable || isLoading) && "cursor-default",
+              className,
+            )}
+            readOnly={!isEditable || isLoading}
+            id="content"
+            name="content"
+            spellCheck
+            placeholder="Add your content here..."
+            renderElement={renderElement}
+            renderLeaf={renderLeaf}
+            onKeyDown={(event: React.KeyboardEvent) => {
+              if (!isEditable || isLoading) return;
+              if (event.ctrlKey && event.key in HOTKEYS) {
+                event.preventDefault();
+                const mark = HOTKEYS[event.key];
+                CustomEditor.toggleMark(
+                  editor,
+                  mark as keyof Omit<CustomText, "text">,
+                );
+              }
+            }}
           />
         </div>
-        <Editable
-          className="editor__content"
-          id="content"
-          name="content"
-          spellCheck
-          placeholder="Add your content here..."
-          renderElement={renderElement}
-          renderLeaf={renderLeaf}
-          onKeyDown={(event: React.KeyboardEvent) => {
-            if (event.ctrlKey && event.key in HOTKEYS) {
-              event.preventDefault();
-              const mark = HOTKEYS[event.key];
-              CustomEditor.toggleMark(
-                editor,
-                mark as keyof Omit<CustomText, "text">,
-              );
-            }
-          }}
-        />
-      </div>
-    </Slate>
+      </Slate>
+    </>
   );
 };
 
