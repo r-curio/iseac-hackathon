@@ -41,6 +41,7 @@ export const generateGlares = () => {
 
 export interface WeeklyWrapProps {
   weeklyWrapStats: {
+    username: string;
     startDate: Date;
     endDate: Date;
     totalNotes: number;
@@ -209,7 +210,7 @@ const WeeklyWrap: React.FC<WeeklyWrapProps> = ({ weeklyWrapStats }) => {
               />
             )}
             {currentPage === 1 && (
-              <FirstSlide timeline={timelines.current[0]} />
+              <FirstSlide timeline={timelines.current[0]} username={weeklyWrapStats.username}/>
             )}
 
             {currentPage === 2 && (

@@ -1,11 +1,7 @@
-import React, { useEffect, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import Slide from "../components/slide";
-import { createClient } from "@/utils/supabase/client";
 
-const FirstSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
-
-  const [username, setUsername] = useState<string | null>(null);
+const FirstSlide = ({ timeline, username }: { timeline: GSAPTimeline; username: string }) => {
 
   useGSAP(() => {
     timeline.add("start");
@@ -103,20 +99,6 @@ const FirstSlide = ({ timeline }: { timeline: GSAPTimeline }) => {
       ">2",
     );
   });
-
-  useEffect(() => {
-    const fetchProfile = async () => {
-      const supabase = await createClient();
-      const { data: { user } } = await supabase.auth.getUser();
-
-      const response = await fetch(`/api/${user?.id}`);
-      const data = await response.json();
-
-      setUsername(data.username);
-    }
-
-    fetchProfile();
-  }, []);
 
   return (
     <Slide className="slide relative">
