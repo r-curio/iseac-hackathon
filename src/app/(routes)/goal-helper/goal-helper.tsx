@@ -168,7 +168,7 @@ const GoalHelper = ({
               `flex items-center gap-4`,
               message.role === "user"
                 ? "w-fit max-w-[80%] flex-row-reverse self-end"
-                : "w-full flex-col",
+                : "w-fit flex-col",
             )}
           >
             {/* <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent-200">
@@ -193,7 +193,7 @@ const GoalHelper = ({
               <div
                 className={cn(
                   "prose prose-invert flex h-full w-full max-w-none items-center",
-                  message.role === "user" && "text-right",
+                  message.role === "user" ? "text-right" : "text-left",
                 )}
               >
                 {typeof message.text === "string" ? (

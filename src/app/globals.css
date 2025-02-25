@@ -43,15 +43,15 @@
       inset 7px -3px 20px rgba(253, 140, 255, 0.8),
       inset 24px -5px 20px #2e00a9;
   }
-  
+
   .transform-style-3d {
     transform-style: preserve-3d;
   }
-  
+
   .backface-hidden {
     backface-visibility: hidden;
   }
-  
+
   .rotate-y-180 {
     transform: rotateY(180deg);
   }
@@ -116,6 +116,15 @@
   .animate-twinkle {
     animation: twinkle 3s ease-in-out infinite alternate;
   }
+
+  @keyframes moveProgressBar {
+    from {
+      left: -100%;
+    }
+    to {
+      left: 0;
+    }
+  }
 }
 
 @layer components {
@@ -152,7 +161,7 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --S8: #00020A;
+  --S8: #00020a;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -175,6 +184,5 @@ body {
   background: var(--P8, #090311);
 }
 
-
-
-@layer base {}
+@layer base {
+}

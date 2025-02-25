@@ -29,10 +29,9 @@ const updateCurrentStreak = async (activities: Activity[]) => {
   // Calculate streak from today
   let currentStreak = 0;
   const today = new Date();
-  const checkDate = today;
+  const checkDate = new Date();
 
   while (true) {
-    // Format the date to match activityMap keys (YYYY-MM-DD)
     const dateKey = new Date(
       checkDate.getTime() - checkDate.getTimezoneOffset() * 60000,
     )
@@ -40,6 +39,11 @@ const updateCurrentStreak = async (activities: Activity[]) => {
       .split("T")[0];
 
     // Check if there's activity on this date
+    if (checkDate.getDate() === today.getDate() && !activityMap[dateKey]) {
+      checkDate.setDate(checkDate.getDate() - 1);
+      continue;
+    }
+
     if (!activityMap[dateKey]) {
       break;
     }

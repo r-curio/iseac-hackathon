@@ -3,6 +3,7 @@ import React from "react";
 import { useSidebar } from "../../hooks/use-sidebar";
 import { useIsMobile } from "@/hooks/use-mobile";
 import PomodoroModal from "@/components/modals/pomodoro-modal";
+import Sidebar from "@/components/sidebar";
 
 const RouteLayout = ({ children }: { children: React.ReactNode }) => {
   const sidebar = useSidebar();
@@ -20,6 +21,7 @@ const RouteLayout = ({ children }: { children: React.ReactNode }) => {
         loading={isLoading}
         setLoading={setIsLoading}
       />
+      <Sidebar />
       <div
         className="m-0 mt-16 flex items-center justify-center p-0 transition-all lg:m-0 lg:ml-auto lg:px-10 lg:py-8"
         style={{
